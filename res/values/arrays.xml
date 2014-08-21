@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="heartbeat_list_preference">
+        <item>1 second</item>
+        <item>2 seconds</item>
+        <item>5 seconds</item>  
+        <item>10 seconds</item>  
+        <item>30 seconds</item>  
+    </string-array>
+
+    <!-- Used in app/menu examples -->
+    <string-array name="heartbeatvalues_list_preference">
+        <item>1</item>
+        <item>2</item>
+        <item>5</item>  
+        <item>10</item>  
+        <item>30</item>  
+    </string-array>
+	
+    <string-array name="logging_preferences">
+    	<item>Log All Messages</item>
+    	<item>Notification Messages</item>
+    	<item>Critical Messages</item>
+    	<item>Turn Off Logging</item>
+    </string-array>
+    <string-array name="loggingvalues_preferences">
+    	<item>0</item>
+    	<item>1</item>
+    	<item>2</item>
+    	<item>3</item>
+    </string-array>
+</resources>
