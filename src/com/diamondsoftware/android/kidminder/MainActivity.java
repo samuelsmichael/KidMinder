@@ -8,6 +8,8 @@ import android.view.MenuItem;
 
 public abstract class MainActivity extends Activity {
 	protected abstract void onResumeManageView();
+	protected abstract void resetTimer();
+	protected abstract void pressedEnableButton();
 
 	protected SettingsManager mSettingsManager;
 	

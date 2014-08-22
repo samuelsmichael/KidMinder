@@ -4,19 +4,81 @@
     android:layout_height="match_parent"
     tools:context="${relativePackage}.${activityClass}" >
 
-<com.diamondsoftware.android.kidminder.SpeedometerView
-    android:layout_height="wrap_content"
-    android:layout_width="match_parent"
-    android:padding="8dp"
-    android:id="@+id/speedometer" />
-
-<Switch
-    android:id="@+id/enabledSwitch"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_below="@+id/speedometer"
-    android:layout_centerHorizontal="true"
-    android:layout_marginTop="20dip"
-    android:text="System is" />
+	<com.diamondsoftware.android.kidminder.SpeedometerView
+	    android:layout_height="wrap_content"
+	    android:layout_width="match_parent"
+	    android:padding="8dp"
+	    android:id="@+id/speedometer" />
+	
+	<Switch
+	    android:id="@+id/enabledSwitch"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_below="@+id/speedometer"
+	    android:layout_centerHorizontal="true"
+	    android:layout_marginTop="20dip"
+	    android:text="System is" />
+	<TextView 
+	    android:id="@+id/switchinfo_id"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_below="@+id/enabledSwitch"
+	    android:layout_centerHorizontal="true"
+	    android:layout_marginTop="4dip"
+	    android:textSize="12sp"
+	    android:text="(Slide the switch to change the status)"
+	    >	  
+	</TextView>	    
+	<LinearLayout 
+	    android:id="@+id/HeartbeatCountId"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_below="@+id/switchinfo_id"
+	    android:layout_centerHorizontal="true"
+	    android:layout_marginTop="20dip"
+	    android:orientation="horizontal"
+	    >
+    	<TextView 
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:textSize="14sp"
+		    android:text="Heartbeat ticks count:"
+		    android:layout_marginRight="20dip"
+		    >	  
+		</TextView>	    
+    	<TextView 
+		    android:id="@+id/heartbeatcount_id"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:textSize="14sp"
+		    >	  
+		</TextView>	    	    		    
+	</LinearLayout>
+	<LinearLayout 
+	    android:id="@+id/GotSpeedCountId"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_below="@+id/HeartbeatCountId"
+	    android:layout_centerHorizontal="true"
+	    android:layout_marginTop="20dip"
+	    android:orientation="horizontal"
+	    >
+    	<TextView 
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:textSize="14sp"
+		    android:text="Location has speed count:"
+		    android:layout_marginRight="20dip"
+		    >	  
+		</TextView>	    
+    	<TextView 
+		    android:id="@+id/gotspeedcount_id"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:textSize="14sp"
+		    >	  
+		</TextView>	    	    		    
+	</LinearLayout>
+		
 
 </RelativeLayout>

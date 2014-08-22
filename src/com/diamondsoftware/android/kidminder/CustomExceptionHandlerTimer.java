@@ -14,7 +14,7 @@ public class CustomExceptionHandlerTimer implements UncaughtExceptionHandler {
 	@Override
 	public void uncaughtException(Thread t, Throwable e) {
 		try {
-			Logger logger=new Logger(0,"ExceptionHandler",mContext);
+			Logger logger=new Logger(0,"ExceptionHandler",mContext); // always log these messages
 			logger.log(e.getMessage(),999);
 			String str="";
 			StackTraceElement[] stea=e.getStackTrace();

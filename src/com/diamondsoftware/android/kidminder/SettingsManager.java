@@ -35,7 +35,7 @@ public class SettingsManager {
 		editor.commit();		
 	}
 	public int getLoggingLevel() {
-		String value=getValue(GlobalStaticValues.KEY_LOGGINGLEVEL,"0");
+		String value=getValue(GlobalStaticValues.KEY_LOGGINGLEVEL,String.valueOf(GlobalStaticValues.LOG_LEVEL_NOTIFICATION));
 		return Integer.valueOf(value);
 	}
 	public void setLoggingLevel(int value) {
@@ -51,5 +51,33 @@ public class SettingsManager {
 		Editor editor=mSharedPreferences.edit();
 		editor.putString(GlobalStaticValues.KEY_HEARTBEATFREQUENCY, String.valueOf(value));
 		editor.commit();		
+	}
+	public int getHeartbeatTicksCount() {
+		String value=getValue(GlobalStaticValues.KEY_HEARTBEAT_TICKS_COUNT,"0");
+		return Integer.valueOf(value);
+	}
+	public void setHeartbeatTicksCount(int value) {
+		Editor editor=mSharedPreferences.edit();
+		editor.putString(GlobalStaticValues.KEY_HEARTBEAT_TICKS_COUNT, String.valueOf(value));
+		editor.commit();		
+	}
+	public void incrementHeartbeatTicksCount() {
+		int count=getHeartbeatTicksCount();
+		count++;
+		setHeartbeatTicksCount(count);
+	}
+	public int getGotspeedTicksCount() {
+		String value=getValue(GlobalStaticValues.KEY_GOTSPEED_COUNT,"0");
+		return Integer.valueOf(value);
+	}
+	public void setGotSpeedTicksCount(int value) {
+		Editor editor=mSharedPreferences.edit();
+		editor.putString(GlobalStaticValues.KEY_GOTSPEED_COUNT, String.valueOf(value));
+		editor.commit();		
+	}
+	public void incrementGotSpeedCount() {
+		int count=getGotspeedTicksCount();
+		count++;
+		setGotSpeedTicksCount(count);
 	}
 }
