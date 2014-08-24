@@ -2,6 +2,50 @@
 	<PreferenceScreen
 	  xmlns:android="http://schemas.android.com/apk/res/android">
 		<PreferenceCategory android:title="Debugging Values">
+		    <ListPreference
+	            android:key="LoggingLevel"
+	            android:defaultValue="@string/default_logginglevel_value"
+	            android:title="@string/defaultlogging_title_list_preference"
+	            android:summary="@string/logging_summary_list_preference"
+	            android:entries="@array/logging_preferences"
+	            android:entryValues="@array/loggingvalues_preferences"
+	            android:dialogTitle="@string/logging_dialog_title_list_preference" />
+		</PreferenceCategory>
+		<PreferenceCategory
+			android:title="Notifications"
+		>
+			  <CheckBoxPreference
+			  	android:key="sound"
+			  	android:defaultValue="true"
+			  	android:title="Notifications Use Sound"
+			  	android:summary="Check this box if you want to be notified with sound."
+			  ></CheckBoxPreference>
+			  <CheckBoxPreference
+			  	android:defaultValue="true"
+			  	android:key="vibrate"
+			  	android:title="Notifications Vibrate"
+			  	android:summary="Check this box if you want your phone to vibrate when you are notified."
+			  ></CheckBoxPreference>
+			  <CheckBoxPreference
+			  	android:key="popup"
+			  	android:defaultValue="true"
+			  	android:title="Notifications Use Popup"
+			  	android:summary="Check this box if you want to be notified with a popup window."
+			  ></CheckBoxPreference>
+			  <EditTextPreference
+			      android:key="isdriving"
+			      android:defaultValue="5"
+			      android:title="Driving"
+			      android:summary="Speed (in MPH) above which the phone considers that you are driving."
+			  ></EditTextPreference>
+			  <EditTextPreference
+			      android:key="stoptime"
+			      android:defaultValue="7"
+			      android:title="Stop Time"
+			      android:summary="If you are stopped for this amount of minutes, you will receive an alert."
+			  ></EditTextPreference>
+		</PreferenceCategory>
+		<PreferenceCategory android:title="Heartbeat Frequency" >
 		    <ListPreference android:key="HeartbeatFrequency"
 				android:defaultValue="@string/default_heartbeatfrequency_value"
 				android:title="@string/defaulthearbeatfrequency_title_list_preference"
@@ -9,14 +53,6 @@
 				android:entries="@array/heartbeat_list_preference" 
 				android:entryValues="@array/heartbeatvalues_list_preference"
 				android:dialogTitle="@string/heartbeat_dialog_title_list_preference" />
-		    <ListPreference
-		            android:key="LoggingLevel"
-		            android:defaultValue="@string/default_logginglevel_value"
-		            android:title="@string/defaultlogging_title_list_preference"
-		            android:summary="@string/logging_summary_list_preference"
-		            android:entries="@array/logging_preferences"
-		            android:entryValues="@array/loggingvalues_preferences"
-		            android:dialogTitle="@string/logging_dialog_title_list_preference" />
-		</PreferenceCategory>
+		</PreferenceCategory>	
 </PreferenceScreen>
 

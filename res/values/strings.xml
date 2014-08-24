@@ -15,4 +15,8 @@
     <string name="heartbeat_dialog_title_list_preference">Choose a Hearbeat frequency</string>
     <string name="heartbeatfrequency_summary_list_preference">The number of seconds between heartbeats.</string>
     
+    <string name="alertnotificationtitle">Kid Minder Alert</string>
+    <string name="alertnotificationdescription1">You have been stopped now for </string>
+    <string name="alertnotificationdescription2">Make sure that you haven\'t left your child in the car.</string>
+    
 </resources>

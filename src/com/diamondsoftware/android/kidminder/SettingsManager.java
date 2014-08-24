@@ -151,4 +151,44 @@ public class SettingsManager {
 				GlobalStaticValues.KEY_LATESTLOCATION_LONGITUDE,String.valueOf(longitude)
 			);
 	}
+	public int getIsDrivingThreshhold() {
+		String value=getValue(GlobalStaticValues.KEY_IS_DRIVING_THRESHHOLD,"5");
+		int valueAsInt=GlobalStaticValues.DEFAULT_MPH_DRIVINGTHRESHHOLD; // default ... in case the entered garbage
+		try {
+			valueAsInt=Integer.valueOf(value);
+		} catch (Exception e) {
+			valueAsInt=GlobalStaticValues.DEFAULT_MPH_DRIVINGTHRESHHOLD;
+			setIsDrivingThreshhold(valueAsInt);
+		}
+		return valueAsInt;
+	}
+	public void setIsDrivingThreshhold(int value) {
+		setValue(GlobalStaticValues.KEY_IS_DRIVING_THRESHHOLD,"5");
+	}
+	public void setStoppedTimeMinutesBeforeNotification(int value) {
+		setValue(GlobalStaticValues.KEY_STOPPEDTIME_MINUTES_BEFORE_NOTIFICATION,String.valueOf(value));
+	}
+	public int getStoppedTimeMinutesBeforeNotification() {
+		String value=getValue(GlobalStaticValues.KEY_STOPPEDTIME_MINUTES_BEFORE_NOTIFICATION,"7");
+		int valueAsInt=GlobalStaticValues.DEFAULT_MINUTES_STOPPED; // default ... in case the entered garbage
+		try {
+			valueAsInt=Integer.valueOf(value);
+		} catch (Exception e) {
+			valueAsInt=GlobalStaticValues.DEFAULT_MINUTES_STOPPED;
+			setStoppedTimeMinutesBeforeNotification(valueAsInt);
+		}
+		return valueAsInt;
+	}
+	public boolean getNotificationUsesSound() {
+		boolean usesSound=mSharedPreferences.getBoolean(GlobalStaticValues.KEY_NOTIFICATION_USES_SOUND, true);
+		return usesSound;
+	}
+	public boolean getNotificationUsesVibrate() {
+		boolean usesSound=mSharedPreferences.getBoolean(GlobalStaticValues.KEY_NOTIFICATION_USES_VIBRATE, true);
+		return usesSound;
+	}
+	public boolean getNotificationUsesPopup() {
+		boolean usesSound=mSharedPreferences.getBoolean(GlobalStaticValues.KEY_NOTIFICATION_USES_POPUP, true);
+		return usesSound;
+	}
 }

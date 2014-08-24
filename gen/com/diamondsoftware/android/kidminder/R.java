@@ -1679,6 +1679,9 @@ containing a value of this type.
          */
         public static final int abc_shareactionprovider_share_with_application=0x7f07002b;
         public static final int action_settings=0x7f07002e;
+        public static final int alertnotificationdescription1=0x7f070038;
+        public static final int alertnotificationdescription2=0x7f070039;
+        public static final int alertnotificationtitle=0x7f070037;
         public static final int app_name=0x7f07002d;
         public static final int auth_client_needs_enabling_title=0x7f070001;
         public static final int auth_client_needs_installation_title=0x7f070002;
