@@ -1487,8 +1487,11 @@ containing a value of this type.
         public static final int spot_mask=0x7f020077;
     }
     public static final class id {
+        public static final int CalculatedDistanceId=0x7f090059;
         public static final int GotSpeedCountId=0x7f090053;
         public static final int HeartbeatCountId=0x7f090051;
+        public static final int LatestLocationId=0x7f090057;
+        public static final int PriorLocationId=0x7f090055;
         public static final int action_bar=0x7f09002e;
         public static final int action_bar_activity_content=0x7f090027;
         public static final int action_bar_container=0x7f09002d;
@@ -1500,7 +1503,7 @@ containing a value of this type.
         public static final int action_menu_divider=0x7f090028;
         public static final int action_menu_presenter=0x7f090029;
         public static final int action_mode_close_button=0x7f090036;
-        public static final int action_settings=0x7f090055;
+        public static final int action_settings=0x7f09005b;
         public static final int activity_chooser_view_content=0x7f090037;
         public static final int always=0x7f09001e;
         public static final int beginning=0x7f090023;
@@ -1508,6 +1511,7 @@ containing a value of this type.
         public static final int buyButton=0x7f09000a;
         public static final int buy_now=0x7f09000f;
         public static final int buy_with_google=0x7f09000e;
+        public static final int calculated_distance_id=0x7f09005a;
         public static final int checkbox=0x7f09003f;
         public static final int classic=0x7f090011;
         public static final int collapseActionView=0x7f090020;
@@ -1531,6 +1535,7 @@ containing a value of this type.
         public static final int icon=0x7f09003c;
         public static final int ifRoom=0x7f09001d;
         public static final int image=0x7f090039;
+        public static final int latest_location_id=0x7f090058;
         public static final int listMode=0x7f090014;
         public static final int list_item=0x7f09003b;
         public static final int match_parent=0x7f09000c;
@@ -1539,6 +1544,7 @@ containing a value of this type.
         public static final int never=0x7f09001c;
         public static final int none=0x7f090000;
         public static final int normal=0x7f090001;
+        public static final int prior_location_id=0x7f090056;
         public static final int production=0x7f090007;
         public static final int progress_circular=0x7f09002a;
         public static final int progress_horizontal=0x7f09002b;

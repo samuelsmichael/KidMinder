@@ -10,7 +10,7 @@
 	    <string name="logging_summary_list_preference">What level of trouble-shooting logging would you	like?</string>
     	<string name="logging_dialog_title_list_preference">Choose a logging level</string>
 	<!-- Heartbeat -->
-    <string name="default_heartbeatfrequency_value">2</string>
+    <string name="default_heartbeatfrequency_value">5</string>
     <string name="defaulthearbeatfrequency_title_list_preference">Hearbeat Frequency</string>
     <string name="heartbeat_dialog_title_list_preference">Choose a Hearbeat frequency</string>
     <string name="heartbeatfrequency_summary_list_preference">The number of seconds between heartbeats.</string>

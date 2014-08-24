@@ -1,13 +1,18 @@
 package com.diamondsoftware.android.kidminder;
 
 
+import java.text.NumberFormat;
+import java.util.Date;
 import java.util.Locale;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
@@ -23,9 +28,9 @@ public class MainActivityPerspectiveTest extends MainActivity {
 	private Switch mSwitch;
 	private TextView mHeartbeatIndicator;
 	private TextView mGotSpeedIndicator;
-    private MyBroadcastReceiver mBroadcastReceiver;
-    // An intent filter for the broadcast receiver
-    private IntentFilter mIntentFilter;
+	private TextView mPriorLocation;
+	private TextView mLatestLocation;
+	private TextView mCalculatedSpeed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +40,10 @@ public class MainActivityPerspectiveTest extends MainActivity {
         mSwitch=(Switch)findViewById(R.id.enabledSwitch);
         mHeartbeatIndicator=(TextView)findViewById(R.id.heartbeatcount_id);
         mGotSpeedIndicator=(TextView)findViewById(R.id.gotspeedcount_id);
+    	mPriorLocation=(TextView)findViewById(R.id.prior_location_id);
+    	mLatestLocation=(TextView)findViewById(R.id.latest_location_id);
+    	mCalculatedSpeed=(TextView)findViewById(R.id.calculated_distance_id);
+
         
         mSwitch.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
@@ -42,7 +51,7 @@ public class MainActivityPerspectiveTest extends MainActivity {
 			public void onCheckedChanged(CompoundButton buttonView,
 					boolean isChecked) {
 				if(!isChecked) {
-					MainActivityPerspectiveTest.this.resetTimer();
+					pressedDisableButton();
 				} else {
 					pressedEnableButton();
 				}
@@ -50,22 +59,6 @@ public class MainActivityPerspectiveTest extends MainActivity {
 			}
         	
         });
-        
-		if(mBroadcastReceiver!=null) {
-			LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
-		}
-        // Create a new broadcast receiver to receive updates from the listeners and service
-        mBroadcastReceiver = new MyBroadcastReceiver();
-		mIntentFilter = new IntentFilter();
-		mIntentFilter.addAction(GlobalStaticValues.SPEED_NOTIFICATION);
-		mIntentFilter.addAction(GlobalStaticValues.HEARTBEAT_NOTIFICATION);
-		mIntentFilter.addAction(GlobalStaticValues.GOTSPEED_NOTIFICATION);
-
-		// Register the broadcast receiver to receive status updates
-		LocalBroadcastManager.getInstance(this).registerReceiver(
-				mBroadcastReceiver, mIntentFilter);
-
-
         
   	  // Customize SpeedometerView
   	  speedometer = (SpeedometerView) findViewById(R.id.speedometer);
@@ -92,9 +85,6 @@ public class MainActivityPerspectiveTest extends MainActivity {
 
     @Override
     protected void onDestroy() {
-		if(mBroadcastReceiver!=null) {
-			LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
-		}
     	super.onDestroy();
     }
     
@@ -103,8 +93,29 @@ public class MainActivityPerspectiveTest extends MainActivity {
 		mSwitch.setChecked(mSettingsManager.getIsEnabled());
 		speedometer.setSpeed(mSettingsManager.getCurrentSpeed());
 		this.mHeartbeatIndicator.setText(String.format(Locale.getDefault(), "%d", mSettingsManager.getHeartbeatTicksCount()));
-		int gotSpeedTicks=mSettingsManager.getGotspeedTicksCount();
-		mGotSpeedIndicator.setText(String.format(Locale.getDefault(), "%d", gotSpeedTicks));
+		mGotSpeedIndicator.setText(NumberFormat.getNumberInstance(Locale.US).format(mSettingsManager.getGotspeedTicksCount()));
+		LatLng priorLocation=mSettingsManager.getPriorLocation();
+		LatLng latestLocation=mSettingsManager.getLatestLocation();
+		mPriorLocation.setText(priorLocation.toString());
+		mLatestLocation.setText(latestLocation.toString());
+		Date priorLocationDate=mSettingsManager.getPriorLocationDate();
+		Date latestLocationDate=mSettingsManager.getLatestLocationDate();
+		if(priorLocationDate!=null && priorLocation != null && latestLocationDate!=null && latestLocation != null) {
+			long intervalInSeconds=Math.abs((latestLocationDate.getTime() - priorLocationDate.getTime())/1000);
+			Location priorLocationAsLocation=new Location("GPS");
+			priorLocationAsLocation.setLatitude(priorLocation.latitude);
+			priorLocationAsLocation.setLongitude(priorLocation.longitude);
+			Location latestLocationAsLocation=new Location("GPS");
+			latestLocationAsLocation.setLatitude(latestLocation.latitude);
+			latestLocationAsLocation.setLongitude(latestLocation.longitude);
+			if(priorLocation.latitude!=0) {
+				float dxInMeters=priorLocationAsLocation.distanceTo(latestLocationAsLocation);
+				double mph= (((double)dxInMeters/(double)intervalInSeconds)*(double)3600)/1609.34;
+				this.mCalculatedSpeed.setText(String.valueOf((int)mph));
+			} else {
+				mCalculatedSpeed.setText("");
+			}
+		}
 	}
 	
 	@Override
@@ -125,55 +136,18 @@ public class MainActivityPerspectiveTest extends MainActivity {
 	}
 
 
-    /**
-     * Define a Broadcast receiver that receives updates from connection listeners and
-     * the geofence transition service.
-     */
-    public class MyBroadcastReceiver extends BroadcastReceiver {
-        /*
-         * Define the required method for broadcast receivers
-         * This method is invoked when a broadcast Intent triggers the receiver
-         */
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            // Check the action code and determine what to do
-            String action = intent.getAction();
-            if (TextUtils.equals(action, GlobalStaticValues.SPEED_NOTIFICATION)) {
-        		double speed=intent.getDoubleExtra("speed", 0);
-                new Logger(mSettingsManager.getLoggingLevel(),"MainActivityPerspectiveTest",MainActivityPerspectiveTest.this).log("About to setCurrentSpeed. speed="+String.valueOf(speed), GlobalStaticValues.LOG_LEVEL_INFORMATION);
-            	mSettingsManager.setCurrentSpeed(speed);
-            } else {
-            	if (TextUtils.equals(action, GlobalStaticValues.HEARTBEAT_NOTIFICATION)) {
-            		mSettingsManager.incrementHeartbeatTicksCount();
-            	} else {
-                	if (TextUtils.equals(action, GlobalStaticValues.GOTSPEED_NOTIFICATION)) {
-                		mSettingsManager.incrementGotSpeedCount();        
-                	}
-            	}
-            }
-        	onResumeManageView();
-        }
-    }
-
-
 	@Override
-	protected void resetTimer() {	
-		mSettingsManager.setCurrentSpeed(0);
-		mSettingsManager.setGotSpeedTicksCount(0);
-		mSettingsManager.setHeartbeatTicksCount(0);
-		mSettingsManager.setIsEnabled(false);
-		Intent intent=new Intent(this,TimerService.class)
-			.setAction(GlobalStaticValues.ACTION_RESET);
-		startService(intent);
+	protected void stopTimer() {
+		baseStopTimerService();
 	}
 
 	@Override
 	protected void pressedEnableButton() {
-		mSettingsManager.setCurrentSpeed(0);
-		mSettingsManager.setGotSpeedTicksCount(0);
-		mSettingsManager.setHeartbeatTicksCount(0);
-		mSettingsManager.setIsEnabled(true);
-		Intent intent=new Intent(this,TimerService.class);
-		startService(intent);
+		baseStartTimerService();
+	}
+
+	@Override
+	protected void pressedDisableButton() {
+		baseStopTimerService();
 	}
 }
