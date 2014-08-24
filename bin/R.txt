@@ -332,6 +332,7 @@ int drawable powered_by_google_dark 0x7f020075
 int drawable powered_by_google_light 0x7f020076
 int drawable spot_mask 0x7f020077
 int id CalculatedDistanceId 0x7f090059
+int id CurrentRestTimeId 0x7f09005b
 int id GotSpeedCountId 0x7f090053
 int id HeartbeatCountId 0x7f090051
 int id LatestLocationId 0x7f090057
@@ -347,7 +348,7 @@ int id action_context_bar 0x7f09002f
 int id action_menu_divider 0x7f090028
 int id action_menu_presenter 0x7f090029
 int id action_mode_close_button 0x7f090036
-int id action_settings 0x7f09005b
+int id action_settings 0x7f09005d
 int id activity_chooser_view_content 0x7f090037
 int id always 0x7f09001e
 int id beginning 0x7f090023
@@ -359,6 +360,7 @@ int id calculated_distance_id 0x7f09005a
 int id checkbox 0x7f09003f
 int id classic 0x7f090011
 int id collapseActionView 0x7f090020
+int id current_rest_time_id 0x7f09005c
 int id default_activity_button 0x7f09003a
 int id dialog 0x7f090021
 int id disableHome 0x7f09001b

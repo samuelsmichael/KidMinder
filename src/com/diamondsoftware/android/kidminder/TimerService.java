@@ -38,6 +38,8 @@ LocationListener  {
 	private Timer mRestTimer=null;
 	private Date mTimeWhenRestTimerStarted;
 	private Date mRestTimerCurrent;
+	private int mJeDisSimulation=0;
+	private boolean DO_SIMULATION_SO_YOU_DONT_HAVE_TO_BE_DRIVING=false;
 
 	
     // Global constants
@@ -63,8 +65,25 @@ LocationListener  {
         	.putExtra(GlobalStaticValues.KEY_LATESTLOCATION_LONGITUDE,location.getLongitude());
         LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent2);
 		
-		if(location.hasSpeed()) {
-			speed=(double)location.getSpeed();
+		if(location.hasSpeed()||(true&&DO_SIMULATION_SO_YOU_DONT_HAVE_TO_BE_DRIVING)) {
+			if(DO_SIMULATION_SO_YOU_DONT_HAVE_TO_BE_DRIVING) {
+				if(mJeDisSimulation<2) {
+					speed=10;
+				} else {
+					if(mJeDisSimulation>8 && mJeDisSimulation<=12) {
+						speed = 20;
+					} else {
+						if(mJeDisSimulation>12) {
+							speed=0;
+						} else {
+							speed=(double)location.getSpeed();
+						}
+					}
+				}
+				mJeDisSimulation++;
+			} else {
+				speed=(double)location.getSpeed();				
+			}
 			speed=(speed*(double)3600)/1609.34;
 			Intent broadcastIntent = new Intent();
 	        broadcastIntent.setAction(GlobalStaticValues.NOTIFICATION_GOTSPEED);
@@ -78,19 +97,22 @@ LocationListener  {
         // Broadcast whichever result occurred
         LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
         if(mDrivingFlag) {
-        	if(speed<mSettingsManager.getIsDrivingThreshhold()) {
-        		this.stopMyRestTimer();
+        	if(speed>mSettingsManager.getIsDrivingThreshhold()) {
+        		this.resetMyRestTimer();
         	} else {
 				long intervalInSeconds=Math.abs((mRestTimerCurrent.getTime() - mTimeWhenRestTimerStarted.getTime())/1000);
 				int intervalInMinutes=(int)((float)intervalInSeconds/60f);
 				if(intervalInMinutes>=mSettingsManager.getStoppedTimeMinutesBeforeNotification()) {
 					// do alarm notification
+					if(DO_SIMULATION_SO_YOU_DONT_HAVE_TO_BE_DRIVING) {
+						mJeDisSimulation=-1;
+					}
 					if(mSettingsManager.getNotificationUsesPopup()) {
 				    	if(this.isMyActivityRunning()) {
 				    		Intent broadcastIntentAlert = new Intent();
-					        broadcastIntent.setAction(GlobalStaticValues.NOTIFICATION_POPUPALERT);
+					        broadcastIntentAlert.setAction(GlobalStaticValues.NOTIFICATION_POPUPALERT);
 					        // Broadcast whichever result occurred
-					        LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
+					        LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntentAlert);
 				    	} else {
 					    	Intent intent=new Intent(this,MainActivityPerspectiveTest.class)
 					    		.setAction(GlobalStaticValues.ACTION_POPUPALERT);
@@ -129,10 +151,13 @@ LocationListener  {
 				               .setContentIntent(notificationPendingIntent)
 				               .setAutoCancel(true)
 				               .setPriority(NotificationCompat.PRIORITY_MAX)
-				               .setOnlyAlertOnce(true)
-				               .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-				               .setVibrate(new long[] {0, 1000,500,1000,500,1000,500,1000,500,1000,500,1000,500,1000});
-
+				               .setOnlyAlertOnce(true);
+				        if(mSettingsManager.getNotificationUsesSound()) {
+				               builder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+				        }
+				        if(mSettingsManager.getNotificationUsesVibrate()) {
+				               builder.setVibrate(new long[] {0, 1000,500,1000,500,1000,500,1000,500,1000,500,1000,500,1000});
+				        }
 				        // Get an instance of the Notification manager
 				        NotificationManager mNotificationManager =
 				            (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -143,6 +168,7 @@ LocationListener  {
 
 					mDrivingFlag=false;
 					this.stopMyRestTimer();
+					
 				}
 
         	}
@@ -213,6 +239,9 @@ LocationListener  {
 	        }
 		}
 		this.stopMyRestTimer();
+		if(DO_SIMULATION_SO_YOU_DONT_HAVE_TO_BE_DRIVING) {
+			mJeDisSimulation=-1;
+		}
         mSettingsManager.setLatestLocationDate(new Date());
         mSettingsManager.setPriorLocation(0, 0);
         mSettingsManager.setCurrentSpeed(0);
@@ -290,6 +319,12 @@ LocationListener  {
 		}
 		return mRestTimer;
 	}
+	private void resetMyRestTimer() {
+		// RestTimer=0
+		this.mTimeWhenRestTimerStarted=new Date();
+		this.mRestTimerCurrent=new Date();
+
+	}
 	private void stopMyRestTimer() {
 		if (mRestTimer != null) {
 			try {
@@ -298,6 +333,12 @@ LocationListener  {
 			} catch (Exception e) {
 			}
 			mRestTimer = null;
+    		Intent broadcastIntentAlert = new Intent()
+    			.setAction(GlobalStaticValues.NOTIFICATION_CURRENT_REST_TIME)
+    			.putExtra(GlobalStaticValues.KEY_CURRENT_REST_TIME, 0l);
+	        // Broadcast whichever result occurred
+	        LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntentAlert);
+	        this.resetMyRestTimer();
 		}
 	}	
 	private void startMyRestTimer() {
@@ -305,8 +346,18 @@ LocationListener  {
 		getRestTimer().schedule(new TimerTask() {
 			public void run() {
 				mRestTimerCurrent=new Date();
+				long millisFromTimerWhenRestTimerStarted=mTimeWhenRestTimerStarted.getTime();
+				long millisFromRestTimeCurrent=mRestTimerCurrent.getTime();
+				double timeInSeconds=((double)mRestTimerCurrent.getTime()-(double)mTimeWhenRestTimerStarted.getTime())/1000;
+				long timeInSecondsLong=(long)timeInSeconds;
+	    		Intent broadcastIntentAlert = new Intent()
+    			.setAction(GlobalStaticValues.NOTIFICATION_CURRENT_REST_TIME)
+    			.putExtra(GlobalStaticValues.KEY_CURRENT_REST_TIME, timeInSecondsLong);
+	        // Broadcast whichever result occurred
+	        LocalBroadcastManager.getInstance(TimerService.this).sendBroadcast(broadcastIntentAlert);
+
 			}
-		}, GlobalStaticValues.RestTimerInterval, GlobalStaticValues.RestTimerInterval);
+		}, GlobalStaticValues.RestTimerInterval*1000, GlobalStaticValues.RestTimerInterval*1000);
 	}
 
 }

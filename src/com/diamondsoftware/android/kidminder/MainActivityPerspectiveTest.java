@@ -31,6 +31,7 @@ public class MainActivityPerspectiveTest extends MainActivity {
 	private TextView mPriorLocation;
 	private TextView mLatestLocation;
 	private TextView mCalculatedSpeed;
+	private TextView mCurrentRestTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +44,7 @@ public class MainActivityPerspectiveTest extends MainActivity {
     	mPriorLocation=(TextView)findViewById(R.id.prior_location_id);
     	mLatestLocation=(TextView)findViewById(R.id.latest_location_id);
     	mCalculatedSpeed=(TextView)findViewById(R.id.calculated_distance_id);
-
+    	mCurrentRestTime=(TextView)findViewById(R.id.current_rest_time_id);
         
         mSwitch.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
@@ -116,6 +117,10 @@ public class MainActivityPerspectiveTest extends MainActivity {
 				mCalculatedSpeed.setText("");
 			}
 		}
+		long currentRestTimeInSeconds=mSettingsManager.getCurrentRestTime();
+		int minutes=(int)currentRestTimeInSeconds/60;
+		int seconds=(int)currentRestTimeInSeconds % 60;
+		mCurrentRestTime.setText(String.valueOf(minutes)+" m   "+String.valueOf(seconds)+ " s");
 	}
 	
 	@Override

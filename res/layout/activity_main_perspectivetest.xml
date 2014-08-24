@@ -163,6 +163,31 @@
 		    >	  
 		</TextView>	    
 	</LinearLayout>	
-		
+	<LinearLayout 
+	    android:id="@+id/CurrentRestTimeId"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_below="@+id/CalculatedDistanceId"
+	    android:layout_centerHorizontal="true"
+	    android:layout_marginTop="5dip"
+	    android:orientation="horizontal"
+	    >
+    	<TextView 
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:textSize="14sp"
+		    android:text="Current rest time:"
+		    android:layout_marginRight="20dip"
+		    >	  
+		</TextView>	    
+    	<TextView 
+		    android:id="@+id/current_rest_time_id"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:textSize="14sp"
+		    >	  
+		</TextView>	    	    		    	    	    
+	</LinearLayout>	
+			
 	
 </RelativeLayout>

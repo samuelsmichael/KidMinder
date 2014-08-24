@@ -191,4 +191,11 @@ public class SettingsManager {
 		boolean usesSound=mSharedPreferences.getBoolean(GlobalStaticValues.KEY_NOTIFICATION_USES_POPUP, true);
 		return usesSound;
 	}
+	public long getCurrentRestTime() {
+		String value= getValue(GlobalStaticValues.KEY_CURRENT_REST_TIME,"0");
+		return Long.valueOf(value);
+	}
+	public void setCurrentRestTime(long value) {
+		setValue(GlobalStaticValues.KEY_CURRENT_REST_TIME,String.valueOf(value));
+	}
 }

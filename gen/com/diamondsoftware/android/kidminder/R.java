@@ -1488,6 +1488,7 @@ containing a value of this type.
     }
     public static final class id {
         public static final int CalculatedDistanceId=0x7f090059;
+        public static final int CurrentRestTimeId=0x7f09005b;
         public static final int GotSpeedCountId=0x7f090053;
         public static final int HeartbeatCountId=0x7f090051;
         public static final int LatestLocationId=0x7f090057;
@@ -1503,7 +1504,7 @@ containing a value of this type.
         public static final int action_menu_divider=0x7f090028;
         public static final int action_menu_presenter=0x7f090029;
         public static final int action_mode_close_button=0x7f090036;
-        public static final int action_settings=0x7f09005b;
+        public static final int action_settings=0x7f09005d;
         public static final int activity_chooser_view_content=0x7f090037;
         public static final int always=0x7f09001e;
         public static final int beginning=0x7f090023;
@@ -1515,6 +1516,7 @@ containing a value of this type.
         public static final int checkbox=0x7f09003f;
         public static final int classic=0x7f090011;
         public static final int collapseActionView=0x7f090020;
+        public static final int current_rest_time_id=0x7f09005c;
         public static final int default_activity_button=0x7f09003a;
         public static final int dialog=0x7f090021;
         public static final int disableHome=0x7f09001b;

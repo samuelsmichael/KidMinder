@@ -9,6 +9,7 @@ public class GlobalStaticValues {
 	public static final String NOTIFICATION_GOTSPEED ="GotSpeed_Notification";
 	public static final String NOTIFICATION_GPS_NOT_ENABLED ="NOTIFICATION_GPS_NOT_ENABLED";
 	public static final String NOTIFICATION_POPUPALERT="notificationPopupAlert";
+	public static final String NOTIFICATION_CURRENT_REST_TIME="currentresttime";
 	
 	public static final String KEY_LOGGINGLEVEL= "LoggingLevel";
 	public static final String KEY_HEARTBEATFREQUENCY="HeartbeatFrequency";	
@@ -27,6 +28,7 @@ public class GlobalStaticValues {
 	public static final String KEY_NOTIFICATION_USES_POPUP = "popup";
 	public static final String KEY_IS_DRIVING_THRESHHOLD = "isdriving";
 	public static final String KEY_STOPPEDTIME_MINUTES_BEFORE_NOTIFICATION = "stoptime";
+	public static final String KEY_CURRENT_REST_TIME="CURRENTRestTime";
 	
 	public static final String ACTION_GPS_NOT_ENABLED = "ACTIONGPGNOTENABLED";
 	public static final String ACTION_STOP="ACTION_STOP";
@@ -43,7 +45,7 @@ public class GlobalStaticValues {
 	
 	public static final int DEFAULT_MPH_DRIVINGTHRESHHOLD=5;
 	public static final int DEFAULT_MINUTES_STOPPED=7;
-	public static final long RestTimerInterval=30;
+	public static final long RestTimerInterval=2;
 	
     // Milliseconds per second
     public static final int MILLISECONDS_PER_SECOND = 1000;

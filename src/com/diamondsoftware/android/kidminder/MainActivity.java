@@ -41,7 +41,8 @@ public abstract class MainActivity extends Activity {
     private MyBroadcastReceiver mBroadcastReceiver;
     // An intent filter for the broadcast receiver
     private IntentFilter mIntentFilter;
-    private final Vibrator mVibrator= (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+    private Vibrator mVibrator;
+    private Ringtone mRingTone;
 
 	protected abstract void onResumeManageView();
 	protected abstract void stopTimer();
@@ -53,6 +54,7 @@ public abstract class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mVibrator= (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         mSettingsManager=new SettingsManager(this);
 		if(mBroadcastReceiver!=null) {
 			LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
@@ -65,6 +67,7 @@ public abstract class MainActivity extends Activity {
 		mIntentFilter.addAction(GlobalStaticValues.NOTIFICATION_GOTSPEED);
 		mIntentFilter.addAction(GlobalStaticValues.NOTIFICATION_GPS_NOT_ENABLED);
 		mIntentFilter.addAction(GlobalStaticValues.NOTIFICATION_POPUPALERT);
+		mIntentFilter.addAction(GlobalStaticValues.NOTIFICATION_CURRENT_REST_TIME);
 		// Register the broadcast receiver to receive status updates
 		LocalBroadcastManager.getInstance(this).registerReceiver(
 				mBroadcastReceiver, mIntentFilter);
@@ -96,7 +99,7 @@ public abstract class MainActivity extends Activity {
 	 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 	        builder.setTitle("Kid Alert");//
 	        String alertString=getString(R.string.alertnotificationdescription1) + 
-	        		String.valueOf(mSettingsManager.getStoppedTimeMinutesBeforeNotification()) + "\n" + getString(R.string.alertnotificationdescription2);
+	        		String.valueOf(mSettingsManager.getStoppedTimeMinutesBeforeNotification())+" minute"+ (mSettingsManager.getStoppedTimeMinutesBeforeNotification()>1?"s":"") + getString(R.string.alertnotificationdescription2);
 	        builder.setMessage(alertString)
 	        	.setCancelable(false)
 				.setPositiveButton("Okay", new DialogInterface.OnClickListener() {			
@@ -104,6 +107,10 @@ public abstract class MainActivity extends Activity {
 	               public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
 						dialog.dismiss();
 						mVibrator.cancel();
+						if(mRingTone!=null) {
+							mRingTone.stop();
+							mRingTone=null;
+						}
 	               }
 				}
 			);
@@ -115,9 +122,7 @@ public abstract class MainActivity extends Activity {
 	        // Show the error dialog in the DialogFragment
 	        errorFragment.show(
 	                getFragmentManager(),
-	                "GPS not enabled");
-	
-	        alert.show();	    	
+	                "Alert Dialog");
     	}
     	if(mSettingsManager.getNotificationUsesVibrate()) {
 			// Start without a delay
@@ -136,11 +141,13 @@ public abstract class MainActivity extends Activity {
     	if(mSettingsManager.getNotificationUsesSound()) {
     		try {
     		    Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-    		    Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
-    		    r.play();
+    		    mRingTone = RingtoneManager.getRingtone(getApplicationContext(), notification);
+    		    mRingTone.play();    		    
     		} catch (Exception e) {
     		    e.printStackTrace();
     		}    		
+    	} else {
+    		mRingTone=null;
     	}
     }
     private void showGPSNotEnabledDialog() {
@@ -257,6 +264,10 @@ public abstract class MainActivity extends Activity {
                 		} else {
                 			if(TextUtils.equals(action, GlobalStaticValues.NOTIFICATION_POPUPALERT)) {
                 				doPopupAlert();
+                			} else {
+                				if(TextUtils.equals(action, GlobalStaticValues.NOTIFICATION_CURRENT_REST_TIME)) {
+                					mSettingsManager.setCurrentRestTime(intent.getLongExtra(GlobalStaticValues.KEY_CURRENT_REST_TIME, 0));
+                				}
                 			}
                 		}
                 	}
@@ -286,6 +297,11 @@ public abstract class MainActivity extends Activity {
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             return mDialog;
+        }
+        
+        @Override 
+        public void onSaveInstanceState(Bundle outState) {
+        	
         }
     }
     /*
