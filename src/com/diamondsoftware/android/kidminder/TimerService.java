@@ -67,18 +67,10 @@ LocationListener  {
 		
 		if(location.hasSpeed()||(true&&DO_SIMULATION_SO_YOU_DONT_HAVE_TO_BE_DRIVING)) {
 			if(DO_SIMULATION_SO_YOU_DONT_HAVE_TO_BE_DRIVING) {
-				if(mJeDisSimulation<2) {
+				if(mJeDisSimulation<5) {
 					speed=10;
 				} else {
-					if(mJeDisSimulation>8 && mJeDisSimulation<=12) {
-						speed = 20;
-					} else {
-						if(mJeDisSimulation>12) {
-							speed=0;
-						} else {
-							speed=(double)location.getSpeed();
-						}
-					}
+					speed=0;
 				}
 				mJeDisSimulation++;
 			} else {
@@ -98,11 +90,14 @@ LocationListener  {
         LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
         if(mDrivingFlag) {
         	if(speed>mSettingsManager.getIsDrivingThreshhold()) {
-        		this.resetMyRestTimer();
+        		this.resetRestTimerTimeValues();
         	} else {
 				long intervalInSeconds=Math.abs((mRestTimerCurrent.getTime() - mTimeWhenRestTimerStarted.getTime())/1000);
 				int intervalInMinutes=(int)((float)intervalInSeconds/60f);
 				if(intervalInMinutes>=mSettingsManager.getStoppedTimeMinutesBeforeNotification()) {
+					mDrivingFlag=false;
+					this.stopMyRestTimer();
+
 					// do alarm notification
 					if(DO_SIMULATION_SO_YOU_DONT_HAVE_TO_BE_DRIVING) {
 						mJeDisSimulation=-1;
@@ -164,11 +159,7 @@ LocationListener  {
 
 				       	mNotificationManager.notify((int)new Date().getTime(), builder.build());
 
-					}
-
-					mDrivingFlag=false;
-					this.stopMyRestTimer();
-					
+					}					
 				}
 
         	}
@@ -183,6 +174,8 @@ LocationListener  {
     @Override
     public void onCreate() {
     	super.onCreate();
+		Thread.setDefaultUncaughtExceptionHandler(new CustomExceptionHandlerTimer(
+				this));
 		mSettingsManager=new SettingsManager(this);
         mLocationRequest = LocationRequest.create();
         // Use high accuracy
@@ -194,14 +187,15 @@ LocationListener  {
         // Set the fastest update interval to 1 second
         mLocationRequest.setFastestInterval(GlobalStaticValues.FASTEST_INTERVAL);
         mSettingsManager.setCurrentSpeed(0);
+        mSettingsManager.setCurrentRestTime(0);
+        this.mTimeWhenRestTimerStarted=new Date();
+        this.mRestTimerCurrent=new Date();
         mDrivingFlag=false;
     }
     
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		super.onStartCommand(intent, flags, startId);
-		Thread.setDefaultUncaughtExceptionHandler(new CustomExceptionHandlerTimer(
-				this));
 		if(intent!=null) {
 			String action=intent.getAction();
 			if(action!=null) {
@@ -213,6 +207,10 @@ LocationListener  {
 							startIfNotAlreadyEnabled();
 					} else {
 						if(action.equals(GlobalStaticValues.ACTION_STARTING_FROM_MAINACTIVITY)) {
+					        this.mTimeWhenRestTimerStarted=new Date();
+					        this.mRestTimerCurrent=new Date();
+					        mDrivingFlag=false;
+
 							startIfNotAlreadyEnabled();
 						} else {
 							if(action.equals(GlobalStaticValues.ACTION_STARTING_FROM_BOOTUP)) {
@@ -319,7 +317,7 @@ LocationListener  {
 		}
 		return mRestTimer;
 	}
-	private void resetMyRestTimer() {
+	private void resetRestTimerTimeValues() {
 		// RestTimer=0
 		this.mTimeWhenRestTimerStarted=new Date();
 		this.mRestTimerCurrent=new Date();
@@ -338,10 +336,11 @@ LocationListener  {
     			.putExtra(GlobalStaticValues.KEY_CURRENT_REST_TIME, 0l);
 	        // Broadcast whichever result occurred
 	        LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntentAlert);
-	        this.resetMyRestTimer();
+	        this.resetRestTimerTimeValues();
 		}
 	}	
 	private void startMyRestTimer() {
+		stopMyRestTimer();
 		mTimeWhenRestTimerStarted=new Date();
 		getRestTimer().schedule(new TimerTask() {
 			public void run() {

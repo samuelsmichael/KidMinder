@@ -54,6 +54,8 @@ public abstract class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+		Thread.setDefaultUncaughtExceptionHandler(new CustomExceptionHandlerTimer(
+				this));
         mVibrator= (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         mSettingsManager=new SettingsManager(this);
 		if(mBroadcastReceiver!=null) {
@@ -299,11 +301,12 @@ public abstract class MainActivity extends Activity {
             return mDialog;
         }
         
-        @Override 
-        public void onSaveInstanceState(Bundle outState) {
-        	
-        }
     }
+    @Override 
+    public void onSaveInstanceState(Bundle outState) {
+    	
+    }
+
     /*
      * Handle results returned to the FragmentActivity
      * by Google Play services

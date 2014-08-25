@@ -80,94 +80,10 @@
 		</TextView>	    	    		    
 	</LinearLayout>
 	<LinearLayout 
-	    android:id="@+id/PriorLocationId"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_below="@+id/GotSpeedCountId"
-	    android:layout_centerHorizontal="true"
-	    android:layout_marginTop="15dip"
-	    android:orientation="horizontal"
-	    >
-    	<TextView 
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:textSize="14sp"
-		    android:text="Prior location:"
-		    android:layout_marginRight="20dip"
-		    >	  
-		</TextView>	    
-    	<TextView 
-		    android:id="@+id/prior_location_id"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:textSize="14sp"
-		    >	  
-		</TextView>	    	    		    	    	    
-	</LinearLayout>	
-	<LinearLayout 
-	    android:id="@+id/LatestLocationId"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_below="@+id/PriorLocationId"
-	    android:layout_centerHorizontal="true"
-	    android:layout_marginTop="5dip"
-	    android:orientation="horizontal"
-	    >
-    	<TextView 
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:textSize="14sp"
-		    android:text="Latest location:"
-		    android:layout_marginRight="20dip"
-		    >	  
-		</TextView>	    
-    	<TextView 
-		    android:id="@+id/latest_location_id"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:textSize="14sp"
-		    >	  
-		</TextView>	    	    		    	    	    
-	    	    
-	</LinearLayout>	
-	<LinearLayout 
-	    android:id="@+id/CalculatedDistanceId"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_below="@+id/LatestLocationId"
-	    android:layout_centerHorizontal="true"
-	    android:layout_marginTop="5dip"
-	    android:orientation="horizontal"
-	    >
-    	<TextView 
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:textSize="14sp"
-		    android:text="Calculated distance:"
-		    android:layout_marginRight="20dip"
-		    >	  
-		</TextView>	    
-    	<TextView 
-		    android:id="@+id/calculated_distance_id"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:textSize="14sp"
-		    >	  
-		</TextView>	    	    		    	    	    
-    	<TextView 
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:textSize="14sp"
-		    android:text="MPH"
-		    android:layout_marginLeft="2dip"
-		    >	  
-		</TextView>	    
-	</LinearLayout>	
-	<LinearLayout 
 	    android:id="@+id/CurrentRestTimeId"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
-	    android:layout_below="@+id/CalculatedDistanceId"
+	    android:layout_below="@+id/GotSpeedCountId"
 	    android:layout_centerHorizontal="true"
 	    android:layout_marginTop="5dip"
 	    android:orientation="horizontal"
@@ -188,6 +104,5 @@
 		    >	  
 		</TextView>	    	    		    	    	    
 	</LinearLayout>	
-			
 	
 </RelativeLayout>

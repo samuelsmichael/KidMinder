@@ -28,9 +28,6 @@ public class MainActivityPerspectiveTest extends MainActivity {
 	private Switch mSwitch;
 	private TextView mHeartbeatIndicator;
 	private TextView mGotSpeedIndicator;
-	private TextView mPriorLocation;
-	private TextView mLatestLocation;
-	private TextView mCalculatedSpeed;
 	private TextView mCurrentRestTime;
 
     @Override
@@ -41,9 +38,11 @@ public class MainActivityPerspectiveTest extends MainActivity {
         mSwitch=(Switch)findViewById(R.id.enabledSwitch);
         mHeartbeatIndicator=(TextView)findViewById(R.id.heartbeatcount_id);
         mGotSpeedIndicator=(TextView)findViewById(R.id.gotspeedcount_id);
-    	mPriorLocation=(TextView)findViewById(R.id.prior_location_id);
+/*    	
+ 		mPriorLocation=(TextView)findViewById(R.id.prior_location_id);
     	mLatestLocation=(TextView)findViewById(R.id.latest_location_id);
     	mCalculatedSpeed=(TextView)findViewById(R.id.calculated_distance_id);
+*/
     	mCurrentRestTime=(TextView)findViewById(R.id.current_rest_time_id);
         
         mSwitch.setOnCheckedChangeListener(new OnCheckedChangeListener() {
@@ -97,8 +96,6 @@ public class MainActivityPerspectiveTest extends MainActivity {
 		mGotSpeedIndicator.setText(NumberFormat.getNumberInstance(Locale.US).format(mSettingsManager.getGotspeedTicksCount()));
 		LatLng priorLocation=mSettingsManager.getPriorLocation();
 		LatLng latestLocation=mSettingsManager.getLatestLocation();
-		mPriorLocation.setText(priorLocation.toString());
-		mLatestLocation.setText(latestLocation.toString());
 		Date priorLocationDate=mSettingsManager.getPriorLocationDate();
 		Date latestLocationDate=mSettingsManager.getLatestLocationDate();
 		if(priorLocationDate!=null && priorLocation != null && latestLocationDate!=null && latestLocation != null) {
@@ -112,9 +109,7 @@ public class MainActivityPerspectiveTest extends MainActivity {
 			if(priorLocation.latitude!=0) {
 				float dxInMeters=priorLocationAsLocation.distanceTo(latestLocationAsLocation);
 				double mph= (((double)dxInMeters/(double)intervalInSeconds)*(double)3600)/1609.34;
-				this.mCalculatedSpeed.setText(String.valueOf((int)mph));
 			} else {
-				mCalculatedSpeed.setText("");
 			}
 		}
 		long currentRestTimeInSeconds=mSettingsManager.getCurrentRestTime();

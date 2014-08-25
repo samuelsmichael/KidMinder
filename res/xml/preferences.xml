@@ -1,37 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 	<PreferenceScreen
 	  xmlns:android="http://schemas.android.com/apk/res/android">
-		<PreferenceCategory android:title="Debugging Values">
-		    <ListPreference
-	            android:key="LoggingLevel"
-	            android:defaultValue="@string/default_logginglevel_value"
-	            android:title="@string/defaultlogging_title_list_preference"
-	            android:summary="@string/logging_summary_list_preference"
-	            android:entries="@array/logging_preferences"
-	            android:entryValues="@array/loggingvalues_preferences"
-	            android:dialogTitle="@string/logging_dialog_title_list_preference" />
+		<PreferenceCategory android:title="GPS Frequency" >		    
+		    <ListPreference android:key="HeartbeatFrequency"
+				android:defaultValue="@string/default_heartbeatfrequency_value"
+				android:title="@string/defaulthearbeatfrequency_title_list_preference"
+				android:summary="@string/heartbeatfrequency_summary_list_preference"
+				android:entries="@array/heartbeat_list_preference" 
+				android:entryValues="@array/heartbeatvalues_list_preference"
+				android:dialogTitle="@string/heartbeat_dialog_title_list_preference" />
+		</PreferenceCategory>	
+		<PreferenceCategory android:title="Notification Preferences">
+			<PreferenceScreen android:summary="Choose one or more types of alert notifications."
+				android:title="Notifications">
+				  <CheckBoxPreference
+				  	android:key="sound"
+				  	android:defaultValue="true"
+				  	android:title="Notifications Use Sound"
+				  	android:summary="Check this box if you want to be notified with sound."
+				  ></CheckBoxPreference>
+				  <CheckBoxPreference
+				  	android:defaultValue="true"
+				  	android:key="vibrate"
+				  	android:title="Notifications Vibrate"
+				  	android:summary="Check this box if you want your phone to vibrate when you are notified."
+				  ></CheckBoxPreference>
+				  <CheckBoxPreference
+				  	android:key="popup"
+				  	android:defaultValue="true"
+				  	android:title="Notifications Use Popup"
+				  	android:summary="Check this box if you want to be notified with a popup window."
+				  ></CheckBoxPreference>
+			</PreferenceScreen>
 		</PreferenceCategory>
-		<PreferenceCategory
-			android:title="Notifications"
-		>
-			  <CheckBoxPreference
-			  	android:key="sound"
-			  	android:defaultValue="true"
-			  	android:title="Notifications Use Sound"
-			  	android:summary="Check this box if you want to be notified with sound."
-			  ></CheckBoxPreference>
-			  <CheckBoxPreference
-			  	android:defaultValue="true"
-			  	android:key="vibrate"
-			  	android:title="Notifications Vibrate"
-			  	android:summary="Check this box if you want your phone to vibrate when you are notified."
-			  ></CheckBoxPreference>
-			  <CheckBoxPreference
-			  	android:key="popup"
-			  	android:defaultValue="true"
-			  	android:title="Notifications Use Popup"
-			  	android:summary="Check this box if you want to be notified with a popup window."
-			  ></CheckBoxPreference>
+		<PreferenceCategory android:title="Alert Parameters" 
+		    android:summary="These settings allow you to tailor your driving and stop time to suit your own driving pattern. ">
 			  <EditTextPreference
 			      android:key="isdriving"
 			      android:defaultValue="5"
@@ -45,14 +48,15 @@
 			      android:summary="If you are stopped for this amount of minutes, you will receive an alert."
 			  ></EditTextPreference>
 		</PreferenceCategory>
-		<PreferenceCategory android:title="Heartbeat Frequency" >
-		    <ListPreference android:key="HeartbeatFrequency"
-				android:defaultValue="@string/default_heartbeatfrequency_value"
-				android:title="@string/defaulthearbeatfrequency_title_list_preference"
-				android:summary="@string/heartbeatfrequency_summary_list_preference"
-				android:entries="@array/heartbeat_list_preference" 
-				android:entryValues="@array/heartbeatvalues_list_preference"
-				android:dialogTitle="@string/heartbeat_dialog_title_list_preference" />
-		</PreferenceCategory>	
+	    <PreferenceCategory android:title="Debugging Values">
+		    <ListPreference
+	            android:key="LoggingLevel"
+	            android:defaultValue="@string/default_logginglevel_value"
+	            android:title="@string/defaultlogging_title_list_preference"
+	            android:summary="@string/logging_summary_list_preference"
+	            android:entries="@array/logging_preferences"
+	            android:entryValues="@array/loggingvalues_preferences"
+	            android:dialogTitle="@string/logging_dialog_title_list_preference" />
+		</PreferenceCategory>
 </PreferenceScreen>
 
