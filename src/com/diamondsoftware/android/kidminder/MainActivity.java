@@ -43,6 +43,7 @@ public abstract class MainActivity extends Activity {
     private IntentFilter mIntentFilter;
     private Vibrator mVibrator;
     private Ringtone mRingTone;
+    private boolean mEnabledStateBeforeGPSWasTurnedOff;
 
 	protected abstract void onResumeManageView();
 	protected abstract void stopTimer();
@@ -70,6 +71,7 @@ public abstract class MainActivity extends Activity {
 		mIntentFilter.addAction(GlobalStaticValues.NOTIFICATION_GPS_NOT_ENABLED);
 		mIntentFilter.addAction(GlobalStaticValues.NOTIFICATION_POPUPALERT);
 		mIntentFilter.addAction(GlobalStaticValues.NOTIFICATION_CURRENT_REST_TIME);
+		mIntentFilter.addAction(GlobalStaticValues.NOTIFICATION_GPS_HASBEEN_ENABLED);
 		// Register the broadcast receiver to receive status updates
 		LocalBroadcastManager.getInstance(this).registerReceiver(
 				mBroadcastReceiver, mIntentFilter);
@@ -261,7 +263,9 @@ public abstract class MainActivity extends Activity {
                 		mSettingsManager.incrementGotSpeedCount();        
                 	} else {
                 		if(TextUtils.equals(action, GlobalStaticValues.NOTIFICATION_GPS_NOT_ENABLED)) {
+                			mEnabledStateBeforeGPSWasTurnedOff=mSettingsManager.getIsEnabled();
                 			mSettingsManager.setIsEnabled(false);    	
+                			pressedDisableButton();
                 			showGPSNotEnabledDialog();
                 		} else {
                 			if(TextUtils.equals(action, GlobalStaticValues.NOTIFICATION_POPUPALERT)) {
@@ -269,6 +273,13 @@ public abstract class MainActivity extends Activity {
                 			} else {
                 				if(TextUtils.equals(action, GlobalStaticValues.NOTIFICATION_CURRENT_REST_TIME)) {
                 					mSettingsManager.setCurrentRestTime(intent.getLongExtra(GlobalStaticValues.KEY_CURRENT_REST_TIME, 0));
+                				} else {
+                					if(TextUtils.equals(action, GlobalStaticValues.NOTIFICATION_GPS_HASBEEN_ENABLED)) {
+                						if(mEnabledStateBeforeGPSWasTurnedOff) {
+                							pressedEnableButton();
+                							mSettingsManager.setIsEnabled(true);
+                						}
+                					}
                 				}
                 			}
                 		}

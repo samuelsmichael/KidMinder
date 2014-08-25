@@ -20,6 +20,7 @@ import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
 import android.media.RingtoneManager;
@@ -30,7 +31,7 @@ import android.support.v4.content.LocalBroadcastManager;
 
 public class TimerService extends Service implements GooglePlayServicesClient.ConnectionCallbacks,
 GooglePlayServicesClient.OnConnectionFailedListener,
-LocationListener  {
+com.google.android.gms.location.LocationListener  {
 	private SettingsManager mSettingsManager;
     private LocationClient mLocationClient;
 	private LocationManager mLocationManager = null;
@@ -40,18 +41,13 @@ LocationListener  {
 	private Date mRestTimerCurrent;
 	private int mJeDisSimulation=0;
 	private boolean DO_SIMULATION_SO_YOU_DONT_HAVE_TO_BE_DRIVING=false;
+	private TimerServiceLocationManagerHelper mTimerServiceLocationManagerHelper;
 
 	
     // Global constants
     // Define an object that holds accuracy and frequency parameters
     LocationRequest mLocationRequest;
 	
-	private LocationManager getLocationManager() {
-		if (mLocationManager == null) {
-			mLocationManager = (android.location.LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		}
-		return mLocationManager;
-	}	
     @Override
     public void onLocationChanged(Location location) {
 		double speed=0;
@@ -176,6 +172,7 @@ LocationListener  {
     	super.onCreate();
 		Thread.setDefaultUncaughtExceptionHandler(new CustomExceptionHandlerTimer(
 				this));
+        mTimerServiceLocationManagerHelper=new TimerServiceLocationManagerHelper(this);
 		mSettingsManager=new SettingsManager(this);
         mLocationRequest = LocationRequest.create();
         // Use high accuracy
@@ -245,22 +242,31 @@ LocationListener  {
         mSettingsManager.setCurrentSpeed(0);
 	}
 	private int mDontReenter=0;
+	public void notifyActivityThatGPSIsNotOn() {
+    	if(this.isMyActivityRunning()) {
+    		Intent broadcastIntent = new Intent();
+	        broadcastIntent.setAction(GlobalStaticValues.NOTIFICATION_GPS_NOT_ENABLED);
+	        // Broadcast whichever result occurred
+	        LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
+    	} else {
+	    	Intent intent=new Intent(this,MainActivityPerspectiveTest.class)
+	    		.setAction(GlobalStaticValues.ACTION_GPS_NOT_ENABLED);
+	    	intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+	    	startActivity(intent);
+    	}
+	}
+	public void gpsIsBackOn() {
+		Intent broadcastIntent = new Intent();
+        broadcastIntent.setAction(GlobalStaticValues.NOTIFICATION_GPS_HASBEEN_ENABLED);
+        // Broadcast whichever result occurred
+        LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
+	}
 	private void startIfNotAlreadyEnabled() {
 		if(mDontReenter==0) {
 			mDontReenter=1;
 			if(this.mLocationClient==null || !(mLocationClient.isConnected() || mLocationClient.isConnecting())) {
-			    if (! getLocationManager().isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
-			    	if(this.isMyActivityRunning()) {
-			    		Intent broadcastIntent = new Intent();
-				        broadcastIntent.setAction(GlobalStaticValues.NOTIFICATION_GPS_NOT_ENABLED);
-				        // Broadcast whichever result occurred
-				        LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
-			    	} else {
-				    	Intent intent=new Intent(this,MainActivityPerspectiveTest.class)
-				    		.setAction(GlobalStaticValues.ACTION_GPS_NOT_ENABLED);
-				    	intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				    	startActivity(intent);
-			    	}
+			    if (! mTimerServiceLocationManagerHelper.isGPSAlive() ) {
+					notifyActivityThatGPSIsNotOn();
 			    } else {
 			    	stop();
 			        mLocationClient = new LocationClient(this, this, this);
@@ -272,7 +278,8 @@ LocationListener  {
 	}
 	@Override
 	public void onDestroy() {
-    	stop();		
+    	stop();	
+    	mTimerServiceLocationManagerHelper.onDestroy();
 	}
 	
 

@@ -8,6 +8,7 @@ public class GlobalStaticValues {
 	public static final String NOTIFICATION_HEARTBEAT ="Heartbeat_Notification";
 	public static final String NOTIFICATION_GOTSPEED ="GotSpeed_Notification";
 	public static final String NOTIFICATION_GPS_NOT_ENABLED ="NOTIFICATION_GPS_NOT_ENABLED";
+	public static final String NOTIFICATION_GPS_HASBEEN_ENABLED ="NOTIFICATION_GPS_HASBEEN_ENABLED";
 	public static final String NOTIFICATION_POPUPALERT="notificationPopupAlert";
 	public static final String NOTIFICATION_CURRENT_REST_TIME="currentresttime";
 	
