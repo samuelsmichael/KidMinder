@@ -40,132 +40,159 @@ com.google.android.gms.location.LocationListener  {
 	private Date mTimeWhenRestTimerStarted;
 	private Date mRestTimerCurrent;
 	private int mJeDisSimulation=0;
-	private boolean DO_SIMULATION_SO_YOU_DONT_HAVE_TO_BE_DRIVING=false;
 	private TimerServiceLocationManagerHelper mTimerServiceLocationManagerHelper;
 
 	
     // Global constants
     // Define an object that holds accuracy and frequency parameters
     LocationRequest mLocationRequest;
+    int mNoreentry2=0;
+    
 	
     @Override
     public void onLocationChanged(Location location) {
-		double speed=0;
-		// Broadcast message to listeners
-		GregorianCalendar gc=new GregorianCalendar(Locale.getDefault());
-		gc.setTime(new Date());
-		Intent broadcastIntent2 = new Intent();
-        broadcastIntent2.setAction(GlobalStaticValues.NOTIFICATION_HEARTBEAT)
-        	.putExtra(GlobalStaticValues.KEY_LATESTLOCATION_DATESTAMP,GlobalStaticValues.MDATEFORMAT.format(gc.getTime()))
-        	.putExtra(GlobalStaticValues.KEY_LATESTLOCATION_LATITUDE,location.getLatitude())
-        	.putExtra(GlobalStaticValues.KEY_LATESTLOCATION_LONGITUDE,location.getLongitude());
-        LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent2);
-		
-		if(location.hasSpeed()||(true&&DO_SIMULATION_SO_YOU_DONT_HAVE_TO_BE_DRIVING)) {
-			if(DO_SIMULATION_SO_YOU_DONT_HAVE_TO_BE_DRIVING) {
-				if(mJeDisSimulation<5) {
-					speed=10;
+	    if(mNoreentry2==0) {
+	    	mNoreentry2=1;
+			double speed=0;
+			// Broadcast message to listeners
+			GregorianCalendar gc=new GregorianCalendar(Locale.getDefault());
+			gc.setTime(new Date());
+			Intent broadcastIntent2 = new Intent();
+	        broadcastIntent2.setAction(GlobalStaticValues.NOTIFICATION_HEARTBEAT)
+	        	.putExtra(GlobalStaticValues.KEY_LATESTLOCATION_DATESTAMP,GlobalStaticValues.MDATEFORMAT.format(gc.getTime()))
+	        	.putExtra(GlobalStaticValues.KEY_LATESTLOCATION_LATITUDE,location.getLatitude())
+	        	.putExtra(GlobalStaticValues.KEY_LATESTLOCATION_LONGITUDE,location.getLongitude());
+	        LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent2);
+			
+			if(location.hasSpeed()||(true&&mSettingsManager.getCurrentSimilationStatus())) {
+				if(mSettingsManager.getCurrentSimilationStatus()) {
+					if(mJeDisSimulation<5) {
+						speed=10;
+					} else {
+						speed=0;
+					}
+					mJeDisSimulation++;
 				} else {
-					speed=0;
+					speed=(double)location.getSpeed();				
 				}
-				mJeDisSimulation++;
-			} else {
-				speed=(double)location.getSpeed();				
-			}
-			speed=(speed*(double)3600)/1609.34;
+				speed=(speed*(double)3600)/1609.34;
+				Intent broadcastIntent = new Intent();
+		        broadcastIntent.setAction(GlobalStaticValues.NOTIFICATION_GOTSPEED);
+		        // Broadcast whichever result occurred
+		        LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
+			} 
+	        mSettingsManager.setCurrentSpeed(speed);
 			Intent broadcastIntent = new Intent();
-	        broadcastIntent.setAction(GlobalStaticValues.NOTIFICATION_GOTSPEED);
+	        broadcastIntent.setAction(GlobalStaticValues.NOTIFICATION_SPEED)
+	        	.putExtra("speed", speed);
 	        // Broadcast whichever result occurred
 	        LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
-		} 
-        mSettingsManager.setCurrentSpeed(speed);
+	        if(mDrivingFlag) {
+	        	if(speed>mSettingsManager.getIsDrivingThreshhold()) {
+	        		this.resetRestTimerTimeValues();
+	        	} else {
+					long intervalInSeconds=Math.abs((mRestTimerCurrent.getTime() - mTimeWhenRestTimerStarted.getTime())/1000);
+					int intervalInMinutes=(int)((float)intervalInSeconds/60f);
+					if(intervalInMinutes>=mSettingsManager.getStoppedTimeMinutesBeforeNotification()) {
+						mDrivingFlag=false;
+						resetRestTimerTimeValues();
+						this.stopMyRestTimer();
+	
+						// do alarm notification
+						if(mSettingsManager.getCurrentSimilationStatus()) {
+							mJeDisSimulation=-1;
+						}
+						if(mSettingsManager.getNotificationUsesPopup()) {
+					    	if(this.isMyActivityRunning()) {
+					    		Intent broadcastIntentAlert = new Intent()
+					    			.setFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+						        broadcastIntentAlert.setAction(GlobalStaticValues.NOTIFICATION_POPUPALERT);
+						        // Broadcast whichever result occurred
+						        LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntentAlert);
+					    	} else {
+						    	Intent intent=new Intent(this,MainActivityPerspectiveTest.class)
+						    		.setAction(GlobalStaticValues.ACTION_POPUPALERT);
+						    	intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+						    	startActivity(intent);
+					    	}
+						} else {
+					        // Create an explicit content Intent that starts the main Activity
+					        Intent notificationIntent =
+					                new Intent(this,MainActivityPerspectiveTest.class)
+					        			.setAction(GlobalStaticValues.ACTION_STARTING_FROM_NOTIFICATION_ALERT); 
+	
+					        // Construct a task stack
+					        android.support.v4.app.TaskStackBuilder stackBuilder = android.support.v4.app.TaskStackBuilder.create(this);
+	
+					        // Adds the main Activity to the task stack as the parent
+					        stackBuilder.addParentStack(MainActivityPerspectiveTest.class);
+	
+					        // Push the content Intent onto the stack
+					        stackBuilder.addNextIntent(notificationIntent);
+	
+					        // Get a PendingIntent containing the entire back stack
+					        PendingIntent notificationPendingIntent =
+					                stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+	
+					        // Get a notification builder that's compatible with platform versions >= 4
+					        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+	
+					        // Set the notification contents
+					        String alertString=getString(R.string.alertnotificationdescription1) + 
+					        		String.valueOf(mSettingsManager.getStoppedTimeMinutesBeforeNotification()) + "\n" + getString(R.string.alertnotificationdescription2);
+					        
+					        builder.setSmallIcon(R.drawable.ic_launcher)
+					               .setContentTitle(this.getString(R.string.alertnotificationtitle))
+					               .setContentText(alertString)
+					               .setContentIntent(notificationPendingIntent)
+					               .setAutoCancel(true)
+					               .setPriority(NotificationCompat.PRIORITY_MAX)
+					               .setOnlyAlertOnce(true);
+					        if(mSettingsManager.getNotificationUsesSound()) {
+					               builder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+					        }
+					        if(mSettingsManager.getNotificationUsesVibrate()) {
+					               builder.setVibrate(new long[] {0, 1000,500,1000,500,1000,500,1000,500,1000,500,1000,500,1000});
+					        }
+					        // Get an instance of the Notification manager
+					        NotificationManager mNotificationManager =
+					            (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+	
+					       	mNotificationManager.notify((int)new Date().getTime(), builder.build());
+	
+						}					
+					}
+	
+	        	}
+	        } else {
+	        	if(mSettingsManager.getCurrentSpeed()>mSettingsManager.getIsDrivingThreshhold()) {
+	        		this.startMyRestTimer();
+	        		mDrivingFlag=true;
+	        	}
+	        }
+	        mNoreentry2=0;
+	    }
+    }
+	public void notifyActivityThatGPSIsNotOn() {
+    	if(this.isMyActivityRunning()) {
+    		Intent broadcastIntent = new Intent()
+    				.setFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+	        broadcastIntent.setAction(GlobalStaticValues.NOTIFICATION_GPS_NOT_ENABLED);
+	        // Broadcast whichever result occurred
+	        LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
+    	} else {
+	    	Intent intent=new Intent(this,MainActivityPerspectiveTest.class)
+	    		.setAction(GlobalStaticValues.ACTION_GPS_NOT_ENABLED);
+	    	intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+	    	startActivity(intent);
+    	}
+	}
+	public void gpsIsBackOn() {
 		Intent broadcastIntent = new Intent();
-        broadcastIntent.setAction(GlobalStaticValues.NOTIFICATION_SPEED)
-        	.putExtra("speed", speed);
+        broadcastIntent.setAction(GlobalStaticValues.NOTIFICATION_GPS_HASBEEN_ENABLED);
         // Broadcast whichever result occurred
         LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
-        if(mDrivingFlag) {
-        	if(speed>mSettingsManager.getIsDrivingThreshhold()) {
-        		this.resetRestTimerTimeValues();
-        	} else {
-				long intervalInSeconds=Math.abs((mRestTimerCurrent.getTime() - mTimeWhenRestTimerStarted.getTime())/1000);
-				int intervalInMinutes=(int)((float)intervalInSeconds/60f);
-				if(intervalInMinutes>=mSettingsManager.getStoppedTimeMinutesBeforeNotification()) {
-					mDrivingFlag=false;
-					this.stopMyRestTimer();
-
-					// do alarm notification
-					if(DO_SIMULATION_SO_YOU_DONT_HAVE_TO_BE_DRIVING) {
-						mJeDisSimulation=-1;
-					}
-					if(mSettingsManager.getNotificationUsesPopup()) {
-				    	if(this.isMyActivityRunning()) {
-				    		Intent broadcastIntentAlert = new Intent();
-					        broadcastIntentAlert.setAction(GlobalStaticValues.NOTIFICATION_POPUPALERT);
-					        // Broadcast whichever result occurred
-					        LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntentAlert);
-				    	} else {
-					    	Intent intent=new Intent(this,MainActivityPerspectiveTest.class)
-					    		.setAction(GlobalStaticValues.ACTION_POPUPALERT);
-					    	intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-					    	startActivity(intent);
-				    	}
-					} else {
-				        // Create an explicit content Intent that starts the main Activity
-				        Intent notificationIntent =
-				                new Intent(this,MainActivityPerspectiveTest.class)
-				        			.setAction(GlobalStaticValues.ACTION_STARTING_FROM_NOTIFICATION); 
-
-				        // Construct a task stack
-				        android.support.v4.app.TaskStackBuilder stackBuilder = android.support.v4.app.TaskStackBuilder.create(this);
-
-				        // Adds the main Activity to the task stack as the parent
-				        stackBuilder.addParentStack(MainActivityPerspectiveTest.class);
-
-				        // Push the content Intent onto the stack
-				        stackBuilder.addNextIntent(notificationIntent);
-
-				        // Get a PendingIntent containing the entire back stack
-				        PendingIntent notificationPendingIntent =
-				                stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-
-				        // Get a notification builder that's compatible with platform versions >= 4
-				        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-
-				        // Set the notification contents
-				        String alertString=getString(R.string.alertnotificationdescription1) + 
-				        		String.valueOf(mSettingsManager.getStoppedTimeMinutesBeforeNotification()) + "\n" + getString(R.string.alertnotificationdescription2);
-				        
-				        builder.setSmallIcon(R.drawable.ic_launcher)
-				               .setContentTitle(this.getString(R.string.alertnotificationtitle))
-				               .setContentText(alertString)
-				               .setContentIntent(notificationPendingIntent)
-				               .setAutoCancel(true)
-				               .setPriority(NotificationCompat.PRIORITY_MAX)
-				               .setOnlyAlertOnce(true);
-				        if(mSettingsManager.getNotificationUsesSound()) {
-				               builder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
-				        }
-				        if(mSettingsManager.getNotificationUsesVibrate()) {
-				               builder.setVibrate(new long[] {0, 1000,500,1000,500,1000,500,1000,500,1000,500,1000,500,1000});
-				        }
-				        // Get an instance of the Notification manager
-				        NotificationManager mNotificationManager =
-				            (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-
-				       	mNotificationManager.notify((int)new Date().getTime(), builder.build());
-
-					}					
-				}
-
-        	}
-        } else {
-        	if(mSettingsManager.getCurrentSpeed()>mSettingsManager.getIsDrivingThreshhold()) {
-        		this.startMyRestTimer();
-        		mDrivingFlag=true;
-        	}
-        }
-    }
+	}
 	
     @Override
     public void onCreate() {
@@ -188,6 +215,7 @@ com.google.android.gms.location.LocationListener  {
         this.mTimeWhenRestTimerStarted=new Date();
         this.mRestTimerCurrent=new Date();
         mDrivingFlag=false;
+        resetRestTimerTimeValues();
     }
     
 	@Override
@@ -234,7 +262,7 @@ com.google.android.gms.location.LocationListener  {
 	        }
 		}
 		this.stopMyRestTimer();
-		if(DO_SIMULATION_SO_YOU_DONT_HAVE_TO_BE_DRIVING) {
+		if(mSettingsManager.getCurrentSimilationStatus()) {
 			mJeDisSimulation=-1;
 		}
         mSettingsManager.setLatestLocationDate(new Date());
@@ -242,25 +270,6 @@ com.google.android.gms.location.LocationListener  {
         mSettingsManager.setCurrentSpeed(0);
 	}
 	private int mDontReenter=0;
-	public void notifyActivityThatGPSIsNotOn() {
-    	if(this.isMyActivityRunning()) {
-    		Intent broadcastIntent = new Intent();
-	        broadcastIntent.setAction(GlobalStaticValues.NOTIFICATION_GPS_NOT_ENABLED);
-	        // Broadcast whichever result occurred
-	        LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
-    	} else {
-	    	Intent intent=new Intent(this,MainActivityPerspectiveTest.class)
-	    		.setAction(GlobalStaticValues.ACTION_GPS_NOT_ENABLED);
-	    	intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-	    	startActivity(intent);
-    	}
-	}
-	public void gpsIsBackOn() {
-		Intent broadcastIntent = new Intent();
-        broadcastIntent.setAction(GlobalStaticValues.NOTIFICATION_GPS_HASBEEN_ENABLED);
-        // Broadcast whichever result occurred
-        LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
-	}
 	private void startIfNotAlreadyEnabled() {
 		if(mDontReenter==0) {
 			mDontReenter=1;

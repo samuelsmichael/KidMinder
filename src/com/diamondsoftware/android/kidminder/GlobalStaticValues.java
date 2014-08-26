@@ -30,6 +30,7 @@ public class GlobalStaticValues {
 	public static final String KEY_IS_DRIVING_THRESHHOLD = "isdriving";
 	public static final String KEY_STOPPEDTIME_MINUTES_BEFORE_NOTIFICATION = "stoptime";
 	public static final String KEY_CURRENT_REST_TIME="CURRENTRestTime";
+	public static final String KEY_SIMULATION="key_simulation";
 	
 	public static final String ACTION_GPS_NOT_ENABLED = "ACTIONGPGNOTENABLED";
 	public static final String ACTION_STOP="ACTION_STOP";
@@ -37,7 +38,7 @@ public class GlobalStaticValues {
 	public static final String ACTION_STARTING_FROM_MAINACTIVITY="StartingFromMainActivity";
 	public static final String ACTION_STARTING_FROM_BOOTUP="StartingFromBootup";
 	public static final String ACTION_POPUPALERT="actionPopupAlert";
-	public static final String ACTION_STARTING_FROM_NOTIFICATION="actionstartingfromnotification";
+	public static final String ACTION_STARTING_FROM_NOTIFICATION_ALERT="actionstartingfromnotification";
 	
 	public static final int LOG_LEVEL_INFORMATION=0;
 	public static final int LOG_LEVEL_NOTIFICATION=1;

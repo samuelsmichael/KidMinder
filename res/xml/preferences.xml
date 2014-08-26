@@ -37,7 +37,7 @@
 		    android:summary="These settings allow you to tailor your driving and stop time to suit your own driving pattern. ">
 			  <EditTextPreference
 			      android:key="isdriving"
-			      android:defaultValue="5"
+			      android:defaultValue="10"
 			      android:title="Driving"
 			      android:summary="Speed (in MPH) above which the phone considers that you are driving."
 			  ></EditTextPreference>
@@ -57,6 +57,12 @@
 	            android:entries="@array/logging_preferences"
 	            android:entryValues="@array/loggingvalues_preferences"
 	            android:dialogTitle="@string/logging_dialog_title_list_preference" />
-		</PreferenceCategory>
+		  <CheckBoxPreference
+			  	android:key="key_simulation"
+			  	android:defaultValue="false"
+			  	android:title="Driving/Stopping Simulation"
+			  	android:summary="With this setting on, the app will simulate your driving for a few moments, and then stopping."
+		  ></CheckBoxPreference>
+		    </PreferenceCategory>
 </PreferenceScreen>
 

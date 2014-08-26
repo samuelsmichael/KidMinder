@@ -198,4 +198,8 @@ public class SettingsManager {
 	public void setCurrentRestTime(long value) {
 		setValue(GlobalStaticValues.KEY_CURRENT_REST_TIME,String.valueOf(value));
 	}
+	public boolean getCurrentSimilationStatus() {
+		boolean simulate=mSharedPreferences.getBoolean(GlobalStaticValues.KEY_SIMULATION, false);
+		return simulate;
+	}
 }

@@ -83,10 +83,10 @@ public abstract class MainActivity extends Activity {
 	    		mSettingsManager.setIsEnabled(false);    	
 	        } else {
 	        	if(action.equals(GlobalStaticValues.ACTION_POPUPALERT)) {
-	        		doPopupAlert();
+	        		doPopupAlert(false);
 	        	} else {
-	        		if(action.equals(GlobalStaticValues.ACTION_STARTING_FROM_NOTIFICATION)) {
-	        			// I don't know of anything I need to do special.  We know the service is alive and well, otherwise we wouldn't have got this notification
+	        		if(action.equals(GlobalStaticValues.ACTION_STARTING_FROM_NOTIFICATION_ALERT)) {
+	        			doPopupAlert(true);
 	        		} else {
 			        	if(mSettingsManager.getIsEnabled()) {
 			        		baseStartTimerService();
@@ -98,8 +98,8 @@ public abstract class MainActivity extends Activity {
 	        }
 		}
     }
-    private void doPopupAlert() {
-    	if(mSettingsManager.getNotificationUsesPopup()) {
+    private void doPopupAlert(boolean justDoWindow) {
+    	if(mSettingsManager.getNotificationUsesPopup() || justDoWindow) {
 	 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 	        builder.setTitle("Kid Alert");//
 	        String alertString=getString(R.string.alertnotificationdescription1) + 
@@ -128,7 +128,7 @@ public abstract class MainActivity extends Activity {
 	                getFragmentManager(),
 	                "Alert Dialog");
     	}
-    	if(mSettingsManager.getNotificationUsesVibrate()) {
+    	if(mSettingsManager.getNotificationUsesVibrate() && !justDoWindow) {
 			// Start without a delay
 			// Vibrate for 1000 milliseconds
 			// Sleep for 150 milliseconds
@@ -142,7 +142,7 @@ public abstract class MainActivity extends Activity {
 		        }	        
 		    }).start();		
     	}
-    	if(mSettingsManager.getNotificationUsesSound()) {
+    	if(mSettingsManager.getNotificationUsesSound() && !justDoWindow) {
     		try {
     		    Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
     		    mRingTone = RingtoneManager.getRingtone(getApplicationContext(), notification);
@@ -269,7 +269,7 @@ public abstract class MainActivity extends Activity {
                 			showGPSNotEnabledDialog();
                 		} else {
                 			if(TextUtils.equals(action, GlobalStaticValues.NOTIFICATION_POPUPALERT)) {
-                				doPopupAlert();
+                				doPopupAlert(false);
                 			} else {
                 				if(TextUtils.equals(action, GlobalStaticValues.NOTIFICATION_CURRENT_REST_TIME)) {
                 					mSettingsManager.setCurrentRestTime(intent.getLongExtra(GlobalStaticValues.KEY_CURRENT_REST_TIME, 0));
