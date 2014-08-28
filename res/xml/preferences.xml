@@ -61,7 +61,7 @@
 			  	android:key="key_simulation"
 			  	android:defaultValue="false"
 			  	android:title="Driving/Stopping Simulation"
-			  	android:summary="With this setting on, the app will simulate your driving for a few moments, and then stopping."
+			  	android:summary="With this setting on, the app will simulate your driving for a few moments, and then stopping. And it keeps cycling like this."
 		  ></CheckBoxPreference>
 		    </PreferenceCategory>
 </PreferenceScreen>

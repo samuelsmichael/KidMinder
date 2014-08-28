@@ -3,7 +3,35 @@ package com.diamondsoftware.android.kidminder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
+import android.content.Context;
+import android.content.Intent;
+
+
 public class GlobalStaticValues {
+	public static enum TIMER_IMPLEMENTATIONS {
+		ORIGINAL,
+		ORIGINAL_REFACTORED,
+		NEW
+	}
+	public static final TIMER_IMPLEMENTATIONS myTimerImplementation=TIMER_IMPLEMENTATIONS.NEW;
+	public static Intent getIntentForTimer(Context context) {
+		Intent intent;
+		switch (myTimerImplementation) {
+		case ORIGINAL:
+			intent = new Intent(context,TimerService.class); 
+			break;
+		case ORIGINAL_REFACTORED:
+			intent=new Intent(context,TimerServiceOriginal.class);
+			break;
+		case NEW:
+			intent = new Intent(context,TimerServiceNew.class);
+			break;
+		default:
+			intent = new Intent(context,TimerService.class); 
+			break;
+		}
+		return intent;
+	}
 	public static final String NOTIFICATION_SPEED ="Speed_Notification";
 	public static final String NOTIFICATION_HEARTBEAT ="Heartbeat_Notification";
 	public static final String NOTIFICATION_GOTSPEED ="GotSpeed_Notification";

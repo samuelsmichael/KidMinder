@@ -12,11 +12,11 @@ import android.os.Bundle;
 
 public class TimerServiceLocationManagerHelper implements android.location.LocationListener  {
 	private LocationManager mLocationManager;
-	private TimerService mTimerService;
+	private DoesTimerServiceFunctions mTimerService;
 	private static final String ACTION_GPS = "android.location.PROVIDERS_CHANGED";
 	private BroadcastReceiver yourReceiver;
 	
-	public TimerServiceLocationManagerHelper(TimerService timerService) {
+	public TimerServiceLocationManagerHelper(DoesTimerServiceFunctions timerService) {
 		mTimerService=timerService;
 		this.initializeLocationManager();
 	}

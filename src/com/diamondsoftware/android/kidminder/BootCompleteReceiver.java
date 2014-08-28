@@ -11,7 +11,7 @@ public class BootCompleteReceiver extends BroadcastReceiver {
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {
-    	Intent jdItent2=new Intent(context, TimerService.class)
+    	Intent jdItent2=GlobalStaticValues.getIntentForTimer(context)
     		.setAction(GlobalStaticValues.ACTION_STARTING_FROM_BOOTUP);
 		context.startService(jdItent2);
 	}	

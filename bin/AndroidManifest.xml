@@ -31,9 +31,15 @@
             </intent-filter>
         </activity>
         <activity android:name=".Preferences" ></activity>
-        
         <service
             android:name="com.diamondsoftware.android.kidminder.TimerService" >
+        </service>
+
+        <service
+            android:name="com.diamondsoftware.android.kidminder.TimerServiceOriginal" >
+        </service>
+        <service
+            android:name="com.diamondsoftware.android.kidminder.TimerServiceNew" >
         </service>
         <receiver
             android:name="com.diamondsoftware.android.kidminder.BootCompleteReceiver"

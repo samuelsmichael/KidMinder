@@ -29,12 +29,11 @@ import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 
-public class TimerService extends Service implements GooglePlayServicesClient.ConnectionCallbacks,
+public class TimerService extends Service implements DoesTimerServiceFunctions, GooglePlayServicesClient.ConnectionCallbacks,
 GooglePlayServicesClient.OnConnectionFailedListener,
 com.google.android.gms.location.LocationListener  {
 	private SettingsManager mSettingsManager;
     private LocationClient mLocationClient;
-	private LocationManager mLocationManager = null;
 	private boolean mDrivingFlag=false;
 	private Timer mRestTimer=null;
 	private Date mTimeWhenRestTimerStarted;
@@ -291,9 +290,6 @@ com.google.android.gms.location.LocationListener  {
     	mTimerServiceLocationManagerHelper.onDestroy();
 	}
 	
-
-	public TimerService() {		
-	}
 
 	@Override
 	public IBinder onBind(Intent arg0) {

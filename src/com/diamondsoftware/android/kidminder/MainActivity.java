@@ -4,12 +4,15 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.List;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.model.LatLng;
 
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningServiceInfo;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -89,7 +92,9 @@ public abstract class MainActivity extends Activity {
 	        			doPopupAlert(true);
 	        		} else {
 			        	if(mSettingsManager.getIsEnabled()) {
-			        		baseStartTimerService();
+			        		if(!isMyServiceRunning()) {
+			        			baseStartTimerService();
+			        		}
 			        	} else {
 			        		this.baseStopTimerService();
 			        	}
@@ -190,13 +195,30 @@ public abstract class MainActivity extends Activity {
 		mSettingsManager.setGotSpeedTicksCount(0);
 		mSettingsManager.setHeartbeatTicksCount(0);
 		mSettingsManager.setIsEnabled(true);    	
-        Intent intent=new Intent(this,TimerService.class)
+        Intent intent=GlobalStaticValues.getIntentForTimer(this)
     		.setAction("StartingFromMainActivity");
         startService(intent);
     }
     
+	public boolean isMyServiceRunning(){
+		ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+		 List< RunningServiceInfo > runningServices = manager.getRunningServices(200); 
+		 for(ActivityManager.RunningServiceInfo info : runningServices) {
+			 String className=info.service.getClassName();
+			 if(className.indexOf(getPackageName())!=-1) {
+				 int bkhere=3;
+				 int bkthere=bkhere;
+			 }
+			 if(className.indexOf("TimerService")!=-1 && className.indexOf(getPackageName())!=-1) {
+				 return true;
+			 }
+		 }
+		return false;
+	}
+
+    
     protected void baseStopTimerService() {
-		Intent intent=new Intent(this,TimerService.class)
+		Intent intent=GlobalStaticValues.getIntentForTimer(this)
 			.setAction(GlobalStaticValues.ACTION_STOP);
 		startService(intent);
 		mSettingsManager.setCurrentSpeed(0);

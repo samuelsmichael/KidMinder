@@ -35,7 +35,7 @@ public class Preferences extends PreferenceActivity {
 				@Override
 				public boolean onPreferenceChange(Preference preference, Object newValue) {
 					new SettingsManager(Preferences.this).setHeartbeatFrequency(Integer.valueOf(newValue.toString()));
-					Intent intent=new Intent(Preferences.this,TimerService.class)
+					Intent intent=GlobalStaticValues.getIntentForTimer(Preferences.this)
 						.setAction(GlobalStaticValues.ACTION_HEARTBEAT_INTERVAL_CHANGED);
 					startService(intent);
 					return true;
