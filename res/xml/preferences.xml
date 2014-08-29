@@ -38,13 +38,13 @@
 			  <EditTextPreference
 			      android:key="isdriving"
 			      android:defaultValue="10"
-			      android:title="Driving"
+			      android:title="Driving - Speed in MPH"
 			      android:summary="Speed (in MPH) above which the phone considers that you are driving."
 			  ></EditTextPreference>
 			  <EditTextPreference
 			      android:key="stoptime"
 			      android:defaultValue="7"
-			      android:title="Stop Time"
+			      android:title="Stop Time in Minutes"
 			      android:summary="If you are stopped for this amount of minutes, you will receive an alert."
 			  ></EditTextPreference>
 		</PreferenceCategory>

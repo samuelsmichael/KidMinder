@@ -27,7 +27,9 @@ import android.media.RingtoneManager;
 import android.media.SoundPool;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.os.Vibrator;
+import android.os.PowerManager.WakeLock;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
@@ -40,13 +42,13 @@ import android.widget.Button;
 
 public abstract class MainActivity extends Activity {
 	private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
+	private WakeLock screenLock=null;
 	
     private MyBroadcastReceiver mBroadcastReceiver;
     // An intent filter for the broadcast receiver
     private IntentFilter mIntentFilter;
     private Vibrator mVibrator;
     private Ringtone mRingTone;
-    private boolean mEnabledStateBeforeGPSWasTurnedOff;
 
 	protected abstract void onResumeManageView();
 	protected abstract void stopTimer();
@@ -66,7 +68,7 @@ public abstract class MainActivity extends Activity {
 			LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
 		}
         // Create a new broadcast receiver to receive updates from the listeners and service
-        mBroadcastReceiver = new MyBroadcastReceiver();
+        mBroadcastReceiver = new MyBroadcastReceiver(this);
 		mIntentFilter = new IntentFilter();
 		mIntentFilter.addAction(GlobalStaticValues.NOTIFICATION_SPEED);
 		mIntentFilter.addAction(GlobalStaticValues.NOTIFICATION_HEARTBEAT);
@@ -105,6 +107,12 @@ public abstract class MainActivity extends Activity {
     }
     private void doPopupAlert(boolean justDoWindow) {
     	if(mSettingsManager.getNotificationUsesPopup() || justDoWindow) {
+			/* This makes it happen even if the system is sleeping or locked */
+    		if(screenLock==null) {
+				screenLock = ((PowerManager)getSystemService(POWER_SERVICE)).newWakeLock(
+					     PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "TAG");
+				screenLock.acquire();
+    		}
 	 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 	        builder.setTitle("Kid Alert");//
 	        String alertString=getString(R.string.alertnotificationdescription1) + 
@@ -234,13 +242,23 @@ public abstract class MainActivity extends Activity {
 		if(mBroadcastReceiver!=null) {
 			LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
 		}
+		if(screenLock!=null) {
+			screenLock.release();		
+		}
     	super.onDestroy();
     }
         
     @Override
     protected void onResume() {
     	super.onResume();
+    	mSettingsManager.setImOnTop(true);
     	onResumeManageView();
+    }
+    
+    @Override
+    protected void onPause() {
+    	super.onPause();
+    	mSettingsManager.setImOnTop(false);
     }
     
     protected void enabledStatusChangedTo(boolean value) {
@@ -251,6 +269,11 @@ public abstract class MainActivity extends Activity {
      * Define a Broadcast receiver that receives updates from connection listeners
      */
     public class MyBroadcastReceiver extends BroadcastReceiver {
+    	private Activity mActivity;
+    	
+    	public MyBroadcastReceiver(Activity activity) {
+    		mActivity=activity;
+    	}
         /*
          * Define the required method for broadcast receivers
          * This method is invoked when a broadcast Intent triggers the receiver
@@ -285,19 +308,35 @@ public abstract class MainActivity extends Activity {
                 		mSettingsManager.incrementGotSpeedCount();        
                 	} else {
                 		if(TextUtils.equals(action, GlobalStaticValues.NOTIFICATION_GPS_NOT_ENABLED)) {
-                			mEnabledStateBeforeGPSWasTurnedOff=mSettingsManager.getIsEnabled();
+                			mSettingsManager.setEnabledStateBeforeGPSWasTurnedOff(mSettingsManager.getIsEnabled());
                 			mSettingsManager.setIsEnabled(false);    	
                 			pressedDisableButton();
-                			showGPSNotEnabledDialog();
+            				if(mSettingsManager.getImOnTop()) {
+            					MainActivity.this.showGPSNotEnabledDialog();
+            				} else { 
+	                			Intent jdIntent=new Intent(mActivity, MainActivityPerspectiveTest.class)
+	                			.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+	                			.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+	                			.setAction(GlobalStaticValues.ACTION_GPS_NOT_ENABLED);
+	                			startActivity(jdIntent);
+            				}
                 		} else {
                 			if(TextUtils.equals(action, GlobalStaticValues.NOTIFICATION_POPUPALERT)) {
-                				doPopupAlert(false);
+                				if(mSettingsManager.getImOnTop()) {
+                					MainActivity.this.doPopupAlert(false);
+                				} else {
+                    			Intent jdIntent=new Intent(mActivity, MainActivityPerspectiveTest.class)
+                    			.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    			.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    			.setAction(GlobalStaticValues.ACTION_POPUPALERT);
+                    			startActivity(jdIntent);
+                				}
                 			} else {
                 				if(TextUtils.equals(action, GlobalStaticValues.NOTIFICATION_CURRENT_REST_TIME)) {
                 					mSettingsManager.setCurrentRestTime(intent.getLongExtra(GlobalStaticValues.KEY_CURRENT_REST_TIME, 0));
                 				} else {
                 					if(TextUtils.equals(action, GlobalStaticValues.NOTIFICATION_GPS_HASBEEN_ENABLED)) {
-                						if(mEnabledStateBeforeGPSWasTurnedOff) {
+                						if(mSettingsManager.getEnabledStateBeforeGPSWasTurnedOff()) {
                 							pressedEnableButton();
                 							mSettingsManager.setIsEnabled(true);
                 						}

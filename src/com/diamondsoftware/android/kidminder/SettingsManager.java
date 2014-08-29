@@ -202,4 +202,22 @@ public class SettingsManager {
 		boolean simulate=mSharedPreferences.getBoolean(GlobalStaticValues.KEY_SIMULATION, false);
 		return simulate;
 	}
+	public boolean getEnabledStateBeforeGPSWasTurnedOff() {
+		boolean enabled=mSharedPreferences.getBoolean("EnabledStateBeforeGPSWasTurnedOff", false);
+		return enabled;
+	}
+	public void setEnabledStateBeforeGPSWasTurnedOff(boolean value) {
+		Editor editor=mSharedPreferences.edit();
+		editor.putBoolean("EnabledStateBeforeGPSWasTurnedOff",value);
+		editor.commit();				
+	}
+	public boolean getImOnTop() {
+		boolean enabled=mSharedPreferences.getBoolean("ImOnTop", false);
+		return enabled;
+	}
+	public void setImOnTop(boolean value) {
+		Editor editor=mSharedPreferences.edit();
+		editor.putBoolean("ImOnTop",value);
+		editor.commit();				
+	}
 }
