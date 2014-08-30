@@ -81,7 +81,8 @@ public abstract class MainActivity extends Activity {
 		LocalBroadcastManager.getInstance(this).registerReceiver(
 				mBroadcastReceiver, mIntentFilter);
 		// Perform the requested action
-		String action=getIntent().getAction();
+		Intent intent=getIntent();
+		String action=intent.getAction();
 		if(action!=null) {
 	        if(action.equals(GlobalStaticValues.ACTION_GPS_NOT_ENABLED)) {
 	        	showGPSNotEnabledDialog();
@@ -93,13 +94,9 @@ public abstract class MainActivity extends Activity {
 	        		if(action.equals(GlobalStaticValues.ACTION_STARTING_FROM_NOTIFICATION_ALERT)) {
 	        			doPopupAlert(true);
 	        		} else {
-			        	if(mSettingsManager.getIsEnabled()) {
-			        		if(!isMyServiceRunning()) {
-			        			baseStartTimerService();
-			        		}
-			        	} else {
-			        		this.baseStopTimerService();
-			        	}
+	        			if(action.equals("android.intent.action.MAIN")) {
+	        			} else {
+	        			}
 		        	}
 	        	}
 	        }
@@ -132,10 +129,12 @@ public abstract class MainActivity extends Activity {
 				}
 			);
 	        final AlertDialog alert = builder.create();
+	        alert.setCanceledOnTouchOutside(false);
+
 	        ErrorDialogFragment errorFragment =
 	                new ErrorDialogFragment();
-	        // Set the dialog in the DialogFragment
 	        errorFragment.setDialog(alert);
+	        // Set the dialog in the DialogFragment
 	        // Show the error dialog in the DialogFragment
 	        errorFragment.show(
 	                getFragmentManager(),
@@ -187,6 +186,7 @@ public abstract class MainActivity extends Activity {
 			}
 		);
         final AlertDialog alert = builder.create();
+        alert.setCanceledOnTouchOutside(false);       
         ErrorDialogFragment errorFragment =
                 new ErrorDialogFragment();
         // Set the dialog in the DialogFragment
@@ -198,6 +198,15 @@ public abstract class MainActivity extends Activity {
 
         alert.show();	    	
     }
+    
+    protected void doAnyPressedDisableButtonActions() {
+		mVibrator.cancel();
+		if(mRingTone!=null) {
+			mRingTone.stop();
+			mRingTone=null;
+		}
+    }
+    
     protected void baseStartTimerService() {
 		mSettingsManager.setCurrentSpeed(0);
 		mSettingsManager.setGotSpeedTicksCount(0);
@@ -208,7 +217,7 @@ public abstract class MainActivity extends Activity {
         startService(intent);
     }
     
-	public boolean isMyServiceRunning(){
+	protected boolean isMyServiceRunning(){
 		ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
 		 List< RunningServiceInfo > runningServices = manager.getRunningServices(200); 
 		 for(ActivityManager.RunningServiceInfo info : runningServices) {

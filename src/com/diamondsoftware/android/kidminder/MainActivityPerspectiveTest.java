@@ -148,6 +148,7 @@ public class MainActivityPerspectiveTest extends MainActivity {
 
 	@Override
 	protected void pressedDisableButton() {
+		doAnyPressedDisableButtonActions();
 		baseStopTimerService();
 	}
 }

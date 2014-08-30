@@ -330,7 +330,7 @@ com.google.android.gms.location.LocationListener {
 		 List< ActivityManager.RunningTaskInfo > runningTaskInfo = manager.getRunningTasks(200); 
 		 for(ActivityManager.RunningTaskInfo info : runningTaskInfo) {
 			 String className=info.baseActivity.getClassName();
-			 if(className.indexOf("MainActivityPerspectiveTest")!=-1 && info.baseActivity.getPackageName().equals(getPackageName())) {
+			 if(className.indexOf("MainActivity")!=-1 && info.baseActivity.getPackageName().equals(getPackageName())) {
 				 return true;
 			 }
 		 }

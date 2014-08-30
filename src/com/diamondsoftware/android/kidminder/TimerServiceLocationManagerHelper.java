@@ -81,7 +81,6 @@ public class TimerServiceLocationManagerHelper implements android.location.Locat
 	}
 	@Override
 	public void onLocationChanged(Location location) {
-		mLocationManager.removeUpdates(this);
 	}
 	public void onDestroy() {
 		mLocationManager.removeUpdates(this);
