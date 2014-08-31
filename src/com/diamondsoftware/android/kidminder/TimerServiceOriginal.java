@@ -13,7 +13,7 @@ import android.support.v4.content.LocalBroadcastManager;
 
 import com.google.android.gms.common.ConnectionResult;
 
-public class TimerServiceOriginal extends TimerServiceAbstract {
+public class TimerServiceOriginal extends TimerServiceAbstractLocationService {
 	private boolean mDrivingFlag=false;
     @Override
     public void onCreate() {
@@ -32,6 +32,9 @@ public class TimerServiceOriginal extends TimerServiceAbstract {
 					mDrivingFlag=false;
 					resetRestTimerTimeValues();
 					this.stopMyRestTimer();
+					if(mSettingsManager.getCurrentSimilationStatus()) {
+						mJeDisSimulation=-1;
+					}
 					alarm();
 				}
 

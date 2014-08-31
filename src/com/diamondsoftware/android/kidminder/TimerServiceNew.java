@@ -1,6 +1,6 @@
 package com.diamondsoftware.android.kidminder;
 
-public class TimerServiceNew extends TimerServiceAbstract {
+public class TimerServiceNew extends TimerServiceAbstractLocationService {
 	private boolean mWasMoving=false;
 
 	@Override
@@ -25,6 +25,9 @@ public class TimerServiceNew extends TimerServiceAbstract {
 			mWasMoving=false;
 			this.stopMyRestTimer();
 			resetRestTimerTimeValues();
+			if(mSettingsManager.getCurrentSimilationStatus()) {
+				mJeDisSimulation=-1;
+			}
 			alarm();
 		}		
 	}

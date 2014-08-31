@@ -345,8 +345,9 @@ int id action_context_bar 0x7f09002f
 int id action_menu_divider 0x7f090028
 int id action_menu_presenter 0x7f090029
 int id action_mode_close_button 0x7f090036
-int id action_settings 0x7f090057
+int id action_settings 0x7f090058
 int id activity_chooser_view_content 0x7f090037
+int id activityrecognitionstatus_id 0x7f090057
 int id always 0x7f09001e
 int id beginning 0x7f090023
 int id book_now 0x7f090010
@@ -445,8 +446,9 @@ int layout abc_popup_menu_item_layout 0x7f030014
 int layout abc_search_dropdown_item_icons_2line 0x7f030015
 int layout abc_search_view 0x7f030016
 int layout abc_simple_decor 0x7f030017
-int layout activity_main_perspectivetest 0x7f030018
-int layout support_simple_spinner_dropdown_item 0x7f030019
+int layout activity_main_perspectivetestactivityrecognition 0x7f030018
+int layout activity_main_perspectivetestlocationservice 0x7f030019
+int layout support_simple_spinner_dropdown_item 0x7f03001a
 int menu perspective_test 0x7f0e0000
 int string abc_action_bar_home_description 0x7f070021
 int string abc_action_bar_up_description 0x7f070022

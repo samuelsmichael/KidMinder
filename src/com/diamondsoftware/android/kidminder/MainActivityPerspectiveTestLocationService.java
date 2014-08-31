@@ -23,7 +23,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Switch;
 import android.widget.TextView;
 
-public class MainActivityPerspectiveTest extends MainActivity {
+public class MainActivityPerspectiveTestLocationService extends MainActivity {
 	private SpeedometerView speedometer;
 	private Switch mSwitch;
 	private TextView mHeartbeatIndicator;
@@ -33,7 +33,7 @@ public class MainActivityPerspectiveTest extends MainActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_perspectivetest);
+        setContentView(R.layout.activity_main_perspectivetestlocationservice);
         
         mSwitch=(Switch)findViewById(R.id.enabledSwitch);
         mHeartbeatIndicator=(TextView)findViewById(R.id.heartbeatcount_id);
@@ -55,7 +55,7 @@ public class MainActivityPerspectiveTest extends MainActivity {
 				} else {
 					pressedEnableButton();
 				}
-				MainActivityPerspectiveTest.this.onResumeManageView();
+				MainActivityPerspectiveTestLocationService.this.onResumeManageView();
 			}
         	
         });

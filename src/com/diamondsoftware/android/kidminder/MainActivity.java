@@ -323,7 +323,7 @@ public abstract class MainActivity extends Activity {
             				if(mSettingsManager.getImOnTop()) {
             					MainActivity.this.showGPSNotEnabledDialog();
             				} else { 
-	                			Intent jdIntent=new Intent(mActivity, MainActivityPerspectiveTest.class)
+	                			Intent jdIntent=new Intent(mActivity, MainActivityPerspectiveTestLocationService.class)
 	                			.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 	                			.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
 	                			.setAction(GlobalStaticValues.ACTION_GPS_NOT_ENABLED);
@@ -334,7 +334,7 @@ public abstract class MainActivity extends Activity {
                 				if(mSettingsManager.getImOnTop()) {
                 					MainActivity.this.doPopupAlert(false);
                 				} else {
-                    			Intent jdIntent=new Intent(mActivity, MainActivityPerspectiveTest.class)
+                    			Intent jdIntent=new Intent(mActivity, MainActivityPerspectiveTestLocationService.class)
                     			.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     			.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                     			.setAction(GlobalStaticValues.ACTION_POPUPALERT);

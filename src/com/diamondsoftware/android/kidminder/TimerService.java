@@ -109,7 +109,7 @@ com.google.android.gms.location.LocationListener  {
 						        // Broadcast whichever result occurred
 						        LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntentAlert);
 					    	} else {
-						    	Intent intent=new Intent(this,MainActivityPerspectiveTest.class)
+						    	Intent intent=new Intent(this,MainActivityPerspectiveTestLocationService.class)
 						    		.setAction(GlobalStaticValues.ACTION_POPUPALERT);
 						    	intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 						    	startActivity(intent);
@@ -117,14 +117,14 @@ com.google.android.gms.location.LocationListener  {
 						} else {
 					        // Create an explicit content Intent that starts the main Activity
 					        Intent notificationIntent =
-					                new Intent(this,MainActivityPerspectiveTest.class)
+					                new Intent(this,MainActivityPerspectiveTestLocationService.class)
 					        			.setAction(GlobalStaticValues.ACTION_STARTING_FROM_NOTIFICATION_ALERT); 
 	
 					        // Construct a task stack
 					        android.support.v4.app.TaskStackBuilder stackBuilder = android.support.v4.app.TaskStackBuilder.create(this);
 	
 					        // Adds the main Activity to the task stack as the parent
-					        stackBuilder.addParentStack(MainActivityPerspectiveTest.class);
+					        stackBuilder.addParentStack(MainActivityPerspectiveTestLocationService.class);
 	
 					        // Push the content Intent onto the stack
 					        stackBuilder.addNextIntent(notificationIntent);
@@ -180,7 +180,7 @@ com.google.android.gms.location.LocationListener  {
 	        // Broadcast whichever result occurred
 	        LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
     	} else {
-	    	Intent intent=new Intent(this,MainActivityPerspectiveTest.class)
+	    	Intent intent=new Intent(this,MainActivityPerspectiveTestLocationService.class)
 	    		.setAction(GlobalStaticValues.ACTION_GPS_NOT_ENABLED);
 	    	intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 	    	startActivity(intent);
