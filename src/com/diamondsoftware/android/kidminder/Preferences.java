@@ -19,8 +19,11 @@ public class Preferences extends PreferenceActivity {
         try {
 	        setTitle(getString(R.string.app_name)+" - Preferences");
 	        // Load the preferences from an XML resource
-	        addPreferencesFromResource(R.xml.preferences);
-	        
+	        if(getIntent().getStringExtra(GlobalStaticValues.KEY_PREFERENCES_TYPE).equals(GlobalStaticValues.TIMER_IMPLEMENTATIONS.ACTIVITY_RECOGNITION.toString())) {
+	        	addPreferencesFromResource(R.xml.preferencesactivityrecognition);
+	        } else {
+	        	addPreferencesFromResource(R.xml.preferences);
+	        }
 	        ListPreference lp1=(ListPreference)findPreference(GlobalStaticValues.KEY_LOGGINGLEVEL); 
 	        lp1.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 				@Override

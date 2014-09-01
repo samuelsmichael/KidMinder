@@ -112,7 +112,7 @@ public abstract class MainActivity extends Activity {
     		}
 	 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 	        builder.setTitle("Kid Alert");//
-	        String alertString=getString(R.string.alertnotificationdescription1) + 
+	        String alertString=getString(R.string.alertnotificationdescription1) + " " +
 	        		String.valueOf(mSettingsManager.getStoppedTimeMinutesBeforeNotification())+" minute"+ (mSettingsManager.getStoppedTimeMinutesBeforeNotification()>1?"s":"") + getString(R.string.alertnotificationdescription2);
 	        builder.setMessage(alertString)
 	        	.setCancelable(false)
@@ -208,9 +208,6 @@ public abstract class MainActivity extends Activity {
     }
     
     protected void baseStartTimerService() {
-		mSettingsManager.setCurrentSpeed(0);
-		mSettingsManager.setGotSpeedTicksCount(0);
-		mSettingsManager.setHeartbeatTicksCount(0);
 		mSettingsManager.setIsEnabled(true);    	
         Intent intent=GlobalStaticValues.getIntentForTimer(this)
     		.setAction("StartingFromMainActivity");
@@ -238,12 +235,6 @@ public abstract class MainActivity extends Activity {
 		Intent intent=GlobalStaticValues.getIntentForTimer(this)
 			.setAction(GlobalStaticValues.ACTION_STOP);
 		startService(intent);
-		mSettingsManager.setCurrentSpeed(0);
-		mSettingsManager.setGotSpeedTicksCount(0);
-		mSettingsManager.setHeartbeatTicksCount(0);
-		mSettingsManager.setLatestLocationDate(new Date());
-		mSettingsManager.setPriorLocationDate(new Date());
-		mSettingsManager.setPriorLocation(mSettingsManager.getLatestLocation().latitude, mSettingsManager.getLatestLocation().longitude);
 		mSettingsManager.setIsEnabled(false);
     }
     @Override

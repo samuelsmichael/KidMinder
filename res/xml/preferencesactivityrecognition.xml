@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+	<PreferenceScreen
+	  xmlns:android="http://schemas.android.com/apk/res/android">
+		<PreferenceCategory android:title="Activity Recognition Frequency" >		    
+		    <ListPreference android:key="HeartbeatFrequency"
+				android:defaultValue="@string/default_heartbeatfrequency_value"
+				android:title="@string/defaulthearbeatfrequency_title_list_preference"
+				android:summary="@string/heartbeatfrequency_summary_list_preference"
+				android:entries="@array/heartbeat_list_preference" 
+				android:entryValues="@array/heartbeatvalues_list_preference"
+				android:dialogTitle="@string/heartbeat_dialog_title_list_preference" />
+		</PreferenceCategory>	
+		<PreferenceCategory android:title="Notification Preferences">
+			<PreferenceScreen android:summary="Choose one or more types of alert notifications."
+				android:title="Notifications">
+				  <CheckBoxPreference
+				  	android:key="sound"
+				  	android:defaultValue="true"
+				  	android:title="Notifications Use Sound"
+				  	android:summary="Check this box if you want to be notified with sound."
+				  ></CheckBoxPreference>
+				  <CheckBoxPreference
+				  	android:defaultValue="true"
+				  	android:key="vibrate"
+				  	android:title="Notifications Vibrate"
+				  	android:summary="Check this box if you want your phone to vibrate when you are notified."
+				  ></CheckBoxPreference>
+				  <CheckBoxPreference
+				  	android:key="popup"
+				  	android:defaultValue="true"
+				  	android:title="Notifications Use Popup"
+				  	android:summary="Check this box if you want to be notified with a popup window."
+				  ></CheckBoxPreference>
+			</PreferenceScreen>
+		</PreferenceCategory>
+		<PreferenceCategory android:title="Alert Parameters" 
+		    android:summary="These settings allow you to tailor your driving and stop time to suit your own driving pattern. ">
+			  <EditTextPreference
+			      android:key="stoptime"
+			      android:defaultValue="7"
+			      android:title="Stop Time in Minutes"
+			      android:summary="If you are stopped for this amount of minutes, you will receive an alert."
+			  ></EditTextPreference>
+		</PreferenceCategory>
+	    <PreferenceCategory android:title="Debugging Values">
+		    <ListPreference
+	            android:key="LoggingLevel"
+	            android:defaultValue="@string/default_logginglevel_value"
+	            android:title="@string/defaultlogging_title_list_preference"
+	            android:summary="@string/logging_summary_list_preference"
+	            android:entries="@array/logging_preferences"
+	            android:entryValues="@array/loggingvalues_preferences"
+	            android:dialogTitle="@string/logging_dialog_title_list_preference" />
+		  <CheckBoxPreference
+			  	android:key="key_simulation"
+			  	android:defaultValue="false"
+			  	android:title="Driving/Stopping Simulation"
+			  	android:summary="With this setting on, the app will simulate your driving for a few moments, and then stopping. And it keeps cycling like this."
+		  ></CheckBoxPreference>
+		</PreferenceCategory>
+</PreferenceScreen>
+

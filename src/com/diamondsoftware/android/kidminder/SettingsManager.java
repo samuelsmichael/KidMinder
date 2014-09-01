@@ -50,7 +50,7 @@ public class SettingsManager {
 		setValue(GlobalStaticValues.KEY_LOGGINGLEVEL, String.valueOf(value));
 	}
 	public int getHeartbeatFrequency() {
-		String value=getValue(GlobalStaticValues.KEY_HEARTBEATFREQUENCY,"2");
+		String value=getValue(GlobalStaticValues.KEY_HEARTBEATFREQUENCY,"60");
 		return Integer.valueOf(value);
 	}
 	public void setHeartbeatFrequency(int value) {
@@ -219,5 +219,11 @@ public class SettingsManager {
 		Editor editor=mSharedPreferences.edit();
 		editor.putBoolean("ImOnTop",value);
 		editor.commit();				
+	}
+	public String getActivityRecognition() {
+		return getValue(GlobalStaticValues.KEY_ACTIVITYRECOGNITION,"");
+	}
+	public void setActivityRecognition(String value) {
+		setValue(GlobalStaticValues.KEY_ACTIVITYRECOGNITION, value);
 	}
 }

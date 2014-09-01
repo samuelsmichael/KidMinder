@@ -2,6 +2,8 @@ package com.diamondsoftware.android.kidminder;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import android.content.Context;
 import android.content.Intent;
@@ -20,8 +22,13 @@ public abstract class TimerServiceAbstract extends Service implements DoesTimerS
 	protected abstract void doACTION_STARTING_FROM_MAINACTIVITY();
 	protected abstract void doACTION_STARTING_FROM_BOOTUP();
 	protected abstract void stop();
+	
 	private TimerServiceLocationManagerHelper mTimerServiceLocationManagerHelper;
 	protected SettingsManager mSettingsManager;
+	private Timer mRestTimer=null;
+	protected Date mTimeWhenRestTimerStarted;
+	protected Date mRestTimerCurrent;
+
 
     @Override
     public void onCreate() {
@@ -31,6 +38,9 @@ public abstract class TimerServiceAbstract extends Service implements DoesTimerS
 				this));
         mTimerServiceLocationManagerHelper=new TimerServiceLocationManagerHelper(this);
 		mSettingsManager=new SettingsManager(this);
+        this.mTimeWhenRestTimerStarted=new Date();
+        this.mRestTimerCurrent=new Date();
+        resetRestTimerTimeValues();
 
 
     }
@@ -163,8 +173,66 @@ public abstract class TimerServiceAbstract extends Service implements DoesTimerS
 	       	mNotificationManager.notify((int)new Date().getTime(), builder.build());
 		}					    	
     }
+	// -----------------------------------------  RestTimer ----------------------------------------------------------------------------
+	protected void resetRestTimerTimeValues() {
+		this.mTimeWhenRestTimerStarted=new Date();
+		this.mRestTimerCurrent=new Date();
 
-	
+	}
+
+
+	private Timer getRestTimer() {
+		if (mRestTimer == null) {
+			mRestTimer = new Timer("RestTimer");
+		}
+		return mRestTimer;
+	}	
+	protected void stopMyRestTimer() {
+		if (mRestTimer != null) {
+			try {
+				mRestTimer.cancel();
+				mRestTimer.purge();
+			} catch (Exception e) {
+			}
+			mRestTimer = null;
+    		Intent broadcastIntentAlert = new Intent()
+    			.setAction(GlobalStaticValues.NOTIFICATION_CURRENT_REST_TIME)
+    			.putExtra(GlobalStaticValues.KEY_CURRENT_REST_TIME, 0l);
+	        // Broadcast whichever result occurred
+	        LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntentAlert);
+	        this.resetRestTimerTimeValues();
+		}
+	}	
+	protected void startMyRestTimer() {
+		stopMyRestTimer();
+		mTimeWhenRestTimerStarted=new Date();
+		getRestTimer().schedule(new TimerTask() {
+			public void run() {
+				mRestTimerCurrent=new Date();
+				long millisFromTimerWhenRestTimerStarted=mTimeWhenRestTimerStarted.getTime();
+				long millisFromRestTimeCurrent=mRestTimerCurrent.getTime();
+				double timeInSeconds=((double)millisFromRestTimeCurrent-(double)millisFromTimerWhenRestTimerStarted)/1000;
+				long timeInSecondsLong=(long)timeInSeconds;
+	    		Intent broadcastIntentAlert = new Intent()
+    			.setAction(GlobalStaticValues.NOTIFICATION_CURRENT_REST_TIME)
+    			.putExtra(GlobalStaticValues.KEY_CURRENT_REST_TIME, timeInSecondsLong);
+		        // Broadcast whichever result occurred
+		        LocalBroadcastManager.getInstance(TimerServiceAbstract.this).sendBroadcast(broadcastIntentAlert);
+		        restTimerPopped();
+			}
+		}, GlobalStaticValues.RestTimerInterval*1000, GlobalStaticValues.RestTimerInterval*1000);
+	}
+
+	protected void restTimerPopped() {
+		long intervalInSeconds=Math.abs((mRestTimerCurrent.getTime() - mTimeWhenRestTimerStarted.getTime())/1000);
+		int intervalInMinutes=(int)((float)intervalInSeconds/60f);
+		if(intervalInMinutes>=mSettingsManager.getStoppedTimeMinutesBeforeNotification()) {
+			this.stopMyRestTimer();
+			resetRestTimerTimeValues();
+			alarm();
+		}		
+	}
+
 	@Override
 	public IBinder onBind(Intent intent) {
 		return null;

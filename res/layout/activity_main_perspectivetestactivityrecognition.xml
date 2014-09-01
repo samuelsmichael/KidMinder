@@ -4,25 +4,18 @@
     android:layout_height="match_parent"
     tools:context="${relativePackage}.${activityClass}" >
 
-	<com.diamondsoftware.android.kidminder.SpeedometerView
-	    android:layout_height="wrap_content"
-	    android:layout_width="match_parent"
-	    android:padding="8dp"
-	    android:id="@+id/speedometer" />
-	
 	<Switch
-	    android:id="@+id/enabledSwitch"
+	    android:id="@+id/enabledSwitchActivityRecognition"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
-	    android:layout_below="@+id/speedometer"
 	    android:layout_centerHorizontal="true"
 	    android:layout_marginTop="20dip"
 	    android:text="System is" />
 	<TextView 
-	    android:id="@+id/switchinfo_id"
+	    android:id="@+id/switchinfo_idActivityRecognition"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
-	    android:layout_below="@+id/enabledSwitch"
+	    android:layout_below="@+id/enabledSwitchActivityRecognition"
 	    android:layout_centerHorizontal="true"
 	    android:layout_marginTop="1dip"
 	    android:textSize="12sp"
@@ -30,10 +23,10 @@
 	    >	  
 	</TextView>	    
 	<LinearLayout 
-	    android:id="@+id/HeartbeatCountId"
+	    android:id="@+id/activityrecognizedActivityRecognition"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
-	    android:layout_below="@+id/switchinfo_id" 
+	    android:layout_below="@+id/switchinfo_idActivityRecognition" 
 	    android:layout_centerHorizontal="true"
 	    android:layout_marginTop="15dip"
 	    android:orientation="horizontal"
@@ -42,12 +35,12 @@
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:textSize="14sp"
-		    android:text="Heartbeat ticks count:"
+		    android:text="Activity recognition:"
 		    android:layout_marginRight="20dip"
 		    >	  
 		</TextView>	    
     	<TextView 
-		    android:id="@+id/heartbeatcount_id"
+		    android:id="@+id/activityrecognitionstatus_idActivityRecognition"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:textSize="14sp"
@@ -55,35 +48,10 @@
 		</TextView>	    	    		    
 	</LinearLayout>
 	<LinearLayout 
-	    android:id="@+id/GotSpeedCountId"
+	    android:id="@+id/CurrentRestTimeIdActivityRecognition"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
-	    android:layout_below="@+id/HeartbeatCountId"
-	    android:layout_centerHorizontal="true"
-	    android:layout_marginTop="5dip"
-	    android:orientation="horizontal"
-	    >
-    	<TextView 
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:textSize="14sp"
-		    android:text="Location has speed count:"
-		    android:layout_marginRight="20dip"
-		    >	  
-		</TextView>	    
-    	<TextView 
-		    android:id="@+id/gotspeedcount_id"
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:textSize="14sp"
-		    >	  
-		</TextView>	    	    		    
-	</LinearLayout>
-	<LinearLayout 
-	    android:id="@+id/CurrentRestTimeId"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:layout_below="@+id/GotSpeedCountId"
+	    android:layout_below="@+id/activityrecognizedActivityRecognition"
 	    android:layout_centerHorizontal="true"
 	    android:layout_marginTop="5dip"
 	    android:orientation="horizontal"
@@ -97,7 +65,7 @@
 		    >	  
 		</TextView>	    
     	<TextView 
-		    android:id="@+id/current_rest_time_id"
+		    android:id="@+id/currentresttime_idActivityRecognition"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:textSize="14sp"

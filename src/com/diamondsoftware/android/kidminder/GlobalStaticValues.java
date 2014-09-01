@@ -11,9 +11,10 @@ public class GlobalStaticValues {
 	public static enum TIMER_IMPLEMENTATIONS {
 		ORIGINAL,
 		ORIGINAL_REFACTORED,
-		NEW
+		NEW,
+		ACTIVITY_RECOGNITION
 	}
-	public static final TIMER_IMPLEMENTATIONS myTimerImplementation=TIMER_IMPLEMENTATIONS.NEW;
+	public static final TIMER_IMPLEMENTATIONS myTimerImplementation=TIMER_IMPLEMENTATIONS.ACTIVITY_RECOGNITION;
 	public static Intent getIntentForTimer(Context context) {
 		Intent intent;
 		switch (myTimerImplementation) {
@@ -25,6 +26,9 @@ public class GlobalStaticValues {
 			break;
 		case NEW:
 			intent = new Intent(context,TimerServiceNew.class);
+			break;
+		case ACTIVITY_RECOGNITION:
+			intent=new Intent(context,TimerServiceActivityRecognition.class);
 			break;
 		default:
 			intent = new Intent(context,TimerService.class); 
@@ -39,6 +43,7 @@ public class GlobalStaticValues {
 	public static final String NOTIFICATION_GPS_HASBEEN_ENABLED ="NOTIFICATION_GPS_HASBEEN_ENABLED";
 	public static final String NOTIFICATION_POPUPALERT="notificationPopupAlert";
 	public static final String NOTIFICATION_CURRENT_REST_TIME="currentresttime";
+	public static final String NOTIFICATION_ACTIVITYRECOGNITION="NOTIFICATION_ACTIVITYRECOGNITION";
 	
 	public static final String KEY_LOGGINGLEVEL= "LoggingLevel";
 	public static final String KEY_HEARTBEATFREQUENCY="HeartbeatFrequency";	
@@ -59,6 +64,8 @@ public class GlobalStaticValues {
 	public static final String KEY_STOPPEDTIME_MINUTES_BEFORE_NOTIFICATION = "stoptime";
 	public static final String KEY_CURRENT_REST_TIME="CURRENTRestTime";
 	public static final String KEY_SIMULATION="key_simulation";
+	public static final String KEY_PREFERENCES_TYPE="key_prefences_type";
+	public static final String KEY_ACTIVITYRECOGNITION = "key activityrecognition";
 	
 	public static final String ACTION_GPS_NOT_ENABLED = "ACTIONGPGNOTENABLED";
 	public static final String ACTION_STOP="ACTION_STOP";
@@ -67,6 +74,7 @@ public class GlobalStaticValues {
 	public static final String ACTION_STARTING_FROM_BOOTUP="StartingFromBootup";
 	public static final String ACTION_POPUPALERT="actionPopupAlert";
 	public static final String ACTION_STARTING_FROM_NOTIFICATION_ALERT="actionstartingfromnotification";
+	public static final String ACTION_ACTIVITY_RECOGNITION_CHANGE_ALERT="ACTIONactivityrecognitionchangealert";
 	
 	public static final int LOG_LEVEL_INFORMATION=0;
 	public static final int LOG_LEVEL_NOTIFICATION=1;

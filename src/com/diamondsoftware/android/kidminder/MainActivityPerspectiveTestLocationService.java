@@ -34,7 +34,6 @@ public class MainActivityPerspectiveTestLocationService extends MainActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_perspectivetestlocationservice);
-        
         mSwitch=(Switch)findViewById(R.id.enabledSwitch);
         mHeartbeatIndicator=(TextView)findViewById(R.id.heartbeatcount_id);
         mGotSpeedIndicator=(TextView)findViewById(R.id.gotspeedcount_id);
@@ -128,13 +127,32 @@ public class MainActivityPerspectiveTestLocationService extends MainActivity {
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_settings:
-			Intent i2 = new Intent(this, Preferences.class);
+			Intent i2 = new Intent(this, Preferences.class)
+				.putExtra(GlobalStaticValues.KEY_PREFERENCES_TYPE, GlobalStaticValues.myTimerImplementation.toString());
 			startActivity(i2);
 			return true;
 		}
 		return super.onMenuItemSelected(featureId, item);
 	}
 
+	@Override
+	protected void baseStopTimerService() {
+		super.baseStopTimerService();
+		mSettingsManager.setCurrentSpeed(0);
+		mSettingsManager.setGotSpeedTicksCount(0);
+		mSettingsManager.setHeartbeatTicksCount(0);
+		mSettingsManager.setLatestLocationDate(new Date());
+		mSettingsManager.setPriorLocationDate(new Date());
+		mSettingsManager.setPriorLocation(mSettingsManager.getLatestLocation().latitude, mSettingsManager.getLatestLocation().longitude);
+	}
+	
+	@Override
+	protected void baseStartTimerService() {
+		super.baseStartTimerService();
+		mSettingsManager.setCurrentSpeed(0);
+		mSettingsManager.setGotSpeedTicksCount(0);
+		mSettingsManager.setHeartbeatTicksCount(0);
+	}
 
 	@Override
 	protected void stopTimer() {

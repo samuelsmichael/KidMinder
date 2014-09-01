@@ -31,14 +31,10 @@ com.google.android.gms.location.LocationListener {
 	protected abstract void amMoving(double speed);
 	protected abstract void amAtRest();
 	protected abstract void performActionEqualsACTION_STARTING_FROM_MAINACTIVITY();
-	protected abstract void restTimerPopped();
 	
     int mNoreentry2=0;
     private LocationClient mLocationClient;
 	protected int mJeDisSimulation=0;
-	private Timer mRestTimer=null;
-	protected Date mTimeWhenRestTimerStarted;
-	protected Date mRestTimerCurrent;
     private LocationRequest mLocationRequest;
 
     @Override
@@ -56,9 +52,6 @@ com.google.android.gms.location.LocationListener {
         mLocationRequest.setFastestInterval(GlobalStaticValues.FASTEST_INTERVAL);
         mSettingsManager.setCurrentSpeed(0);
         mSettingsManager.setCurrentRestTime(0);
-        this.mTimeWhenRestTimerStarted=new Date();
-        this.mRestTimerCurrent=new Date();
-        resetRestTimerTimeValues();
     }
     
 
@@ -92,6 +85,9 @@ com.google.android.gms.location.LocationListener {
 					notifyActivityThatGPSIsNotOn();
 			    } else {
 			    	stop();
+			        long updateInterval=(long)((long)mSettingsManager.getHeartbeatFrequency())*(long)GlobalStaticValues.MILLISECONDS_PER_SECOND;
+			        mLocationRequest.setInterval(updateInterval);
+
 			        mLocationClient = new LocationClient(this, this, this);
 			        mLocationClient.connect();
 			    }
@@ -147,55 +143,6 @@ com.google.android.gms.location.LocationListener {
 	    }
     }
     
-	// -----------------------------------------  RestTimer ----------------------------------------------------------------------------
-	protected void resetRestTimerTimeValues() {
-		this.mTimeWhenRestTimerStarted=new Date();
-		this.mRestTimerCurrent=new Date();
-
-	}
-
-
-	private Timer getRestTimer() {
-		if (mRestTimer == null) {
-			mRestTimer = new Timer("RestTimer");
-		}
-		return mRestTimer;
-	}	
-	protected void stopMyRestTimer() {
-		if (mRestTimer != null) {
-			try {
-				mRestTimer.cancel();
-				mRestTimer.purge();
-			} catch (Exception e) {
-			}
-			mRestTimer = null;
-    		Intent broadcastIntentAlert = new Intent()
-    			.setAction(GlobalStaticValues.NOTIFICATION_CURRENT_REST_TIME)
-    			.putExtra(GlobalStaticValues.KEY_CURRENT_REST_TIME, 0l);
-	        // Broadcast whichever result occurred
-	        LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntentAlert);
-	        this.resetRestTimerTimeValues();
-		}
-	}	
-	protected void startMyRestTimer() {
-		stopMyRestTimer();
-		mTimeWhenRestTimerStarted=new Date();
-		getRestTimer().schedule(new TimerTask() {
-			public void run() {
-				mRestTimerCurrent=new Date();
-				long millisFromTimerWhenRestTimerStarted=mTimeWhenRestTimerStarted.getTime();
-				long millisFromRestTimeCurrent=mRestTimerCurrent.getTime();
-				double timeInSeconds=((double)millisFromRestTimeCurrent-(double)millisFromTimerWhenRestTimerStarted)/1000;
-				long timeInSecondsLong=(long)timeInSeconds;
-	    		Intent broadcastIntentAlert = new Intent()
-    			.setAction(GlobalStaticValues.NOTIFICATION_CURRENT_REST_TIME)
-    			.putExtra(GlobalStaticValues.KEY_CURRENT_REST_TIME, timeInSecondsLong);
-		        // Broadcast whichever result occurred
-		        LocalBroadcastManager.getInstance(TimerServiceAbstractLocationService.this).sendBroadcast(broadcastIntentAlert);
-		        restTimerPopped();
-			}
-		}, GlobalStaticValues.RestTimerInterval*1000, GlobalStaticValues.RestTimerInterval*1000);
-	}
 	
 	@Override
 	public void onConnected(Bundle arg0) {
@@ -214,7 +161,6 @@ com.google.android.gms.location.LocationListener {
 	}	
 	protected void doACTION_STOP() {
 		stop();
-		startIfNotAlreadyEnabled();
 	}
 	protected void doACTION_HEARTBEAT_INTERVAL_CHANGED() {
 		stop();
