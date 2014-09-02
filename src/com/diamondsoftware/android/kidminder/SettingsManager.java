@@ -68,6 +68,19 @@ public class SettingsManager {
 		count++;
 		setHeartbeatTicksCount(count);
 	}
+	public int getJeDisSimulationCount() {
+		String value=getValue("JeDisSimulation","0");
+		return Integer.valueOf(value);
+	}
+	public void setJeDisSimulationCount(int value) {
+		setValue("JeDisSimulation", String.valueOf(value));
+	}
+	public void incrementJeDisSimulationCount() {
+		int count=getJeDisSimulationCount();
+		count++;
+		setJeDisSimulationCount(count);
+	}
+
 	public int getGotspeedTicksCount() {
 		String value=getValue(GlobalStaticValues.KEY_GOTSPEED_COUNT,"0");
 		return Integer.valueOf(value);

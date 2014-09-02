@@ -103,6 +103,9 @@ public abstract class MainActivity extends Activity {
 		}
     }
     private void doPopupAlert(boolean justDoWindow) {
+		new Logger(mSettingsManager.getLoggingLevel(), "MainActivity", this)
+		.log("doPopupAlert("+(justDoWindow?"true":"false")+")", GlobalStaticValues.LOG_LEVEL_NOTIFICATION);
+
     	if(mSettingsManager.getNotificationUsesPopup() || justDoWindow) {
 			/* This makes it happen even if the system is sleeping or locked */
     		if(screenLock==null) {

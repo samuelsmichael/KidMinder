@@ -17,9 +17,7 @@ import android.content.Intent;
 public class TimerServiceActivityRecognition extends TimerServiceAbstract  implements
 		ConnectionCallbacks, OnConnectionFailedListener {
     public enum REQUEST_TYPE {START, STOP}
-	private int mWasMoving=0;
     private REQUEST_TYPE mRequestType;
-	protected int mJeDisSimulation=0;
 
     /*
      * Store the PendingIntent used to send activity recognition events
@@ -50,7 +48,7 @@ public class TimerServiceActivityRecognition extends TimerServiceAbstract  imple
          * to send activity recognition updates back to this app.
          */
         Intent intent = new Intent(
-                this, TimerServiceActivityRecognition.class)
+                this, ActivityRecognitionIntentService.class)
         	.setAction(GlobalStaticValues.ACTION_ACTIVITY_RECOGNITION_CHANGE_ALERT);
         /*
          * Return a PendingIntent that starts the IntentService.
@@ -65,111 +63,29 @@ public class TimerServiceActivityRecognition extends TimerServiceAbstract  imple
 		if(intent!=null) {
 			String action=intent.getAction();
 			if(action!=null) {
-				if(action.equals(GlobalStaticValues.ACTION_ACTIVITY_RECOGNITION_CHANGE_ALERT)) {
-					int activityType=DetectedActivity.UNKNOWN;
-					Intent broadcastIntent3 = new Intent();
-			        broadcastIntent3.setAction(GlobalStaticValues.NOTIFICATION_HEARTBEAT);
-			        LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent3);
-
-			        // If the incoming intent contains an update
-			        if (ActivityRecognitionResult.hasResult(intent)||(mSettingsManager.getCurrentSimilationStatus())) {
-						if(mSettingsManager.getCurrentSimilationStatus()) {
-							if(mJeDisSimulation<5) {
-								activityType=DetectedActivity.IN_VEHICLE;
-							} else {
-								activityType=DetectedActivity.STILL;
-							}
-							mJeDisSimulation++;
-						} else {
-	
-				            // Get the update
-				            ActivityRecognitionResult result =
-				                    ActivityRecognitionResult.extractResult(intent);
-				            // Get the most probable activity
-				            DetectedActivity mostProbableActivity =
-				                    result.getMostProbableActivity();
-				            /*
-				             * Get the probability that this activity is the
-				             * the user's actual activity
-				             */
-				            int confidence = mostProbableActivity.getConfidence();
-				            /*
-				             * Get an integer describing the type of activity
-				             */
-				            activityType = mostProbableActivity.getType();
-	
-						}
-			            String activityName = getNameFromType(activityType);
-			            // What is TILTING good for?  
-			            if(activityType==DetectedActivity.TILTING) {
-			            	return Service.START_STICKY;
-			            }
-			            /*
-			             * At this point, you have retrieved all the information
-			             * for the current update. You can display this
-			             * information to the user in a notification, or
-			             * send it to an Activity or Service in a broadcast
-			             * Intent.
-			             */
-						Intent broadcastIntent2 = new Intent()
-							.putExtra(GlobalStaticValues.KEY_ACTIVITYRECOGNITION, activityName);
-				        broadcastIntent2.setAction(GlobalStaticValues.NOTIFICATION_ACTIVITYRECOGNITION);
-				        LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent2);
-			            if(activityType==DetectedActivity.IN_VEHICLE) {
-			            	stopMyRestTimer();
-			            	mWasMoving++;
-			            } else {
-			            	if(mWasMoving>2) {
-			            		startMyRestTimer();
-			            		mWasMoving=0;
-			            	}
-			            }
-			        } else {
-			            /*
-			             * This implementation ignores intents that don't contain
-			             * an activity update. If you wish, you can report them as
-			             * errors.
-			             */
-			        }
-			    }
+				if(action.equals(GlobalStaticValues.ACTION_ACTION_START_RESTTIMER)) {
+					this.startMyRestTimer();
+				} else {
+					if(action.equals(GlobalStaticValues.ACTION_ACTION_STOP_RESTTIMER)) {
+						this.stopMyRestTimer();
+					} 
+				}
 			}
 		}
 		return Service.START_STICKY;
 	}
 	
-    /**
-     * Map detected activity types to strings
-     *@param activityType The detected activity type
-     *@return A user-readable name for the type
-     */
-    private String getNameFromType(int activityType) {
-        switch(activityType) {
-            case DetectedActivity.IN_VEHICLE:
-                return "in_vehicle";
-            case DetectedActivity.ON_BICYCLE:
-                return "on_bicycle";
-            case DetectedActivity.ON_FOOT:
-                return "on_foot";
-            case DetectedActivity.STILL:
-                return "still";
-            case DetectedActivity.UNKNOWN:
-                return "unknown";
-            case DetectedActivity.TILTING:
-                return "tilting";
-        }
-        return "unknown";
-    }
-	
     @Override
 	protected void doACTION_STOP() {
+    	mThenStart=false;
     	stop();
     }
 
+    private boolean mThenStart=false;
 	@Override
 	protected void doACTION_HEARTBEAT_INTERVAL_CHANGED() {
+		mThenStart=true;
 		stop();
-		start();
-
 	}
 
 	@Override
@@ -211,7 +127,7 @@ public class TimerServiceActivityRecognition extends TimerServiceAbstract  imple
 	@Override
 	protected void stop() {		
 		if(mSettingsManager.getCurrentSimilationStatus()) {
-			mJeDisSimulation=-1;
+			mSettingsManager.setJeDisSimulationCount(-1);
 		}
         mRequestType=REQUEST_TYPE.STOP;
         // Request a connection to Location Services
@@ -226,6 +142,7 @@ public class TimerServiceActivityRecognition extends TimerServiceAbstract  imple
 
 	@Override
 	public void onConnected(Bundle arg0) {
+		boolean thenStart=false;
 	    /*
 	     * Called by Location Services once the location client is connected.
 	     *
@@ -237,8 +154,9 @@ public class TimerServiceActivityRecognition extends TimerServiceAbstract  imple
          * detection interval and PendingIntent. This call is
          * synchronous.
          */
-        mActivityRecognitionClient.requestActivityUpdates(
-                mSettingsManager.getHeartbeatFrequency()*1000,
+			int heartbeatFrequency=mSettingsManager.getHeartbeatFrequency();
+			mActivityRecognitionClient.requestActivityUpdates(
+                heartbeatFrequency*1000,
                 mActivityRecognitionPendingIntent);
 		} else {
 	        mActivityRecognitionClient.removeActivityUpdates(mActivityRecognitionPendingIntent);
@@ -247,7 +165,9 @@ public class TimerServiceActivityRecognition extends TimerServiceAbstract  imple
 			.putExtra(GlobalStaticValues.KEY_ACTIVITYRECOGNITION, "");
 			broadcastIntent2.setAction(GlobalStaticValues.NOTIFICATION_ACTIVITYRECOGNITION);
 			LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent2);
-	        
+			if(this.mThenStart) {
+				thenStart=true;
+			}
 		}
         /*
          * Since the preceding call is synchronous, turn off the
@@ -255,7 +175,9 @@ public class TimerServiceActivityRecognition extends TimerServiceAbstract  imple
          */
         mInProgress = false;
         mActivityRecognitionClient.disconnect();
-        this.mWasMoving=0;
+        if(thenStart) {
+	        start();
+        }
 	}
 
 	@Override

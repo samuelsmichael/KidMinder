@@ -101,6 +101,8 @@ public class GlobalStaticValues {
 	public static final String ACTION_POPUPALERT="actionPopupAlert";
 	public static final String ACTION_STARTING_FROM_NOTIFICATION_ALERT="actionstartingfromnotification";
 	public static final String ACTION_ACTIVITY_RECOGNITION_CHANGE_ALERT="ACTIONactivityrecognitionchangealert";
+	public static final String ACTION_ACTION_START_RESTTIMER="STARTRESTTIMER1";
+	public static final String ACTION_ACTION_STOP_RESTTIMER="STOPRESTTIMER1";
 	
 	public static final int LOG_LEVEL_INFORMATION=0;
 	public static final int LOG_LEVEL_NOTIFICATION=1;
