@@ -168,5 +168,6 @@ public class MainActivityPerspectiveTestLocationService extends MainActivity {
 	protected void pressedDisableButton() {
 		doAnyPressedDisableButtonActions();
 		baseStopTimerService();
+        mSettingsManager.setHeartbeatTicksCount(0);
 	}
 }

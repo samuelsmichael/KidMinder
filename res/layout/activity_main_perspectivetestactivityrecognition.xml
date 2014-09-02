@@ -23,10 +23,35 @@
 	    >	  
 	</TextView>	    
 	<LinearLayout 
-	    android:id="@+id/activityrecognizedActivityRecognition"
+	    android:id="@+id/HeartbeatCountId"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_below="@+id/switchinfo_idActivityRecognition" 
+	    android:layout_centerHorizontal="true"
+	    android:layout_marginTop="15dip"
+	    android:orientation="horizontal"
+	    >
+    	<TextView 
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:textSize="14sp"
+		    android:text="Heartbeat ticks count:"
+		    android:layout_marginRight="20dip"
+		    >	  
+		</TextView>	    
+    	<TextView 
+		    android:id="@+id/heartbeatcount_idActivityRecognition"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:textSize="14sp"
+		    >	  
+		</TextView>	    	    		    
+	</LinearLayout>
+	<LinearLayout 
+	    android:id="@+id/activityrecognizedActivityRecognition"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_below="@+id/HeartbeatCountId" 
 	    android:layout_centerHorizontal="true"
 	    android:layout_marginTop="15dip"
 	    android:orientation="horizontal"

@@ -36,6 +36,32 @@ public class GlobalStaticValues {
 		}
 		return intent;
 	}
+	public static Class<?> getClassForMainActivity() {
+		Class<?> classness;
+		switch (myTimerImplementation) {
+		case ACTIVITY_RECOGNITION:
+			classness=MainActivityPerspectiveTestActivityRecognition.class;
+			break;
+		default:
+			classness = MainActivityPerspectiveTestLocationService.class; 
+			break;
+		}
+		return classness;
+		
+	}
+	public static Intent getIntentForMainActivity(Context context) {
+		Intent intent;
+		switch (myTimerImplementation) {
+		case ACTIVITY_RECOGNITION:
+			intent=new Intent(context,MainActivityPerspectiveTestActivityRecognition.class);
+			break;
+		default:
+			intent = new Intent(context,MainActivityPerspectiveTestLocationService.class); 
+			break;
+		}
+		return intent;
+	}
+
 	public static final String NOTIFICATION_SPEED ="Speed_Notification";
 	public static final String NOTIFICATION_HEARTBEAT ="Heartbeat_Notification";
 	public static final String NOTIFICATION_GOTSPEED ="GotSpeed_Notification";

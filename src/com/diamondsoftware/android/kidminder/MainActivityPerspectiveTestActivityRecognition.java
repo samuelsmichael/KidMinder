@@ -3,6 +3,7 @@ package com.diamondsoftware.android.kidminder;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import com.diamondsoftware.android.kidminder.MainActivity.MyBroadcastReceiver;
 import com.google.android.gms.maps.model.LatLng;
@@ -27,6 +28,8 @@ public class MainActivityPerspectiveTestActivityRecognition extends
 	private Switch mSwitch;
 	private TextView mCurrentRestTime;
 	private TextView mActivityRecognition;
+	private TextView mHeartbeatIndicator;
+	
     private MyBroadcastReceiverActivityRecognition mBroadcastReceiver;
     // An intent filter for the broadcast receiver
     private IntentFilter mIntentFilter;
@@ -48,6 +51,8 @@ public class MainActivityPerspectiveTestActivityRecognition extends
 				mBroadcastReceiver, mIntentFilter);
 
     	mCurrentRestTime=(TextView)findViewById(R.id.currentresttime_idActivityRecognition);
+        mHeartbeatIndicator=(TextView)findViewById(R.id.heartbeatcount_idActivityRecognition);
+
     	mActivityRecognition=(TextView)findViewById(R.id.activityrecognitionstatus_idActivityRecognition);
         mSwitch=(Switch)findViewById(R.id.enabledSwitchActivityRecognition);
         mSwitch.setOnCheckedChangeListener(new OnCheckedChangeListener() {
@@ -86,6 +91,7 @@ public class MainActivityPerspectiveTestActivityRecognition extends
 		int seconds=(int)currentRestTimeInSeconds % 60;
 		mCurrentRestTime.setText(String.valueOf(minutes)+" m   "+String.valueOf(seconds)+ " s");
 		mActivityRecognition.setText(mSettingsManager.getActivityRecognition());
+		this.mHeartbeatIndicator.setText(String.format(Locale.getDefault(), "%d", mSettingsManager.getHeartbeatTicksCount()));
 	}
 
 	@Override
@@ -102,6 +108,7 @@ public class MainActivityPerspectiveTestActivityRecognition extends
 	@Override
 	protected void pressedDisableButton() {
 		this.baseStopTimerService();
+        mSettingsManager.setHeartbeatTicksCount(0);
 	}
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

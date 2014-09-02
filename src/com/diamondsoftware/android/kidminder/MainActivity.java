@@ -296,7 +296,7 @@ public abstract class MainActivity extends Activity {
         			GregorianCalendar gc=new GregorianCalendar();
         			try {
         				gc.setTime(GlobalStaticValues.MDATEFORMAT.parse(intent.getStringExtra(GlobalStaticValues.KEY_LATESTLOCATION_DATESTAMP)));
-        			} catch (ParseException e) {
+        			} catch (Exception e) {
         				gc.setTime(new Date());
         			}        			
             		mSettingsManager.setLatestLocationDate(gc.getTime());
@@ -314,7 +314,7 @@ public abstract class MainActivity extends Activity {
             				if(mSettingsManager.getImOnTop()) {
             					MainActivity.this.showGPSNotEnabledDialog();
             				} else { 
-	                			Intent jdIntent=new Intent(mActivity, MainActivityPerspectiveTestLocationService.class)
+	                			Intent jdIntent=GlobalStaticValues.getIntentForMainActivity(mActivity)
 	                			.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 	                			.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
 	                			.setAction(GlobalStaticValues.ACTION_GPS_NOT_ENABLED);
@@ -325,7 +325,7 @@ public abstract class MainActivity extends Activity {
                 				if(mSettingsManager.getImOnTop()) {
                 					MainActivity.this.doPopupAlert(false);
                 				} else {
-                    			Intent jdIntent=new Intent(mActivity, MainActivityPerspectiveTestLocationService.class)
+                    			Intent jdIntent=GlobalStaticValues.getIntentForMainActivity(mActivity)
                     			.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     			.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                     			.setAction(GlobalStaticValues.ACTION_POPUPALERT);

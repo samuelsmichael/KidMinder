@@ -17,8 +17,10 @@ import android.content.Intent;
 public class TimerServiceActivityRecognition extends TimerServiceAbstract  implements
 		ConnectionCallbacks, OnConnectionFailedListener {
     public enum REQUEST_TYPE {START, STOP}
-	private boolean mWasMoving=false;
+	private int mWasMoving=0;
     private REQUEST_TYPE mRequestType;
+	protected int mJeDisSimulation=0;
+
     /*
      * Store the PendingIntent used to send activity recognition events
      * back to the app
@@ -33,7 +35,7 @@ public class TimerServiceActivityRecognition extends TimerServiceAbstract  imple
     public void onCreate() {
         super.onCreate();
         mInProgress=false;
-        mSettingsManager.setCurrentRestTime(0);
+        mSettingsManager.setHeartbeatTicksCount(0);
         mSettingsManager.setActivityRecognition("");
         /*
          * Instantiate a new activity recognition client. Since the
@@ -64,24 +66,44 @@ public class TimerServiceActivityRecognition extends TimerServiceAbstract  imple
 			String action=intent.getAction();
 			if(action!=null) {
 				if(action.equals(GlobalStaticValues.ACTION_ACTIVITY_RECOGNITION_CHANGE_ALERT)) {
+					int activityType=DetectedActivity.UNKNOWN;
+					Intent broadcastIntent3 = new Intent();
+			        broadcastIntent3.setAction(GlobalStaticValues.NOTIFICATION_HEARTBEAT);
+			        LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent3);
+
 			        // If the incoming intent contains an update
-			        if (ActivityRecognitionResult.hasResult(intent)) {
-			            // Get the update
-			            ActivityRecognitionResult result =
-			                    ActivityRecognitionResult.extractResult(intent);
-			            // Get the most probable activity
-			            DetectedActivity mostProbableActivity =
-			                    result.getMostProbableActivity();
-			            /*
-			             * Get the probability that this activity is the
-			             * the user's actual activity
-			             */
-			            int confidence = mostProbableActivity.getConfidence();
-			            /*
-			             * Get an integer describing the type of activity
-			             */
-			            int activityType = mostProbableActivity.getType();
+			        if (ActivityRecognitionResult.hasResult(intent)||(mSettingsManager.getCurrentSimilationStatus())) {
+						if(mSettingsManager.getCurrentSimilationStatus()) {
+							if(mJeDisSimulation<5) {
+								activityType=DetectedActivity.IN_VEHICLE;
+							} else {
+								activityType=DetectedActivity.STILL;
+							}
+							mJeDisSimulation++;
+						} else {
+	
+				            // Get the update
+				            ActivityRecognitionResult result =
+				                    ActivityRecognitionResult.extractResult(intent);
+				            // Get the most probable activity
+				            DetectedActivity mostProbableActivity =
+				                    result.getMostProbableActivity();
+				            /*
+				             * Get the probability that this activity is the
+				             * the user's actual activity
+				             */
+				            int confidence = mostProbableActivity.getConfidence();
+				            /*
+				             * Get an integer describing the type of activity
+				             */
+				            activityType = mostProbableActivity.getType();
+	
+						}
 			            String activityName = getNameFromType(activityType);
+			            // What is TILTING good for?  
+			            if(activityType==DetectedActivity.TILTING) {
+			            	return Service.START_STICKY;
+			            }
 			            /*
 			             * At this point, you have retrieved all the information
 			             * for the current update. You can display this
@@ -93,14 +115,13 @@ public class TimerServiceActivityRecognition extends TimerServiceAbstract  imple
 							.putExtra(GlobalStaticValues.KEY_ACTIVITYRECOGNITION, activityName);
 				        broadcastIntent2.setAction(GlobalStaticValues.NOTIFICATION_ACTIVITYRECOGNITION);
 				        LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent2);
-			            
 			            if(activityType==DetectedActivity.IN_VEHICLE) {
 			            	stopMyRestTimer();
-			            	mWasMoving=true;
+			            	mWasMoving++;
 			            } else {
-			            	if(mWasMoving) {
+			            	if(mWasMoving>2) {
 			            		startMyRestTimer();
-			            		mWasMoving=false;
+			            		mWasMoving=0;
 			            	}
 			            }
 			        } else {
@@ -153,36 +174,45 @@ public class TimerServiceActivityRecognition extends TimerServiceAbstract  imple
 
 	@Override
 	protected void doACTION_STARTING_FROM_MAINACTIVITY() {
+		resetRestTimerTimeValues();
 		start();
 	}	
 
 	@Override
 	protected void doACTION_STARTING_FROM_BOOTUP() {		
 		mSettingsManager.setIsEnabled(true);  // force enabled when starting from bootup
+		resetRestTimerTimeValues();
 		start();
 	}
 
 	private void start() {
-        // If a request is not already underway
-        if (!mInProgress) {
-            // Indicate that a request is in progress
-            mInProgress = true;
-            mRequestType=REQUEST_TYPE.START;
-            // Request a connection to Location Services
-            mActivityRecognitionClient.connect();
-        //
-        } else {
-            /*
-             * A request is already underway. You can handle
-             * this situation by disconnecting the client,
-             * re-setting the flag, and then re-trying the
-             * request.
-             */
-        }
-		
+	    if (! isGPSAlive() ) {
+			notifyActivityThatGPSIsNotOn();
+	    } else {
+	
+	        // If a request is not already underway
+	        if (!mInProgress) {
+	            // Indicate that a request is in progress
+	            mInProgress = true;
+	            mRequestType=REQUEST_TYPE.START;
+	            // Request a connection to Location Services
+	            mActivityRecognitionClient.connect();
+	        //
+	        } else {
+	            /*
+	             * A request is already underway. You can handle
+	             * this situation by disconnecting the client,
+	             * re-setting the flag, and then re-trying the
+	             * request.
+	             */
+	        }
+	    }
 	}
 	@Override
-	protected void stop() {
+	protected void stop() {		
+		if(mSettingsManager.getCurrentSimilationStatus()) {
+			mJeDisSimulation=-1;
+		}
         mRequestType=REQUEST_TYPE.STOP;
         // Request a connection to Location Services
         mActivityRecognitionClient.connect();
@@ -225,6 +255,7 @@ public class TimerServiceActivityRecognition extends TimerServiceAbstract  imple
          */
         mInProgress = false;
         mActivityRecognitionClient.disconnect();
+        this.mWasMoving=0;
 	}
 
 	@Override

@@ -173,6 +173,7 @@ com.google.android.gms.location.LocationListener {
 	}
 	protected void doACTION_STARTING_FROM_BOOTUP() {
 		mSettingsManager.setIsEnabled(true);  // force enabled when starting from bootup
+		resetRestTimerTimeValues();
 		startIfNotAlreadyEnabled();
 	}
 

@@ -78,7 +78,7 @@ public abstract class TimerServiceAbstract extends Service implements DoesTimerS
 	        // Broadcast whichever result occurred
 	        LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
     	} else {
-	    	Intent intent=new Intent(this,MainActivityPerspectiveTestLocationService.class)
+	    	Intent intent=GlobalStaticValues.getIntentForMainActivity(this)
 	    		.setAction(GlobalStaticValues.ACTION_GPS_NOT_ENABLED);
 	    	intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 	    	startActivity(intent);
@@ -116,28 +116,27 @@ public abstract class TimerServiceAbstract extends Service implements DoesTimerS
     protected void alarm() {
 		if(mSettingsManager.getNotificationUsesPopup()) {
 	    	if(this.isMyActivityRunning()) {
-	    		Intent broadcastIntentAlert = new Intent()
-	    			.setFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+	    		Intent broadcastIntentAlert=GlobalStaticValues.getIntentForMainActivity(this);
+	    		broadcastIntentAlert.setFlags(Intent.FLAG_RECEIVER_FOREGROUND);
 		        broadcastIntentAlert.setAction(GlobalStaticValues.NOTIFICATION_POPUPALERT);
 		        // Broadcast whichever result occurred
 		        LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntentAlert);
 	    	} else {
-		    	Intent intent=new Intent(this,MainActivityPerspectiveTestLocationService.class)
-		    		.setAction(GlobalStaticValues.ACTION_POPUPALERT);
+	    		Intent intent=GlobalStaticValues.getIntentForMainActivity(this);
+	    		intent.setAction(GlobalStaticValues.ACTION_POPUPALERT);
 		    	intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		    	startActivity(intent);
 	    	}
 		} else {
 	        // Create an explicit content Intent that starts the main Activity
-	        Intent notificationIntent =
-	                new Intent(this,MainActivityPerspectiveTestLocationService.class)
-	        			.setAction(GlobalStaticValues.ACTION_STARTING_FROM_NOTIFICATION_ALERT); 
+			Intent notificationIntent=GlobalStaticValues.getIntentForMainActivity(this);
+			notificationIntent.setAction(GlobalStaticValues.ACTION_STARTING_FROM_NOTIFICATION_ALERT);
 
 	        // Construct a task stack
 	        android.support.v4.app.TaskStackBuilder stackBuilder = android.support.v4.app.TaskStackBuilder.create(this);
 
 	        // Adds the main Activity to the task stack as the parent
-	        stackBuilder.addParentStack(MainActivityPerspectiveTestLocationService.class);
+	        stackBuilder.addParentStack(GlobalStaticValues.getClassForMainActivity());
 
 	        // Push the content Intent onto the stack
 	        stackBuilder.addNextIntent(notificationIntent);
