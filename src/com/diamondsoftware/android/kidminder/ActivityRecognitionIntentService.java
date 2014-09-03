@@ -11,15 +11,13 @@ import android.support.v4.content.LocalBroadcastManager;
 
 public class ActivityRecognitionIntentService extends IntentService {
 	protected SettingsManager mSettingsManager;
-	private int mWasMoving=0;
-	private int mWasStopped=0;
-
-
+	
 	@Override
 	public void onCreate() {
 		super.onCreate();
 		mSettingsManager=new SettingsManager(this);
 	}
+	
 	public ActivityRecognitionIntentService(String name) {
 		super(name);
 	}
@@ -38,7 +36,7 @@ public class ActivityRecognitionIntentService extends IntentService {
         // If the incoming intent contains an update
         if (ActivityRecognitionResult.hasResult(intent)||(mSettingsManager.getCurrentSimilationStatus())) {
 			if(mSettingsManager.getCurrentSimilationStatus()) {
-				if(mSettingsManager.getJeDisSimulationCount()<5) {
+				if(mSettingsManager.getJeDisSimulationCount()%10<5) {
 					activityType=DetectedActivity.IN_VEHICLE;
 				} else {
 					activityType=DetectedActivity.STILL;
@@ -82,22 +80,24 @@ public class ActivityRecognitionIntentService extends IntentService {
 				.putExtra(GlobalStaticValues.KEY_ACTIVITYRECOGNITION, activityName);
 	        broadcastIntent2.setAction(GlobalStaticValues.NOTIFICATION_ACTIVITYRECOGNITION);
 	        LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent2);
+	        int wasStopped=mSettingsManager.getWasStoppedCount();
+	        int wasMoving=mSettingsManager.getWasMovingCount();
             if(activityType==DetectedActivity.IN_VEHICLE) {
-            	if(mWasStopped>2) {
-            		Intent intend=new Intent(this,TimerServiceActivityRecognition.class)
+            	if(mSettingsManager.getWasStoppedCount()>2) {
+            		Intent intent2=new Intent(this,TimerServiceActivityRecognition.class)
             			.setAction(GlobalStaticValues.ACTION_ACTION_STOP_RESTTIMER);
-            		startService(intent);
-            		mWasStopped=0;
+            		startService(intent2);
+            		mSettingsManager.setWasStoppedCount(0);
             	}
-            	mWasMoving++;
+            	mSettingsManager.incrementWasMovingCount();
             } else {
-            	if(mWasMoving>2) {
-            		Intent intend=new Intent(this,TimerServiceActivityRecognition.class)
+            	if(mSettingsManager.getWasMovingCount()>2) {
+            		Intent intent2=new Intent(this,TimerServiceActivityRecognition.class)
             			.setAction(GlobalStaticValues.ACTION_ACTION_START_RESTTIMER);
-            		startService(intent);
-            		mWasMoving=0;
+            		startService(intent2);
+            		mSettingsManager.setWasMovingCount(0);
             	}
-            	mWasStopped++;
+            	mSettingsManager.incrementWasStoppedCount();
             }
         } else {
             /*

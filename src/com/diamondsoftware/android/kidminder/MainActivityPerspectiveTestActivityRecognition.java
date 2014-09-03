@@ -89,7 +89,8 @@ public class MainActivityPerspectiveTestActivityRecognition extends
 		long currentRestTimeInSeconds=mSettingsManager.getCurrentRestTime();
 		int minutes=(int)currentRestTimeInSeconds/60;
 		int seconds=(int)currentRestTimeInSeconds % 60;
-		mCurrentRestTime.setText(String.valueOf(minutes)+" m   "+String.valueOf(seconds)+ " s");
+		String current=String.valueOf(minutes)+" m   "+String.valueOf(seconds)+ " s";
+		mCurrentRestTime.setText(current);
 		mActivityRecognition.setText(mSettingsManager.getActivityRecognition());
 		this.mHeartbeatIndicator.setText(String.format(Locale.getDefault(), "%d", mSettingsManager.getHeartbeatTicksCount()));
 	}

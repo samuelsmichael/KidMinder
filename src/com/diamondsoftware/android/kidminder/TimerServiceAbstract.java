@@ -194,6 +194,7 @@ public abstract class TimerServiceAbstract extends Service implements DoesTimerS
 			} catch (Exception e) {
 			}
 			mRestTimer = null;
+			mSettingsManager.setCurrentRestTime(0);
     		Intent broadcastIntentAlert = new Intent()
     			.setAction(GlobalStaticValues.NOTIFICATION_CURRENT_REST_TIME)
     			.putExtra(GlobalStaticValues.KEY_CURRENT_REST_TIME, 0l);
@@ -205,6 +206,7 @@ public abstract class TimerServiceAbstract extends Service implements DoesTimerS
 	protected void startMyRestTimer() {
 		stopMyRestTimer();
 		mTimeWhenRestTimerStarted=new Date();
+		mSettingsManager.setCurrentRestTime(0);
 		getRestTimer().schedule(new TimerTask() {
 			public void run() {
 				mRestTimerCurrent=new Date();

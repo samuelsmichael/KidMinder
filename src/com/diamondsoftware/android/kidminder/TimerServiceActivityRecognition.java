@@ -16,11 +16,11 @@ import android.content.Intent;
 
 public class TimerServiceActivityRecognition extends TimerServiceAbstract  implements
 		ConnectionCallbacks, OnConnectionFailedListener {
-    public enum REQUEST_TYPE {START, STOP}
+    public enum REQUEST_TYPE {START, STOP,CLEANUP}
     private REQUEST_TYPE mRequestType;
 
     /*
-     * Store the PendingIntent used to send activity recognition events
+     * Store the PendingIntent used to send activity recognition event
      * back to the app
      */
     private PendingIntent mActivityRecognitionPendingIntent;
@@ -29,6 +29,15 @@ public class TimerServiceActivityRecognition extends TimerServiceAbstract  imple
     // Flag that indicates if a request is underway.
     private boolean mInProgress;
 	
+	private boolean mAmReceiving=false;
+
+	@Override
+	public void onDestroy() {		
+        mRequestType=REQUEST_TYPE.CLEANUP;
+        mActivityRecognitionClient.connect();
+		super.onDestroy();
+	}
+    
     @Override
     public void onCreate() {
         super.onCreate();
@@ -126,9 +135,6 @@ public class TimerServiceActivityRecognition extends TimerServiceAbstract  imple
 	}
 	@Override
 	protected void stop() {		
-		if(mSettingsManager.getCurrentSimilationStatus()) {
-			mSettingsManager.setJeDisSimulationCount(-1);
-		}
         mRequestType=REQUEST_TYPE.STOP;
         // Request a connection to Location Services
         mActivityRecognitionClient.connect();
@@ -158,15 +164,28 @@ public class TimerServiceActivityRecognition extends TimerServiceAbstract  imple
 			mActivityRecognitionClient.requestActivityUpdates(
                 heartbeatFrequency*1000,
                 mActivityRecognitionPendingIntent);
+				mAmReceiving=true;
 		} else {
-	        mActivityRecognitionClient.removeActivityUpdates(mActivityRecognitionPendingIntent);
-	        mSettingsManager.setActivityRecognition("");
-			Intent broadcastIntent2 = new Intent()
-			.putExtra(GlobalStaticValues.KEY_ACTIVITYRECOGNITION, "");
-			broadcastIntent2.setAction(GlobalStaticValues.NOTIFICATION_ACTIVITYRECOGNITION);
-			LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent2);
-			if(this.mThenStart) {
-				thenStart=true;
+			if(mRequestType==REQUEST_TYPE.STOP) {
+		        mActivityRecognitionClient.removeActivityUpdates(mActivityRecognitionPendingIntent);
+		        mSettingsManager.setActivityRecognition("");
+				Intent broadcastIntent2 = new Intent()
+				.putExtra(GlobalStaticValues.KEY_ACTIVITYRECOGNITION, "");
+				broadcastIntent2.setAction(GlobalStaticValues.NOTIFICATION_ACTIVITYRECOGNITION);
+				LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent2);
+				mAmReceiving=false;
+				if(this.mThenStart) {
+					thenStart=true;
+				}
+			} else {
+				if(mRequestType==REQUEST_TYPE.CLEANUP) {
+					new Logger(mSettingsManager.getLoggingLevel(), "TimerServiceActivityRecognition", this)
+					.log("Did CLEANUP", GlobalStaticValues.LOG_LEVEL_NOTIFICATION);
+
+					if(this.mAmReceiving) {
+						mActivityRecognitionClient.removeActivityUpdates(mActivityRecognitionPendingIntent);
+					}
+				}
 			}
 		}
         /*

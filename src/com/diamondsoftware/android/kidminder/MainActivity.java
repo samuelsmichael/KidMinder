@@ -336,7 +336,8 @@ public abstract class MainActivity extends Activity {
                 				}
                 			} else {
                 				if(TextUtils.equals(action, GlobalStaticValues.NOTIFICATION_CURRENT_REST_TIME)) {
-                					mSettingsManager.setCurrentRestTime(intent.getLongExtra(GlobalStaticValues.KEY_CURRENT_REST_TIME, 0));
+                					long currentRestTime=intent.getLongExtra(GlobalStaticValues.KEY_CURRENT_REST_TIME, 0);
+                					mSettingsManager.setCurrentRestTime(currentRestTime);
                 				} else {
                 					if(TextUtils.equals(action, GlobalStaticValues.NOTIFICATION_GPS_HASBEEN_ENABLED)) {
                 						if(mSettingsManager.getEnabledStateBeforeGPSWasTurnedOff()) {

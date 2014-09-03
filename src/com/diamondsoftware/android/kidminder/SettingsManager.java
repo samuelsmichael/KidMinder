@@ -93,6 +93,30 @@ public class SettingsManager {
 		count++;
 		setGotSpeedTicksCount(count);
 	}
+	public int getWasMovingCount() {
+		String value=getValue(GlobalStaticValues.KEY_WASMOVING,"0");
+		return Integer.valueOf(value);
+	}
+	public void setWasMovingCount(int value) {
+		setValue(GlobalStaticValues.KEY_WASMOVING, String.valueOf(value));
+	}
+	public void incrementWasMovingCount() {
+		int count=getWasMovingCount();
+		count++;
+		setWasMovingCount(count);
+	}
+	public int getWasStoppedCount() {
+		String value=getValue(GlobalStaticValues.KEY_WASSTOPPED,"0");
+		return Integer.valueOf(value);
+	}
+	public void setWasStoppedCount(int value) {
+		setValue(GlobalStaticValues.KEY_WASSTOPPED, String.valueOf(value));
+	}
+	public void incrementWasStoppedCount() {
+		int count=getWasStoppedCount();
+		count++;
+		setWasStoppedCount(count);
+	}
 	public LatLng getPriorLocation() {
 		return 
 				new LatLng(
