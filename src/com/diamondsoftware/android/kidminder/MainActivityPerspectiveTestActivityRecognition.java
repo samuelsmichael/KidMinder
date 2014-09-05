@@ -29,6 +29,7 @@ public class MainActivityPerspectiveTestActivityRecognition extends
 	private TextView mCurrentRestTime;
 	private TextView mActivityRecognition;
 	private TextView mHeartbeatIndicator;
+	private TextView mConfidence;
 	
     private MyBroadcastReceiverActivityRecognition mBroadcastReceiver;
     // An intent filter for the broadcast receiver
@@ -52,6 +53,7 @@ public class MainActivityPerspectiveTestActivityRecognition extends
 
     	mCurrentRestTime=(TextView)findViewById(R.id.currentresttime_idActivityRecognition);
         mHeartbeatIndicator=(TextView)findViewById(R.id.heartbeatcount_idActivityRecognition);
+        mConfidence=(TextView)findViewById(R.id.activityconfidenceid);
 
     	mActivityRecognition=(TextView)findViewById(R.id.activityrecognitionstatus_idActivityRecognition);
         mSwitch=(Switch)findViewById(R.id.enabledSwitchActivityRecognition);
@@ -93,6 +95,7 @@ public class MainActivityPerspectiveTestActivityRecognition extends
 		mCurrentRestTime.setText(current);
 		mActivityRecognition.setText(mSettingsManager.getActivityRecognition());
 		this.mHeartbeatIndicator.setText(String.format(Locale.getDefault(), "%d", mSettingsManager.getHeartbeatTicksCount()));
+		mConfidence.setText(String.valueOf(mSettingsManager.getConfidence()));
 	}
 
 	@Override
@@ -148,9 +151,10 @@ public class MainActivityPerspectiveTestActivityRecognition extends
             String action = intent.getAction();
             if (TextUtils.equals(action, GlobalStaticValues.NOTIFICATION_ACTIVITYRECOGNITION)) {
         		String activityRecognition=intent.getStringExtra(GlobalStaticValues.KEY_ACTIVITYRECOGNITION);
+        		int confidence=intent.getIntExtra(GlobalStaticValues.KEY_ACTIVITYRECOGNITION_CONFIDENCE,0);
                 new Logger(mSettingsManager.getLoggingLevel(),"MainActivityPerspectiveTest",MainActivityPerspectiveTestActivityRecognition.this).log("About to setCurrentActivityRecogition. Activity Recognition="+activityRecognition, GlobalStaticValues.LOG_LEVEL_INFORMATION);
             	mSettingsManager.setActivityRecognition(activityRecognition);
-            	
+            	mSettingsManager.setConfidence(confidence);
             }
         	onResumeManageView();
         }

@@ -92,8 +92,11 @@ public class GlobalStaticValues {
 	public static final String KEY_SIMULATION="key_simulation";
 	public static final String KEY_PREFERENCES_TYPE="key_prefences_type";
 	public static final String KEY_ACTIVITYRECOGNITION = "key activityrecognition";
+	public static final String KEY_ACTIVITYRECOGNITION_CONFIDENCE = "key activityrecognition CONFIDENCE";
 	public static final String KEY_WASMOVING = "key WAS MOVING";
 	public static final String KEY_WASSTOPPED = "key was stopped";
+	public static final String KEY_CONFIDENCE_PERCENTAGE ="confidencepercentage";
+	public static final String KEY_INVEHICLECNTTHRESHHOLD = "invehiclethreshhold";
 	
 	public static final String ACTION_GPS_NOT_ENABLED = "ACTIONGPGNOTENABLED";
 	public static final String ACTION_STOP="ACTION_STOP";

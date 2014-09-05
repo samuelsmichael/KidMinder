@@ -263,4 +263,25 @@ public class SettingsManager {
 	public void setActivityRecognition(String value) {
 		setValue(GlobalStaticValues.KEY_ACTIVITYRECOGNITION, value);
 	}
+	public int getConfidence() {
+		String value=getValue(GlobalStaticValues.KEY_ACTIVITYRECOGNITION_CONFIDENCE,"0");
+		return Integer.valueOf(value);
+	}
+	public void setConfidence(int value) {
+		setValue(GlobalStaticValues.KEY_ACTIVITYRECOGNITION_CONFIDENCE, String.valueOf(value));
+	}
+	public int getConfidencePercentage() {
+		String value=getValue(GlobalStaticValues.KEY_CONFIDENCE_PERCENTAGE,"100");
+		return Integer.valueOf(value);
+	}
+	public void setConfidencePercentage(int value) {
+		setValue(GlobalStaticValues.KEY_CONFIDENCE_PERCENTAGE, String.valueOf(value));
+	}
+	public void setInVehicleCntThreshhold(int nbr) {
+		setValue(GlobalStaticValues.KEY_INVEHICLECNTTHRESHHOLD,String.valueOf(nbr));
+	}
+	public int getInVehicleCntThreshhold() {
+		String value=getValue(GlobalStaticValues.KEY_INVEHICLECNTTHRESHHOLD,"1");
+		return Integer.valueOf(value);
+	}
 }

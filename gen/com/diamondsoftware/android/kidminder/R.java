@@ -17,12 +17,14 @@ public final class R {
         public static final int abc_slide_out_top=0x7f040005;
     }
     public static final class array {
-        public static final int heartbeat_list_preference=0x7f0d0000;
+        public static final int heartbeat_list_preference=0x7f0d0002;
         /**  Used in app/menu examples 
          */
-        public static final int heartbeatvalues_list_preference=0x7f0d0001;
-        public static final int logging_preferences=0x7f0d0002;
-        public static final int loggingvalues_preferences=0x7f0d0003;
+        public static final int heartbeatvalues_list_preference=0x7f0d0003;
+        public static final int invehiclethreshholdpossiblevalues=0x7f0d0001;
+        public static final int invehiclethreshholdpossiblevaluesdescriptions=0x7f0d0000;
+        public static final int logging_preferences=0x7f0d0004;
+        public static final int loggingvalues_preferences=0x7f0d0005;
     }
     public static final class attr {
         /**  Custom divider drawable to use for elements in the action bar. 
@@ -1487,9 +1489,9 @@ containing a value of this type.
         public static final int spot_mask=0x7f020077;
     }
     public static final class id {
-        public static final int CurrentRestTimeId=0x7f09005c;
-        public static final int CurrentRestTimeIdActivityRecognition=0x7f090054;
-        public static final int GotSpeedCountId=0x7f09005a;
+        public static final int CurrentRestTimeId=0x7f09005d;
+        public static final int CurrentRestTimeIdActivityRecognition=0x7f090055;
+        public static final int GotSpeedCountId=0x7f09005b;
         public static final int HeartbeatCountId=0x7f090050;
         public static final int action_bar=0x7f09002e;
         public static final int action_bar_activity_content=0x7f090027;
@@ -1502,8 +1504,9 @@ containing a value of this type.
         public static final int action_menu_divider=0x7f090028;
         public static final int action_menu_presenter=0x7f090029;
         public static final int action_mode_close_button=0x7f090036;
-        public static final int action_settings=0x7f09005e;
+        public static final int action_settings=0x7f09005f;
         public static final int activity_chooser_view_content=0x7f090037;
+        public static final int activityconfidenceid=0x7f090054;
         public static final int activityrecognitionstatus_idActivityRecognition=0x7f090053;
         public static final int activityrecognizedActivityRecognition=0x7f090052;
         public static final int always=0x7f09001e;
@@ -1515,21 +1518,21 @@ containing a value of this type.
         public static final int checkbox=0x7f09003f;
         public static final int classic=0x7f090011;
         public static final int collapseActionView=0x7f090020;
-        public static final int current_rest_time_id=0x7f09005d;
-        public static final int currentresttime_idActivityRecognition=0x7f090055;
+        public static final int current_rest_time_id=0x7f09005e;
+        public static final int currentresttime_idActivityRecognition=0x7f090056;
         public static final int default_activity_button=0x7f09003a;
         public static final int dialog=0x7f090021;
         public static final int disableHome=0x7f09001b;
         public static final int dropdown=0x7f090022;
         public static final int edit_query=0x7f090042;
-        public static final int enabledSwitch=0x7f090057;
+        public static final int enabledSwitch=0x7f090058;
         public static final int enabledSwitchActivityRecognition=0x7f09004e;
         public static final int end=0x7f090025;
         public static final int expand_activities_button=0x7f090038;
         public static final int expanded_menu=0x7f09003e;
-        public static final int gotspeedcount_id=0x7f09005b;
+        public static final int gotspeedcount_id=0x7f09005c;
         public static final int grayscale=0x7f090012;
-        public static final int heartbeatcount_id=0x7f090059;
+        public static final int heartbeatcount_id=0x7f09005a;
         public static final int heartbeatcount_idActivityRecognition=0x7f090051;
         public static final int holo_dark=0x7f090005;
         public static final int holo_light=0x7f090006;
@@ -1568,11 +1571,11 @@ containing a value of this type.
         public static final int showCustom=0x7f09001a;
         public static final int showHome=0x7f090017;
         public static final int showTitle=0x7f090019;
-        public static final int speedometer=0x7f090056;
+        public static final int speedometer=0x7f090057;
         public static final int split_action_bar=0x7f090030;
         public static final int strict_sandbox=0x7f090009;
         public static final int submit_area=0x7f09004b;
-        public static final int switchinfo_id=0x7f090058;
+        public static final int switchinfo_id=0x7f090059;
         public static final int switchinfo_idActivityRecognition=0x7f09004f;
         public static final int tabMode=0x7f090015;
         public static final int terrain=0x7f090003;
@@ -1683,9 +1686,9 @@ containing a value of this type.
          */
         public static final int abc_shareactionprovider_share_with_application=0x7f07002b;
         public static final int action_settings=0x7f07002e;
-        public static final int alertnotificationdescription1=0x7f070038;
-        public static final int alertnotificationdescription2=0x7f070039;
-        public static final int alertnotificationtitle=0x7f070037;
+        public static final int alertnotificationdescription1=0x7f07003c;
+        public static final int alertnotificationdescription2=0x7f07003d;
+        public static final int alertnotificationtitle=0x7f07003b;
         public static final int app_name=0x7f07002d;
         public static final int auth_client_needs_enabling_title=0x7f070001;
         public static final int auth_client_needs_installation_title=0x7f070002;
@@ -1784,16 +1787,20 @@ containing a value of this type.
         public static final int common_signin_button_text_long=0x7f07001e;
         /**  Heartbeat 
          */
-        public static final int default_heartbeatfrequency_value=0x7f070033;
+        public static final int default_heartbeatfrequency_value=0x7f070034;
         /**  Logging 
          */
         public static final int default_logginglevel_value=0x7f07002f;
-        public static final int defaulthearbeatfrequency_title_list_preference=0x7f070034;
+        public static final int defaultconfidence=0x7f070031;
+        public static final int defaulthearbeatfrequency_title_list_preference=0x7f070035;
+        public static final int defaultinfrequencythreshhold=0x7f070038;
         public static final int defaultlogging_title_list_preference=0x7f070030;
-        public static final int heartbeat_dialog_title_list_preference=0x7f070035;
-        public static final int heartbeatfrequency_summary_list_preference=0x7f070036;
-        public static final int logging_dialog_title_list_preference=0x7f070032;
-        public static final int logging_summary_list_preference=0x7f070031;
+        public static final int heartbeat_dialog_title_list_preference=0x7f070036;
+        public static final int heartbeatfrequency_summary_list_preference=0x7f070037;
+        public static final int invehiclesummary=0x7f070039;
+        public static final int invehiclethreshholdtitle=0x7f07003a;
+        public static final int logging_dialog_title_list_preference=0x7f070033;
+        public static final int logging_summary_list_preference=0x7f070032;
         /**  Text on a placeholder buy button when Google Play services is not
          available or up-to-date 
          */

@@ -28,6 +28,7 @@ public class ActivityRecognitionIntentService extends IntentService {
 	@Override
 	protected void onHandleIntent(Intent intent) {
 
+		int confidence;
 		int activityType=DetectedActivity.UNKNOWN;
 		Intent broadcastIntent3 = new Intent();
         broadcastIntent3.setAction(GlobalStaticValues.NOTIFICATION_HEARTBEAT);
@@ -41,6 +42,7 @@ public class ActivityRecognitionIntentService extends IntentService {
 				} else {
 					activityType=DetectedActivity.STILL;
 				}
+				confidence=100;
 				mSettingsManager.incrementJeDisSimulationCount();
 			} else {
 				
@@ -54,7 +56,7 @@ public class ActivityRecognitionIntentService extends IntentService {
 	             * Get the probability that this activity is the
 	             * the user's actual activity
 	             */
-	            int confidence = mostProbableActivity.getConfidence();
+	            confidence = mostProbableActivity.getConfidence();
 	            /*
 	             * Get an integer describing the type of activity
 	             */
@@ -63,10 +65,10 @@ public class ActivityRecognitionIntentService extends IntentService {
 			}
             String activityName = getNameFromType(activityType);
     		new Logger(mSettingsManager.getLoggingLevel(), "ActivityRecognition", this)
-			.log("ActivityRecogonition: "+activityName, GlobalStaticValues.LOG_LEVEL_NOTIFICATION);
+			.log("ActivityRecogonition: "+activityName+ " confidence: "+String.valueOf(confidence), GlobalStaticValues.LOG_LEVEL_NOTIFICATION);
 
             // What is TILTING good for?  
-            if(activityType==DetectedActivity.TILTING) {
+            if(activityType==DetectedActivity.TILTING || activityType==DetectedActivity.UNKNOWN) {
             	return;
             }
             /*
@@ -77,13 +79,18 @@ public class ActivityRecognitionIntentService extends IntentService {
              * Intent.
              */
 			Intent broadcastIntent2 = new Intent()
-				.putExtra(GlobalStaticValues.KEY_ACTIVITYRECOGNITION, activityName);
+				.putExtra(GlobalStaticValues.KEY_ACTIVITYRECOGNITION, activityName)
+				.putExtra(GlobalStaticValues.KEY_ACTIVITYRECOGNITION_CONFIDENCE,confidence);
 	        broadcastIntent2.setAction(GlobalStaticValues.NOTIFICATION_ACTIVITYRECOGNITION);
 	        LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent2);
+	        int confidenceThreshhold=mSettingsManager.getConfidencePercentage();
+	        if(confidence<confidenceThreshhold&&activityType==DetectedActivity.IN_VEHICLE) {
+	        	return;
+	        }
 	        int wasStopped=mSettingsManager.getWasStoppedCount();
 	        int wasMoving=mSettingsManager.getWasMovingCount();
             if(activityType==DetectedActivity.IN_VEHICLE) {
-            	if(mSettingsManager.getWasStoppedCount()>2) {
+            	if(1==1 || mSettingsManager.getWasStoppedCount()>2) {
             		Intent intent2=new Intent(this,TimerServiceActivityRecognition.class)
             			.setAction(GlobalStaticValues.ACTION_ACTION_STOP_RESTTIMER);
             		startService(intent2);
@@ -91,7 +98,8 @@ public class ActivityRecognitionIntentService extends IntentService {
             	}
             	mSettingsManager.incrementWasMovingCount();
             } else {
-            	if(mSettingsManager.getWasMovingCount()>2) {
+            	int threshhold=mSettingsManager.getInVehicleCntThreshhold();
+            	if(mSettingsManager.getWasMovingCount()>=threshhold) {
             		Intent intent2=new Intent(this,TimerServiceActivityRecognition.class)
             			.setAction(GlobalStaticValues.ACTION_ACTION_START_RESTTIMER);
             		startService(intent2);

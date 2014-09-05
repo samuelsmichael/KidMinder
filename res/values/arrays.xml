@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string-array name="invehiclethreshholdpossiblevaluesdescriptions">
+        <item>1 notification</item>
+        <item>2 notifications</item>
+        <item>3 notificaitons</item>
+        <item>4 notifications</item>
+    </string-array>
+    <string-array name="invehiclethreshholdpossiblevalues">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
     <string-array name="heartbeat_list_preference">
         <item>5 seconds</item>
         <item>10 seconds</item>

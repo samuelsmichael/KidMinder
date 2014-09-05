@@ -41,6 +41,25 @@
 			      android:title="Stop Time in Minutes"
 			      android:summary="If you are stopped for this amount of minutes, you will receive an alert."
 			  ></EditTextPreference>
+			  <EditTextPreference
+			      android:key="confidencepercentage"
+			      android:defaultValue="@string/defaultconfidence"
+			      android:title="In_Vehicle confidence percentage"
+			      android:summary="The Activity Recognition delivers a confidence percentage when it sends an activity recognition notification. This parameter says 'I want this much confidence percentage before considering the In_Vehicle notification as valid'."
+			  ></EditTextPreference>
+		     <ListPreference android:key="invehiclethreshhold"
+				android:defaultValue="@string/default_heartbeatfrequency_value"
+				android:title="@string/defaultinfrequencythreshhold"
+				android:summary="@string/invehiclesummary"
+				android:entries="@array/invehiclethreshholdpossiblevaluesdescriptions" 
+				android:entryValues="@array/invehiclethreshholdpossiblevalues"
+				android:dialogTitle="@string/invehiclethreshholdtitle" />
+			  <EditTextPreference
+			      android:key="invehiclethreshhold"
+			      android:defaultValue="@string/defaultinfrequencythreshhold"
+			      android:title="In_Vehicle Threshhold"
+			      android:summary="How many back-to-back In_Vehicle notifications need to occur before it's considered a legitimate In_Vehicle,"
+			  ></EditTextPreference>
 		</PreferenceCategory>
 	    <PreferenceCategory android:title="Debugging Values">
 		    <ListPreference
