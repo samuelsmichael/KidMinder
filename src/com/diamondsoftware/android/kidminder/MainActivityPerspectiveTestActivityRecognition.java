@@ -125,7 +125,8 @@ public class MainActivityPerspectiveTestActivityRecognition extends
 		switch (item.getItemId()) {
 		case R.id.action_settings:
 			Intent i2 = new Intent(this, Preferences.class)
-				.putExtra(GlobalStaticValues.KEY_PREFERENCES_TYPE, GlobalStaticValues.myTimerImplementation.toString());			
+				.putExtra(GlobalStaticValues.KEY_PREFERENCES_TYPE, GlobalStaticValues.myTimerImplementation.toString())
+				.putExtra("livevstest", "test");						
 			startActivity(i2);
 			return true;
 		}

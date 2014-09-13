@@ -8,18 +8,19 @@
 	    <string name="default_logginglevel_value">1</string>
 	    <string name="defaultlogging_title_list_preference">Logging Filter</string>
 	    <string name="defaultconfidence">100</string>
-	    <string name="logging_summary_list_preference">What level of trouble-shooting logging would you	like?</string>
+	    <string name="logging_summary_list_preference">What level of trouble-shooting logging would you	like?  The log is in the file \\KidMinder\\log.txt</string>
     	<string name="logging_dialog_title_list_preference">Choose a logging level</string>
 	<!-- Heartbeat -->
     <string name="default_heartbeatfrequency_value">5</string>
-    <string name="defaulthearbeatfrequency_title_list_preference">GPS Frequency</string>
-    <string name="heartbeat_dialog_title_list_preference">Choose a GPS Frequency</string>
-    <string name="heartbeatfrequency_summary_list_preference">The GPS Frequency is the interval of time between GPS accesses. Choose a bigger interval for battery savings.</string>
+    <string name="defaulthearbeatfrequency_title_list_preference">Frequency</string>
+    <string name="heartbeat_dialog_title_list_preference">Choose an Activity Recognition Frequency</string>
+    <string name="heartbeatfrequency_summary_list_preference">The Activity Recognition Frequency is the interval of time between Activity Recognition (e.g. - In_Vehicle, Walking, Still) notifications. Choosing a bigger interval may result in some battery savings.  Experiment with this value, and use the highest value that gives reliable alerts.</string>
     
     <string name="defaultinfrequencythreshhold">1</string>
-    <string name="invehiclesummary">"How many back-to-back In_Vehicle notifications need to occur before it's considered a legitimate In_Vehicle,"</string>
-    <string name="invehiclethreshholdtitle">Back to back In_Vehicle notification threshhold</string>
+    <string name="invehiclesummary">"How many back-to-back In_Vehicle notifications need to occur before it's considered a legitimate In_Vehicle condition.  If you find that you are receiving rogue alerts, then increase this setting.  One of the times when this occurs is when you go up or down an elevator, at which time the sensors feel the acceleration, and starts the 'In Vehicle' cycle."</string>
+    <string name="invehiclethreshholdtitle">Back-to-back In_Vehicle notification threshhold</string>
     
+    <string name="soundtypedefault">0</string>
     <string name="alertnotificationtitle">Kid Minder Alert</string> 
     <string name="alertnotificationdescription1">You have been stopped now for more than</string>
     <string name="alertnotificationdescription2">. Make sure that you haven\'t left your child in the car.</string>

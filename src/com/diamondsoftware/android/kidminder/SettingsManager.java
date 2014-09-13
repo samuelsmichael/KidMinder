@@ -14,9 +14,11 @@ import android.content.SharedPreferences.Editor;
 
 public class SettingsManager {
 	private SharedPreferences mSharedPreferences;
+	private Context mContext;
 	
 	public SettingsManager(Context context) {
 		mSharedPreferences=context.getSharedPreferences(context.getPackageName() + "_preferences", Activity.MODE_PRIVATE);
+		mContext=context;
 	}
 	private String getValue(String key, String defValue) {
 		return mSharedPreferences.getString(key, defValue);
@@ -48,6 +50,9 @@ public class SettingsManager {
 	}
 	public void setLoggingLevel(int value) {
 		setValue(GlobalStaticValues.KEY_LOGGINGLEVEL, String.valueOf(value));
+	}
+	public String getSoundType() {
+		return getValue("soundtype",mContext.getString(R.string.soundtypedefault));
 	}
 	public int getHeartbeatFrequency() {
 		String value=getValue(GlobalStaticValues.KEY_HEARTBEATFREQUENCY,"60");
@@ -225,8 +230,13 @@ public class SettingsManager {
 		return usesSound;
 	}
 	public boolean getNotificationUsesPopup() {
-		boolean usesSound=mSharedPreferences.getBoolean(GlobalStaticValues.KEY_NOTIFICATION_USES_POPUP, true);
+		boolean usesSound=mSharedPreferences.getBoolean(GlobalStaticValues.KEY_NOTIFICATION_USES_POPUP, false);
 		return usesSound;
+	}
+	public void setNotificationUsesPopup(boolean value) {
+		Editor editor=mSharedPreferences.edit();
+		editor.putBoolean(GlobalStaticValues.KEY_NOTIFICATION_USES_POPUP,value);
+		editor.commit();				
 	}
 	public long getCurrentRestTime() {
 		String value= getValue(GlobalStaticValues.KEY_CURRENT_REST_TIME,"0");

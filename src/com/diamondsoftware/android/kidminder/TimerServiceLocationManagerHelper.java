@@ -27,7 +27,7 @@ public class TimerServiceLocationManagerHelper implements android.location.Locat
 
 	
 	//---------------------------------------  LocationManager used to kick-start GPS, and also used to know when user turns off GPS -----------------------------------------
-    protected void initializeLocationManager() {
+    protected void initializeLocationManager() {/*bbhbb
         try {
         	mLocationManager = (android.location.LocationManager) mTimerService.getSystemService(Context.LOCATION_SERVICE);
         	String provider=LocationManager.GPS_PROVIDER;
@@ -38,37 +38,42 @@ public class TimerServiceLocationManagerHelper implements android.location.Locat
 
         } catch (Exception ee3) {
         }
+        bbhbb */
     }
     private void registerReceiverGPS() {
-        if (yourReceiver == null) {
+    	
+       // if (yourReceiver == null) {
             // INTENT FILTER FOR GPS MONITORING
-            final IntentFilter theFilter = new IntentFilter();
-            theFilter.addAction(ACTION_GPS);
-            yourReceiver = new BroadcastReceiver() {
-                @Override
-                public void onReceive(Context context, Intent intent) {
-                    if (intent != null) {
-                        String s = intent.getAction();
-                        if (s != null) {
-                            if (s.equals(ACTION_GPS)) {
-                                checkGPS();
-                            }
-                        }
-                    }
-                }
-            };
-            mTimerService.registerReceiver(yourReceiver, theFilter);
-        }
+        //    final IntentFilter theFilter = new IntentFilter();
+          //  theFilter.addAction(ACTION_GPS);
+//            yourReceiver = new BroadcastReceiver() {
+  //              @Override
+    //            public void onReceive(Context context, Intent intent) {
+      //              if (intent != null) {
+        //                String s = intent.getAction();
+          //              if (s != null) {
+            //                if (s.equals(ACTION_GPS)) {
+              //                  checkGPS();
+                //            }
+                  //      }
+                    //}
+//                }
+  //          };
+    //        mTimerService.registerReceiver(yourReceiver, theFilter);
+      //  }
     }
-    private void checkGPS() {
+    private void checkGPS() { /* bbhbb
     	if(!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 			mTimerService.notifyActivityThatGPSIsNotOn();
     	} else {
     		mTimerService.gpsIsBackOn();
     	}
+    	bbhbb */
     }
     public boolean isGPSAlive() {
-    	return mLocationManager.isProviderEnabled( LocationManager.GPS_PROVIDER );	
+    	return true; /* bbhbb
+    	return mLocationManager.isProviderEnabled( LocationManager.GPS_PROVIDER );
+    	bbhbb */	
     }
 	@Override
 	public void onStatusChanged(String provider, int status, Bundle extras) {
@@ -82,12 +87,13 @@ public class TimerServiceLocationManagerHelper implements android.location.Locat
 	@Override
 	public void onLocationChanged(Location location) {
 	}
-	public void onDestroy() {
+	public void onDestroy() { /* bbhbb
 		mLocationManager.removeUpdates(this);
 	    if (yourReceiver != null) {
 	        mTimerService.unregisterReceiver(yourReceiver);
 	        yourReceiver = null;
-	    }
+	        
+	    }*/
 	}
 
 }

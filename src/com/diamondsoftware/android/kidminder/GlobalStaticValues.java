@@ -12,9 +12,10 @@ public class GlobalStaticValues {
 		ORIGINAL,
 		ORIGINAL_REFACTORED,
 		NEW,
-		ACTIVITY_RECOGNITION
+		ACTIVITY_RECOGNITION,
+		ACTIVITY_RECOGNITION_LIVE
 	}
-	public static final TIMER_IMPLEMENTATIONS myTimerImplementation=TIMER_IMPLEMENTATIONS.ACTIVITY_RECOGNITION;
+	public static final TIMER_IMPLEMENTATIONS myTimerImplementation=TIMER_IMPLEMENTATIONS.ACTIVITY_RECOGNITION_LIVE;
 	public static Intent getIntentForTimer(Context context) {
 		Intent intent;
 		switch (myTimerImplementation) {
@@ -28,6 +29,7 @@ public class GlobalStaticValues {
 			intent = new Intent(context,TimerServiceNew.class);
 			break;
 		case ACTIVITY_RECOGNITION:
+		case ACTIVITY_RECOGNITION_LIVE:
 			intent=new Intent(context,TimerServiceActivityRecognition.class);
 			break;
 		default:
@@ -39,6 +41,9 @@ public class GlobalStaticValues {
 	public static Class<?> getClassForMainActivity() {
 		Class<?> classness;
 		switch (myTimerImplementation) {
+		case ACTIVITY_RECOGNITION_LIVE:
+			classness=MainActivityPerspectiveLiveActivityRecognition.class;
+			break;
 		case ACTIVITY_RECOGNITION:
 			classness=MainActivityPerspectiveTestActivityRecognition.class;
 			break;
@@ -54,6 +59,24 @@ public class GlobalStaticValues {
 		switch (myTimerImplementation) {
 		case ACTIVITY_RECOGNITION:
 			intent=new Intent(context,MainActivityPerspectiveTestActivityRecognition.class);
+			break;
+		case ACTIVITY_RECOGNITION_LIVE:
+			intent=new Intent(context,MainActivityPerspectiveLiveActivityRecognition.class);
+			break;
+		default:
+			intent = new Intent(context,MainActivityPerspectiveTestLocationService.class); 
+			break;
+		}
+		return intent;
+	}
+	public static Intent getIntentForMainActivityAlert(Context context) {
+		Intent intent;
+		switch (myTimerImplementation) {
+		case ACTIVITY_RECOGNITION:
+			intent=new Intent(context,MainActivityPerspectiveTestActivityRecognition.class);
+			break;
+		case ACTIVITY_RECOGNITION_LIVE:
+			intent=new Intent(context,ActivityAlert.class);
 			break;
 		default:
 			intent = new Intent(context,MainActivityPerspectiveTestLocationService.class); 
@@ -85,7 +108,7 @@ public class GlobalStaticValues {
 	public static final String KEY_LATESTLOCATION_DATESTAMP = "LATESTLOCATIONDATESTAMP";
 	public static final String KEY_NOTIFICATION_USES_SOUND = "sound";
 	public static final String KEY_NOTIFICATION_USES_VIBRATE = "vibrate";
-	public static final String KEY_NOTIFICATION_USES_POPUP = "popup";
+	public static final String KEY_NOTIFICATION_USES_POPUP = "popup_liveversion";
 	public static final String KEY_IS_DRIVING_THRESHHOLD = "isdriving";
 	public static final String KEY_STOPPEDTIME_MINUTES_BEFORE_NOTIFICATION = "stoptime";
 	public static final String KEY_CURRENT_REST_TIME="CURRENTRestTime";
@@ -97,6 +120,8 @@ public class GlobalStaticValues {
 	public static final String KEY_WASSTOPPED = "key was stopped";
 	public static final String KEY_CONFIDENCE_PERCENTAGE ="confidencepercentage";
 	public static final String KEY_INVEHICLECNTTHRESHHOLD = "invehiclethreshhold";
+	public static final String KEY_NOTIFICATION_SOUND_ALARM = "0";
+	public static final String KEY_NOTIFICATION_SOUND_NOTIFICATION="1";
 	
 	public static final String ACTION_GPS_NOT_ENABLED = "ACTIONGPGNOTENABLED";
 	public static final String ACTION_STOP="ACTION_STOP";

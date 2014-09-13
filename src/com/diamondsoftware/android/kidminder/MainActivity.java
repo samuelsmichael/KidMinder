@@ -86,7 +86,7 @@ public abstract class MainActivity extends Activity {
 		if(action!=null) {
 	        if(action.equals(GlobalStaticValues.ACTION_GPS_NOT_ENABLED)) {
 	        	showGPSNotEnabledDialog();
-	    		mSettingsManager.setIsEnabled(false);    	
+	    	//bbhbb	mSettingsManager.setIsEnabled(false);    	
 	        } else {
 	        	if(action.equals(GlobalStaticValues.ACTION_POPUPALERT)) {
 	        		doPopupAlert(false);
@@ -170,6 +170,7 @@ public abstract class MainActivity extends Activity {
     	}
     }
     private void showGPSNotEnabledDialog() {
+    	/*bbhbb
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("GPS is disabled");//
         builder.setMessage("For best results, your GPS should be enabled. Do you want to enable it?")
@@ -199,7 +200,8 @@ public abstract class MainActivity extends Activity {
                 getFragmentManager(),
                 "GPS not enabled");
 
-        alert.show();	    	
+        alert.show();
+        bbhbb */    	
     }
     
     protected void doAnyPressedDisableButtonActions() {
@@ -312,8 +314,8 @@ public abstract class MainActivity extends Activity {
                 	} else {
                 		if(TextUtils.equals(action, GlobalStaticValues.NOTIFICATION_GPS_NOT_ENABLED)) {
                 			mSettingsManager.setEnabledStateBeforeGPSWasTurnedOff(mSettingsManager.getIsEnabled());
-                			mSettingsManager.setIsEnabled(false);    	
-                			pressedDisableButton();
+                		//bbhbb	mSettingsManager.setIsEnabled(false);    	
+                		//bbhbb	pressedDisableButton();
             				if(mSettingsManager.getImOnTop()) {
             					MainActivity.this.showGPSNotEnabledDialog();
             				} else { 
@@ -341,8 +343,8 @@ public abstract class MainActivity extends Activity {
                 				} else {
                 					if(TextUtils.equals(action, GlobalStaticValues.NOTIFICATION_GPS_HASBEEN_ENABLED)) {
                 						if(mSettingsManager.getEnabledStateBeforeGPSWasTurnedOff()) {
-                							pressedEnableButton();
-                							mSettingsManager.setIsEnabled(true);
+                					//bbhbb		pressedEnableButton();
+                					//bbhbb		mSettingsManager.setIsEnabled(true);
                 						}
                 					}
                 				}

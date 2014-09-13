@@ -52,6 +52,7 @@ public abstract class TimerServiceAbstract extends Service implements DoesTimerS
 			if(action!=null) {
 				if(action.equals(GlobalStaticValues.ACTION_STOP)) {
 					doACTION_STOP();
+					stopMyRestTimer();
 				} else {
 					if(action.equals(GlobalStaticValues.ACTION_HEARTBEAT_INTERVAL_CHANGED)) {
 						doACTION_HEARTBEAT_INTERVAL_CHANGED();
@@ -129,7 +130,7 @@ public abstract class TimerServiceAbstract extends Service implements DoesTimerS
 	    	}
 		} else {
 	        // Create an explicit content Intent that starts the main Activity
-			Intent notificationIntent=GlobalStaticValues.getIntentForMainActivity(this);
+			Intent notificationIntent=GlobalStaticValues.getIntentForMainActivityAlert(this);
 			notificationIntent.setAction(GlobalStaticValues.ACTION_STARTING_FROM_NOTIFICATION_ALERT);
 
 	        // Construct a task stack
@@ -160,7 +161,13 @@ public abstract class TimerServiceAbstract extends Service implements DoesTimerS
 	               .setPriority(NotificationCompat.PRIORITY_MAX)
 	               .setOnlyAlertOnce(true);
 	        if(mSettingsManager.getNotificationUsesSound()) {
-	               builder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+	        	if(mSettingsManager.getSoundType().equals(GlobalStaticValues.KEY_NOTIFICATION_SOUND_ALARM)) {
+	        		builder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM));
+	        	} else {
+	        		if(mSettingsManager.getSoundType().equals(GlobalStaticValues.KEY_NOTIFICATION_SOUND_NOTIFICATION)) {
+	 	               builder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));	        			
+	        		}
+	        	}
 	        }
 	        if(mSettingsManager.getNotificationUsesVibrate()) {
 	               builder.setVibrate(new long[] {0, 1000,500,1000,500,1000,500,1000,500,1000,500,1000,500,1000});

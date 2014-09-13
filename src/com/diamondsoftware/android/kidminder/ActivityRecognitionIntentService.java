@@ -37,7 +37,12 @@ public class ActivityRecognitionIntentService extends IntentService {
         // If the incoming intent contains an update
         if (ActivityRecognitionResult.hasResult(intent)||(mSettingsManager.getCurrentSimilationStatus())) {
 			if(mSettingsManager.getCurrentSimilationStatus()) {
-				if(mSettingsManager.getJeDisSimulationCount()%10<5) {
+				int heartbeat=mSettingsManager.getHeartbeatFrequency();
+				float factor1=(30f)/((float)heartbeat/5f) * (float)mSettingsManager.getStoppedTimeMinutesBeforeNotification();
+				float factor2=factor1/2;
+				int factor1int=((int)factor1+1);
+				int factor2int=factor1int/2;
+				if(mSettingsManager.getJeDisSimulationCount()%factor1int<factor2int) {
 					activityType=DetectedActivity.IN_VEHICLE;
 				} else {
 					activityType=DetectedActivity.STILL;
