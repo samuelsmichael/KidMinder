@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="alertmessage">We\'ve detected that you have driven to a location and have walked away from your vehicle.  This is just a reminder to check on any children that may be in your vehicle.</string>
 
-    <string name="app_name">KidMinder</string>
+    <string name="textwhendisabled">The Kid Minder service is currently disabled and not active.</string>
+    <string name="textwhenenabled">The Kid Minder service is currently enabled and active.</string>
+    <string name="app_name">Kid Minder</string>
     <string name="action_settings">Settings</string>
     
 	<!-- Logging -->

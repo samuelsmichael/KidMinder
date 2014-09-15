@@ -1,0 +1,132 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/config_screen_background"
+    tools:context="${relativePackage}.${activityClass}" >
+
+    <ImageView
+        android:id="@+id/btn_logoforheaderwelcome2"
+	    android:layout_width="231dp"
+	    android:layout_height="170dp"
+	    android:layout_centerHorizontal="true"
+	    android:src="@drawable/logo_for_header"
+	    android:layout_alignParentTop="true"
+        >
+        
+    </ImageView>
+    <LinearLayout 
+		android:id="@+id/middlearea_whenenabled"
+	    android:layout_width="wrap_content" 
+	    android:layout_height="wrap_content"
+		android:layout_centerHorizontal="true"
+		android:orientation="vertical"
+		android:layout_below="@+id/btn_logoforheaderwelcome2"
+        >
+		<LinearLayout 
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:orientation="horizontal"
+		    android:layout_marginTop="20dip"
+		    >
+		    <ImageView 
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:src="@drawable/intro_screen_2_install_icon"
+		        android:layout_marginRight="15dp"
+		        android:gravity="center_vertical"
+		        android:layout_gravity="center_vertical"
+		        >
+		        
+		    </ImageView>
+		    <TextView 
+		        android:layout_width="220sp"
+		        android:layout_height="wrap_content"
+		        android:textSize="14sp"
+		        android:padding="5dip"
+		        android:background="#eae0cd"
+		        android:gravity="center_vertical"
+		        android:layout_gravity="center_vertical"
+		        android:text="Kid Minder has been successfully installed.  The app has been initialized and is currently active."
+		        
+		        >
+		        
+		    </TextView>
+		</LinearLayout>
+		<LinearLayout 
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:orientation="horizontal"
+		    
+		    android:layout_marginTop="20dip"
+		    
+		    >
+		    <ImageView 
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:src="@drawable/intro_screen_2_map_icon"
+		        android:layout_marginRight="15dp"
+		        android:gravity="center_vertical"
+		        android:layout_gravity="center_vertical"
+		        >
+		        
+		    </ImageView>
+		    <TextView 
+		        android:layout_width="220sp"
+		        android:layout_height="wrap_content"
+		        android:textSize="14sp"
+		        android:padding="5dip"
+		        android:background="#eae0cd"
+		        android:gravity="center_vertical"
+		        android:layout_gravity="center_vertical"
+		        android:text="Kid Minder automatically detects when you are driving, and sends you a friendly reminder when you park and walk away from your car."
+		        
+		        >
+		        
+		    </TextView>
+		</LinearLayout>
+		<LinearLayout 
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:orientation="horizontal"
+		    		    android:layout_marginTop="20dip"
+		    
+		    >
+		    <ImageView 
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:src="@drawable/intro_screen_2_configure_icon"
+		        android:layout_marginRight="15dp"
+		        android:gravity="center_vertical"
+		        android:layout_gravity="center_vertical"
+		        >
+		        
+		    </ImageView>
+		    <TextView 
+		        android:layout_width="220sp"
+		        android:layout_height="wrap_content"
+		        android:textSize="14sp"
+		        android:padding="5dip"
+		        android:background="#eae0cd"
+		        android:gravity="center_vertical"
+		        android:layout_gravity="center_vertical"
+		        android:text="To change the settings for this app, click on the Kid Minder icon in your mobile desktop."
+		        
+		        >
+		        
+		    </TextView>
+		</LinearLayout>
+	</LinearLayout>
+    <ImageButton
+	    android:id="@+id/btn_welcome2continue"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+		android:src="@drawable/button_continue"	   
+		android:layout_alignParentBottom="true"
+		android:layout_centerHorizontal="true"
+		android:paddingLeft="11dp"     
+		android:background="@null"
+       >
+    </ImageButton>
+		
+</RelativeLayout>

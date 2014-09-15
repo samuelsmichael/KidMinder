@@ -19,7 +19,10 @@ public class Preferences extends PreferenceActivity {
         try {
 	        setTitle(getString(R.string.app_name)+" - Preferences");
 	        // Load the preferences from an XML resource
-	        if(getIntent().getStringExtra(GlobalStaticValues.KEY_PREFERENCES_TYPE).equals(GlobalStaticValues.TIMER_IMPLEMENTATIONS.ACTIVITY_RECOGNITION.toString())) {
+	        if(
+        		getIntent().getStringExtra(GlobalStaticValues.KEY_PREFERENCES_TYPE).equals(GlobalStaticValues.TIMER_IMPLEMENTATIONS.ACTIVITY_RECOGNITION.toString()) ||
+        		getIntent().getStringExtra(GlobalStaticValues.KEY_PREFERENCES_TYPE).equals(GlobalStaticValues.TIMER_IMPLEMENTATIONS.ACTIVITY_RECOGNITION_LIVE.toString())
+	        ) {
 	        	if(getIntent().getStringExtra("livevstest").equals("test")) {
 	        		addPreferencesFromResource(R.xml.preferencesactivityrecognition);
 	        	} else {
