@@ -7,7 +7,10 @@ import java.util.TimerTask;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
+import android.media.Ringtone;
 import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
@@ -160,16 +163,69 @@ public abstract class TimerServiceAbstract extends Service implements DoesTimerS
 	               .setAutoCancel(true)
 	               .setPriority(NotificationCompat.PRIORITY_MAX)
 	               .setOnlyAlertOnce(true);
-	        if(mSettingsManager.getNotificationUsesSound()) {
-	        	if(mSettingsManager.getSoundType().equals(GlobalStaticValues.KEY_NOTIFICATION_SOUND_ALARM)) {
-	        		builder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM));
+	        
+			boolean ringerModeNormal=false;
+			boolean ringerModeSilent=false;
+			boolean ringerModeVibrate=false;
+			AudioManager audio = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);				
+			switch( audio.getRingerMode() ){
+				case AudioManager.RINGER_MODE_NORMAL:
+					ringerModeNormal=true;
+				   break;
+				case AudioManager.RINGER_MODE_SILENT:
+					ringerModeSilent=true;
+				   break;
+				case AudioManager.RINGER_MODE_VIBRATE:
+					ringerModeVibrate=true;
+				   break;
+			}				
+
+	        
+	        if(mSettingsManager.getNotificationUsesSound() &&
+	        		(ringerModeNormal)
+	        		) {
+	        	if(!GlobalStaticValues.DoLoopingAlarm) {
+		        	if(mSettingsManager.getSoundType().equals(GlobalStaticValues.KEY_NOTIFICATION_SOUND_ALARM)) {
+
+		        		try {
+		        		    Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+		        			final Ringtone ringTone = RingtoneManager.getRingtone(getApplicationContext(), notification);
+		        		    GlobalStaticValues.getRingtone(getApplicationContext()).play();   
+		        			final Timer stopToneTimer = new Timer("RestTimer");
+		        			stopToneTimer.schedule(new TimerTask() {
+		        				public void run() {
+		        					try {
+		        						if(GlobalStaticValues.getRingtone(getApplicationContext()).isPlaying()) {
+		    	        					GlobalStaticValues.getRingtone(getApplicationContext()).stop();
+		        						}
+		        					} catch (Exception e2) {}
+		        					try {
+		        						stopToneTimer.cancel();
+		        						stopToneTimer.purge();
+		        					} catch (Exception e) {
+		        					}
+		        				}
+		        			}, 13200, 13200);
+		        		} catch (Exception e) {
+		        		    e.printStackTrace();
+		        		}    	
+		        	} else {
+		        		if(mSettingsManager.getSoundType().equals(GlobalStaticValues.KEY_NOTIFICATION_SOUND_NOTIFICATION)) {
+			 	               builder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));	        			
+				        }
+		        	}
 	        	} else {
-	        		if(mSettingsManager.getSoundType().equals(GlobalStaticValues.KEY_NOTIFICATION_SOUND_NOTIFICATION)) {
-	 	               builder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));	        			
+		        	if(mSettingsManager.getSoundType().equals(GlobalStaticValues.KEY_NOTIFICATION_SOUND_ALARM)) {
+		        		builder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM));
+		        	} else {
+		        		if(mSettingsManager.getSoundType().equals(GlobalStaticValues.KEY_NOTIFICATION_SOUND_NOTIFICATION)) {
+		 	               builder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));	        			
+			        	}
 	        		}
-	        	}
-	        }
-	        if(mSettingsManager.getNotificationUsesVibrate()) {
+	        	}	        		
+        	}
+	        if(mSettingsManager.getNotificationUsesVibrate() && 
+	        		(ringerModeNormal || ringerModeVibrate)) {
 	               builder.setVibrate(new long[] {0, 1000,500,1000,500,1000,500,1000,500,1000,500,1000,500,1000});
 	        }
 	        // Get an instance of the Notification manager

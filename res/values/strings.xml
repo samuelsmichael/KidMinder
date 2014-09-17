@@ -3,25 +3,25 @@
     <string name="alertmessage">We\'ve detected that you have driven to a location and have walked away from your vehicle.  This is just a reminder to check on any children that may be in your vehicle.</string>
 
     <string name="textwhendisabled">The Kid Minder service is currently disabled and not active.</string>
-    <string name="textwhenenabled">The Kid Minder service is currently enabled and active.</string>
+    <string name="textwhenenabled">The Kid Minder service is currently\nenabled and active.</string>
     <string name="app_name">Kid Minder</string>
     <string name="action_settings">Settings</string>
     
 	<!-- Logging -->
 	    <string name="default_logginglevel_value">1</string>
-	    <string name="defaultlogging_title_list_preference">Logging Filter</string>
+	    <string name="defaultlogging_title_list_preference">Logging Level</string>
 	    <string name="defaultconfidence">100</string>
-	    <string name="logging_summary_list_preference">What level of trouble-shooting logging would you	like?  The log is in the file \\KidMinder\\log.txt</string>
+	    <string name="logging_summary_list_preference"></string>
     	<string name="logging_dialog_title_list_preference">Choose a logging level</string>
 	<!-- Heartbeat -->
     <string name="default_heartbeatfrequency_value">5</string>
-    <string name="defaulthearbeatfrequency_title_list_preference">Frequency</string>
+    <string name="defaulthearbeatfrequency_title_list_preference">Activity Recognition Frequency</string>
     <string name="heartbeat_dialog_title_list_preference">Choose an Activity Recognition Frequency</string>
-    <string name="heartbeatfrequency_summary_list_preference">The Activity Recognition Frequency is the interval of time between Activity Recognition (e.g. - In_Vehicle, Walking, Still) notifications. Choosing a bigger interval may result in some battery savings.  Experiment with this value, and use the highest value that gives reliable alerts.</string>
+    <string name="heartbeatfrequency_summary_list_preference">How often your phone detects a change in your activity (in vehicle, walking, still, etc)</string>
     
     <string name="defaultinfrequencythreshhold">1</string>
-    <string name="invehiclesummary">"How many back-to-back In_Vehicle notifications need to occur before it's considered a legitimate In_Vehicle condition.  If you find that you are receiving rogue alerts, then increase this setting.  One of the times when this occurs is when you go up or down an elevator, at which time the sensors feel the acceleration, and starts the 'In Vehicle' cycle."</string>
-    <string name="invehiclethreshholdtitle">Back-to-back In_Vehicle notification threshhold</string>
+    <string name="invehiclesummary">"How many back-to-back ‘in vehicle’ activity notifications need to occur before the phone considers the ‘in vehicle’ notification legitimate"</string>
+    <string name="invehiclethreshholdtitle">Continuous In Vehicle Activity</string>
     
     <string name="soundtypedefault">0</string>
     <string name="alertnotificationtitle">Kid Minder Alert</string> 

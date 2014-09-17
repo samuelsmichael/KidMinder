@@ -2,33 +2,30 @@
 	<PreferenceScreen
 	  xmlns:android="http://schemas.android.com/apk/res/android">	    	  	
 		 <CheckBoxPreference
-		 	android:key="sound"
-		 	android:defaultValue="true"
-		 	android:title="Notifications Use Sound"
-		 	android:summary="Check this box if you want to be notified with sound."
-		 ></CheckBoxPreference>
-		 <CheckBoxPreference
 		 	android:defaultValue="true"
 		 	android:key="vibrate"
-		 	android:title="Notifications Vibrate"
+		 	android:title="Vibrate on Alert"
 		 	android:summary="Check this box if you want your phone to vibrate when you are notified."
 		 ></CheckBoxPreference>
 	    <ListPreference
             android:key="soundtype"
             android:defaultValue="0"
             android:title="Sound Type"
-            android:summary="If you choose to activate the Notifications Use Sound (above), which type of sound would you like?"
+            android:summary="Select the type of audio alert"
             android:entries="@array/soundtype_preferences"
             android:entryValues="@array/soundtypevalues_preferences"
             android:dialogTitle="Sound Type" />
-		  <EditTextPreference
-		      android:key="stoptime"
-		      android:defaultValue="7"
-		      android:title="Stop Time in Minutes"
-		      android:summary="If, after driving, you are stopped for this amount of minutes, you will receive an alert."
-		  ></EditTextPreference>
 		  <PreferenceScreen android:summary="These settings have to do with notification parameters which help you tailor the app to suit your particular driving conditions."
 		    android:title="Advanced Settings">
+		    <PreferenceCategory android:title="Timing" >
+			  <EditTextPreference
+			      android:key="stoptime"
+			      android:defaultValue="7"
+			      android:title="Stop Time in Minutes"
+			      android:summary="After driving, if you are stopped for this amount of time, you will receive an alert"
+			  ></EditTextPreference>
+		        		        
+		    </PreferenceCategory>
 			<PreferenceCategory android:title="Activity Recognition" >		    
 			    <ListPreference android:key="HeartbeatFrequency"
 					android:defaultValue="@string/default_heartbeatfrequency_value"
@@ -37,11 +34,11 @@
 					android:entries="@array/heartbeat_list_preference" 
 					android:entryValues="@array/heartbeatvalues_list_preference"
 					android:dialogTitle="@string/heartbeat_dialog_title_list_preference" />
-			  <EditTextPreference
+			<EditTextPreference
 			      android:key="confidencepercentage"
 			      android:defaultValue="@string/defaultconfidence"
-			      android:title="In_Vehicle confidence percentage."
-			      android:summary="The Activity Recognition delivers a confidence percentage when it sends an activity recognition notification. This parameter says 'I want this much confidence percentage before considering the In_Vehicle notification as valid. Pick a value between 1 and 100. You want this value to be as high as possible.  Lower it if the system misses alerts."
+			      android:title="In Vehicle Confidence Percentage."
+			      android:summary="How confident your phone must be to determine that you are driving"
 			  ></EditTextPreference>
 		     <ListPreference android:key="invehiclethreshhold"
 				android:defaultValue="@string/defaultinfrequencythreshhold"
@@ -51,7 +48,7 @@
 				android:entryValues="@array/invehiclethreshholdpossiblevalues"
 				android:dialogTitle="@string/invehiclethreshholdtitle" />
 			</PreferenceCategory>		    		 	
-	    <PreferenceCategory android:title="Debugging Values">
+	    <PreferenceCategory android:title="System">
 		    <ListPreference
 	            android:key="LoggingLevel"
 	            android:defaultValue="@string/default_logginglevel_value"
@@ -63,8 +60,8 @@
 		  <CheckBoxPreference
 			  	android:key="key_simulation"
 			  	android:defaultValue="false"
-			  	android:title="Driving/Stopping Simulation"
-			  	android:summary="With this setting on, the app will simulate your driving for a few moments, and then stopping. And it keeps cycling like this.S"
+			  	android:title="Driving/Stopping Simulator"
+			  	android:summary="Want to test out your changes without stepping into the vehicle? Turn this on and the app will simulate driving conditions for a few moments, and then stopping conditions. It will continue to cycle until this setting is turned off"
 		  ></CheckBoxPreference>
 		</PreferenceCategory>
 	</PreferenceScreen>

@@ -5,9 +5,14 @@ import java.text.SimpleDateFormat;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 
 
 public class GlobalStaticValues {
+	public static boolean DoLoopingAlarm=false;
+	private static Ringtone mRingtone = null;
 	public static enum TIMER_IMPLEMENTATIONS {
 		ORIGINAL,
 		ORIGINAL_REFACTORED,
@@ -37,6 +42,13 @@ public class GlobalStaticValues {
 			break;
 		}
 		return intent;
+	}
+	public static Ringtone getRingtone(Context context) {
+		if(mRingtone==null) {
+		    Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+			mRingtone = RingtoneManager.getRingtone(context, notification);
+		}
+		return mRingtone;
 	}
 	public static Class<?> getClassForMainActivity() {
 		Class<?> classness;

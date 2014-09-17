@@ -13,6 +13,12 @@ public class ActivityAlert extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		try {
+			if(GlobalStaticValues.getRingtone(getApplicationContext()).isPlaying()) {
+				GlobalStaticValues.getRingtone(getApplicationContext()).stop();
+			}
+		} catch (Exception e2) {}
+
 		this.setContentView(R.layout.activity_alert);
         setTitle(getString(R.string.app_name)+" - Reminder");
         btn_closewindow_alert=(ImageButton)this.findViewById(R.id.btn_closewindow_alert);
