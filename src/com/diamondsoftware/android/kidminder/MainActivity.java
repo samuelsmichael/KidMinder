@@ -56,6 +56,7 @@ public abstract class MainActivity extends Activity {
 	protected abstract void pressedDisableButton();
 
 	protected SettingsManager mSettingsManager;
+	private boolean iveStartedService=false;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -215,7 +216,7 @@ public abstract class MainActivity extends Activity {
     protected void baseStartTimerService() {
 		mSettingsManager.setIsEnabled(true);    	
         Intent intent=GlobalStaticValues.getIntentForTimer(this)
-    		.setAction("StartingFromMainActivity");
+    		.setAction(GlobalStaticValues.ACTION_STARTING_FROM_MAINACTIVITY);
         startService(intent);
     }
     
@@ -258,6 +259,12 @@ public abstract class MainActivity extends Activity {
     	super.onResume();
     	mSettingsManager.setImOnTop(true);
     	onResumeManageView();
+			if (servicesConnected()) {
+		    	if(!iveStartedService) {
+		    		iveStartedService=true;
+		    		baseStartTimerService();
+			}
+    	}
     }
     
     @Override
@@ -405,7 +412,9 @@ public abstract class MainActivity extends Activity {
                 break;
             }
         }
-    }    
+    }   
+    
+   
     private boolean servicesConnected() {
         // Check that Google Play services is available
         int resultCode =

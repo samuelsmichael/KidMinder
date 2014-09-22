@@ -8,7 +8,7 @@
     <string name="action_settings">Settings</string>
     
 	<!-- Logging -->
-	    <string name="default_logginglevel_value">1</string>
+	    <string name="default_logginglevel_value">2</string>
 	    <string name="defaultlogging_title_list_preference">Logging Level</string>
 	    <string name="defaultconfidence">100</string>
 	    <string name="logging_summary_list_preference"></string>
