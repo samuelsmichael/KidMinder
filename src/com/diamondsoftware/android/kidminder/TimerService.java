@@ -140,7 +140,7 @@ com.google.android.gms.location.LocationListener  {
 					        String alertString=getString(R.string.alertnotificationdescription1) + 
 					        		String.valueOf(mSettingsManager.getStoppedTimeMinutesBeforeNotification()) + "\n" + getString(R.string.alertnotificationdescription2);
 					        
-					        builder.setSmallIcon(R.drawable.ic_launcher)
+					        builder.setSmallIcon(R.drawable.app_icon)
 					               .setContentTitle(this.getString(R.string.alertnotificationtitle))
 					               .setContentText(alertString)
 					               .setContentIntent(notificationPendingIntent)

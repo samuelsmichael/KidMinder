@@ -9,7 +9,7 @@
 		 ></CheckBoxPreference>
 	    <ListPreference
             android:key="soundtype"
-            android:defaultValue="0"
+            android:defaultValue="@string/soundtypedefault"
             android:title="Sound Type"
             android:summary="Select the type of audio alert"
             android:entries="@array/soundtype_preferences"
@@ -20,7 +20,7 @@
 		    <PreferenceCategory android:title="Timing" >
 			  <EditTextPreference
 			      android:key="stoptime"
-			      android:defaultValue="7"
+			      android:defaultValue="@string/defaultstoptimeinminutes"
 			      android:title="Stop Time in Minutes"
 			      android:summary="After driving, if you are stopped for this amount of time, you will receive an alert"
 			  ></EditTextPreference>

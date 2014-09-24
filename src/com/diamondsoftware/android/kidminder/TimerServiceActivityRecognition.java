@@ -155,6 +155,8 @@ public class TimerServiceActivityRecognition extends TimerServiceAbstract  imple
 	     * Continue by requesting activity updates.
 	     */
 		if(mRequestType==REQUEST_TYPE.START) {
+			new Logger(mSettingsManager.getLoggingLevel(), "MainActivity", this)
+			.log("Starting Activity Recognition Service", GlobalStaticValues.LOG_LEVEL_INFORMATION);
         /*
          * Request activity recognition updates using the preset
          * detection interval and PendingIntent. This call is
@@ -167,6 +169,8 @@ public class TimerServiceActivityRecognition extends TimerServiceAbstract  imple
 				mAmReceiving=true;
 		} else {
 			if(mRequestType==REQUEST_TYPE.STOP) {
+				new Logger(mSettingsManager.getLoggingLevel(), "MainActivity", this)
+				.log("Stopping Activity Recognition Service", GlobalStaticValues.LOG_LEVEL_INFORMATION);
 		        mActivityRecognitionClient.removeActivityUpdates(mActivityRecognitionPendingIntent);
 		        mSettingsManager.setActivityRecognition("");
 				Intent broadcastIntent2 = new Intent()

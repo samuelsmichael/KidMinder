@@ -45,7 +45,7 @@ public class SettingsManager {
 		setValue(GlobalStaticValues.KEY_CURRENTSPEED, String.valueOf(value));
 	}
 	public int getLoggingLevel() {
-		String value=getValue(GlobalStaticValues.KEY_LOGGINGLEVEL,String.valueOf(GlobalStaticValues.LOG_LEVEL_NOTIFICATION));
+		String value=getValue(GlobalStaticValues.KEY_LOGGINGLEVEL,String.valueOf(GlobalStaticValues.LOG_LEVEL_CRITICAL));
 		return Integer.valueOf(value);
 	}
 	public void setLoggingLevel(int value) {
@@ -55,7 +55,7 @@ public class SettingsManager {
 		return getValue("soundtype",mContext.getString(R.string.soundtypedefault));
 	}
 	public int getHeartbeatFrequency() {
-		String value=getValue(GlobalStaticValues.KEY_HEARTBEATFREQUENCY,"60");
+		String value=getValue(GlobalStaticValues.KEY_HEARTBEATFREQUENCY,mContext.getString(R.string.default_heartbeatfrequency_value));
 		return Integer.valueOf(value);
 	}
 	public void setHeartbeatFrequency(int value) {
@@ -211,7 +211,7 @@ public class SettingsManager {
 		setValue(GlobalStaticValues.KEY_STOPPEDTIME_MINUTES_BEFORE_NOTIFICATION,String.valueOf(value));
 	}
 	public int getStoppedTimeMinutesBeforeNotification() {
-		String value=getValue(GlobalStaticValues.KEY_STOPPEDTIME_MINUTES_BEFORE_NOTIFICATION,"7");
+		String value=getValue(GlobalStaticValues.KEY_STOPPEDTIME_MINUTES_BEFORE_NOTIFICATION,mContext.getString(R.string.defaultstoptimeinminutes));
 		int valueAsInt=GlobalStaticValues.DEFAULT_MINUTES_STOPPED; // default ... in case the entered garbage
 		try {
 			valueAsInt=Integer.valueOf(value);
@@ -281,7 +281,7 @@ public class SettingsManager {
 		setValue(GlobalStaticValues.KEY_ACTIVITYRECOGNITION_CONFIDENCE, String.valueOf(value));
 	}
 	public int getConfidencePercentage() {
-		String value=getValue(GlobalStaticValues.KEY_CONFIDENCE_PERCENTAGE,"100");
+		String value=getValue(GlobalStaticValues.KEY_CONFIDENCE_PERCENTAGE,mContext.getString(R.string.defaultconfidence));
 		return Integer.valueOf(value);
 	}
 	public void setConfidencePercentage(int value) {
@@ -291,7 +291,7 @@ public class SettingsManager {
 		setValue(GlobalStaticValues.KEY_INVEHICLECNTTHRESHHOLD,String.valueOf(nbr));
 	}
 	public int getInVehicleCntThreshhold() {
-		String value=getValue(GlobalStaticValues.KEY_INVEHICLECNTTHRESHHOLD,"1");
+		String value=getValue(GlobalStaticValues.KEY_INVEHICLECNTTHRESHHOLD,mContext.getString(R.string.defaultinfrequencythreshhold));
 		return Integer.valueOf(value);
 	}
 }

@@ -10,11 +10,11 @@
 	<!-- Logging -->
 	    <string name="default_logginglevel_value">2</string>
 	    <string name="defaultlogging_title_list_preference">Logging Level</string>
-	    <string name="defaultconfidence">100</string>
+	    <string name="defaultconfidence">95</string>
 	    <string name="logging_summary_list_preference"></string>
     	<string name="logging_dialog_title_list_preference">Choose a logging level</string>
 	<!-- Heartbeat -->
-    <string name="default_heartbeatfrequency_value">5</string>
+    <string name="default_heartbeatfrequency_value">45</string>
     <string name="defaulthearbeatfrequency_title_list_preference">Activity Recognition Frequency</string>
     <string name="heartbeat_dialog_title_list_preference">Choose an Activity Recognition Frequency</string>
     <string name="heartbeatfrequency_summary_list_preference">How often your phone detects a change in your activity (in vehicle, walking, still, etc)</string>
@@ -23,6 +23,7 @@
     <string name="invehiclesummary">"How many back-to-back ‘in vehicle’ activity notifications need to occur before the phone considers the ‘in vehicle’ notification legitimate"</string>
     <string name="invehiclethreshholdtitle">Continuous In Vehicle Activity</string>
     
+    <string name="defaultstoptimeinminutes">4</string>
     <string name="soundtypedefault">0</string>
     <string name="alertnotificationtitle">Kid Minder Alert</string> 
     <string name="alertnotificationdescription1">You have been stopped now for more than</string>

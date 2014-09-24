@@ -1500,19 +1500,18 @@ containing a value of this type.
         public static final int config_screen_background=0x7f02007f;
         public static final int config_screen_icon_disabled=0x7f020080;
         public static final int config_screen_icon_enabled=0x7f020081;
-        public static final int ic_launcher=0x7f020082;
-        public static final int ic_menu_settings_holo_light=0x7f020083;
-        public static final int ic_plusone_medium_off_client=0x7f020084;
-        public static final int ic_plusone_small_off_client=0x7f020085;
-        public static final int ic_plusone_standard_off_client=0x7f020086;
-        public static final int ic_plusone_tall_off_client=0x7f020087;
-        public static final int intro_screen_2_configure_icon=0x7f020088;
-        public static final int intro_screen_2_install_icon=0x7f020089;
-        public static final int intro_screen_2_map_icon=0x7f02008a;
-        public static final int logo_for_header=0x7f02008b;
-        public static final int powered_by_google_dark=0x7f02008c;
-        public static final int powered_by_google_light=0x7f02008d;
-        public static final int spot_mask=0x7f02008e;
+        public static final int ic_menu_settings_holo_light=0x7f020082;
+        public static final int ic_plusone_medium_off_client=0x7f020083;
+        public static final int ic_plusone_small_off_client=0x7f020084;
+        public static final int ic_plusone_standard_off_client=0x7f020085;
+        public static final int ic_plusone_tall_off_client=0x7f020086;
+        public static final int intro_screen_2_configure_icon=0x7f020087;
+        public static final int intro_screen_2_install_icon=0x7f020088;
+        public static final int intro_screen_2_map_icon=0x7f020089;
+        public static final int logo_for_header=0x7f02008a;
+        public static final int powered_by_google_dark=0x7f02008b;
+        public static final int powered_by_google_light=0x7f02008c;
+        public static final int spot_mask=0x7f02008d;
     }
     public static final class id {
         public static final int CurrentRestTimeId=0x7f090065;
@@ -1728,9 +1727,9 @@ containing a value of this type.
         public static final int abc_shareactionprovider_share_with_application=0x7f07002b;
         public static final int action_settings=0x7f070031;
         public static final int alertmessage=0x7f07002d;
-        public static final int alertnotificationdescription1=0x7f070040;
-        public static final int alertnotificationdescription2=0x7f070041;
-        public static final int alertnotificationtitle=0x7f07003f;
+        public static final int alertnotificationdescription1=0x7f070041;
+        public static final int alertnotificationdescription2=0x7f070042;
+        public static final int alertnotificationtitle=0x7f070040;
         public static final int app_name=0x7f070030;
         public static final int auth_client_needs_enabling_title=0x7f070001;
         public static final int auth_client_needs_installation_title=0x7f070002;
@@ -1837,13 +1836,14 @@ containing a value of this type.
         public static final int defaulthearbeatfrequency_title_list_preference=0x7f070038;
         public static final int defaultinfrequencythreshhold=0x7f07003b;
         public static final int defaultlogging_title_list_preference=0x7f070033;
+        public static final int defaultstoptimeinminutes=0x7f07003e;
         public static final int heartbeat_dialog_title_list_preference=0x7f070039;
         public static final int heartbeatfrequency_summary_list_preference=0x7f07003a;
         public static final int invehiclesummary=0x7f07003c;
         public static final int invehiclethreshholdtitle=0x7f07003d;
         public static final int logging_dialog_title_list_preference=0x7f070036;
         public static final int logging_summary_list_preference=0x7f070035;
-        public static final int soundtypedefault=0x7f07003e;
+        public static final int soundtypedefault=0x7f07003f;
         public static final int textwhendisabled=0x7f07002e;
         public static final int textwhenenabled=0x7f07002f;
         /**  Text on a placeholder buy button when Google Play services is not

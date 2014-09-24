@@ -118,6 +118,8 @@ public abstract class TimerServiceAbstract extends Service implements DoesTimerS
 		return mTimerServiceLocationManagerHelper.isGPSAlive();
 	}
     protected void alarm() {
+		new Logger(mSettingsManager.getLoggingLevel(), "MainActivity", this)
+		.log("Alarm Occurred", GlobalStaticValues.LOG_LEVEL_NOTIFICATION);
 		if(mSettingsManager.getNotificationUsesPopup()) {
 	    	if(this.isMyActivityRunning()) {
 	    		Intent broadcastIntentAlert=GlobalStaticValues.getIntentForMainActivity(this);
@@ -156,7 +158,7 @@ public abstract class TimerServiceAbstract extends Service implements DoesTimerS
 	        String alertString=getString(R.string.alertnotificationdescription1) + 
 	        		String.valueOf(mSettingsManager.getStoppedTimeMinutesBeforeNotification()) + "\n" + getString(R.string.alertnotificationdescription2);
 	        
-	        builder.setSmallIcon(R.drawable.ic_launcher)
+	        builder.setSmallIcon(R.drawable.app_icon)
 	               .setContentTitle(this.getString(R.string.alertnotificationtitle))
 	               .setContentText(alertString)
 	               .setContentIntent(notificationPendingIntent)
