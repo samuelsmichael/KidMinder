@@ -27,7 +27,7 @@ public class TimerServiceActivityRecognition extends TimerServiceAbstract  imple
     // Store the current activity recognition client
     private ActivityRecognitionClient mActivityRecognitionClient;
     // Flag that indicates if a request is underway.
-    private boolean mInProgress;
+    private boolean mInProgress=false;
 	
 	private boolean mAmReceiving=false;
 

@@ -259,10 +259,14 @@ public abstract class MainActivity extends Activity {
     	super.onResume();
     	mSettingsManager.setImOnTop(true);
     	onResumeManageView();
-			if (servicesConnected()) {
+		if (servicesConnected()) {
+			if(mSettingsManager.getIsEnabled()) {
 		    	if(!iveStartedService) {
 		    		iveStartedService=true;
-		    		baseStartTimerService();
+		        	Intent jdItent2=GlobalStaticValues.getIntentForTimer(this)
+		            		.setAction(GlobalStaticValues.ACTION_STARTING_FROM_BOOTUP);
+		        		this.startService(jdItent2);
+		    	}
 			}
     	}
     }
